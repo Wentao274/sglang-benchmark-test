@@ -1,0 +1,16 @@
+# 芯片配置信息
+# 用于生成芯片性能对比报告中的芯片详情
+
+chips:
+  inspur_MetaX_C500:
+    - model_name: MiniMax-M2.5-W8A8
+      quantization_config: int8
+      model_size: 215G
+      max_position_embeddings: 196608
+      temperature: N/A
+      top_k: 40
+      top_p: 0.95
+      transformers_version: 4.57.6
+      sglang_version: 0.5.9+maca3.5.3.204
+      python_version: 3.10.10
+      remark: 浪潮MetaX_C500芯片

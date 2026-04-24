@@ -1,0 +1,21 @@
+# 模型部署配置
+# 用于生成芯片性能对比报告中的SGLang启动配置信息
+# 按芯片类型分组
+
+sglang_configs:
+  inspur_MetaX_C500:
+    - model_name: MiniMax-M2.5-W8A8
+      attention-backend: flashinfer
+      quantization: w8a8_int8
+      tp_size: 8
+      pp_size: 1
+      nnodes: 1
+      dtype: auto
+      context-length: 196608
+      max-running-requests: 64
+      max-queued-requests: None
+      disable-radix-cach: True
+      tool-call-parser: minimax-m2
+      reasoning-parser: minimax
+      mem-fraction-static: 0.9
+      remarks: 浪潮MetaX_C500 SGLang启动配置

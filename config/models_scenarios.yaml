@@ -1,0 +1,43 @@
+# SGLang bench serving启动配置
+base_config:
+  base_url: "http://127.0.0.1:8000"
+  port: 8000
+  dataset-path: "/home/workspace/ShareGPT_V3_unfiltered_cleaned_split.json"
+  params:
+    test_01:
+      dataset-name: random
+      max-concurrency: [ 1, 2, 4, 8, 10, 16, 32, 64, 80, 128 ]
+      num-prompts: [ 320 ]
+      random-input-output-len: [[ 10240, 256 ]]
+    test_02:
+      dataset-name: random
+      max-concurrency: [ 1, 2, 4, 8, 10 ]
+      num-prompts: [ 100 ]
+      random-input-output-len: [[ 194560, 1024 ]]
+    test_03:
+      dataset-name: random
+      max-concurrency: [ 32, 64 ]
+      num-prompts: [ 1000 ]
+      random-input-output-len: [[ 90000, 2000 ]]
+    test_04:
+      dataset-name: random
+      max-concurrency: [ 1, 2, 4, 8, 16, 32, 64, 80, 128 ]
+      num-prompts: [ 300 ]
+      random-input-output-len: [ [70000, 1500] ]
+    test_05:
+      dataset-name: random
+      max-concurrency: [ 1, 4, 8, 16, 32, 64, 128 ]
+      num-prompts: [ 1000 ]
+      random-input-output-len: [ [ 128, 128 ], [ 512, 256 ], [ 1024, 512 ],[ 2048, 1024 ],[ 4096, 2048 ],[ 8192, 1024 ]]
+  temperature: 0.7
+  seed: 123
+  ready-check-timeout-sec: 30
+
+models:
+  inspur_MetaX_C500:
+  - name: "MiniMax-M2.5-W8A8"
+    served-model-name: "minimax-m2.5"
+    model_path: "/data/data_shared/MiniMax-M2.5-W8A8"
+
+# SGLang 版本
+sglang_version: "0.5.9"
