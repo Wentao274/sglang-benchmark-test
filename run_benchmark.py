@@ -48,6 +48,7 @@ def run_benchmark(chip_name, base_config, model_config, test_suites, run_id):
     model_name_yaml = model_config.get("name")
     served_model_name = model_config.get("served-model-name")
     model_path_yaml = model_config.get("model_path")
+    tokenizer_path = model_config.get("tokenizer")
 
     if not model_path_yaml:
         print(f"Error: model_path is required in config for model '{model_name_yaml}'")
@@ -138,6 +139,9 @@ def run_benchmark(chip_name, base_config, model_config, test_suites, run_id):
                 "--num-prompt",
                 str(np),
             ]
+
+            if tokenizer_path:
+                cmd.extend(["--tokenizer", tokenizer_path])
 
             print(f"Running: {' '.join(cmd)}")
             print(f"Log file: {log_file}")

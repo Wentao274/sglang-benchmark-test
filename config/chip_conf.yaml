@@ -14,3 +14,14 @@ chips:
       sglang_version: 0.5.9+maca3.5.3.204
       python_version: 3.10.10
       remark: 浪潮MetaX_C500芯片
+    - model_name: Kimi-K2.5_int4_2
+      quantization_config: int4
+      model_size: 496G
+      max_position_embeddings: 262144
+      temperature: N/A
+      top_k: N/A
+      top_p: N/A
+      transformers_version: 4.56.2
+      sglang_version: 0.5.9+maca3.5.3.204
+      python_version: 3.10.10
+      remark: 浪潮MetaX_C500芯片

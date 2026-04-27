@@ -10,12 +10,27 @@ sglang_configs:
       tp_size: 8
       pp_size: 1
       nnodes: 1
-      dtype: auto
       context-length: 196608
       max-running-requests: 64
       max-queued-requests: None
       disable-radix-cach: True
       tool-call-parser: minimax-m2
-      reasoning-parser: minimax
+      reasoning-parser: minimax-append-think
       mem-fraction-static: 0.9
+      remarks: 浪潮MetaX_C500 SGLang启动配置
+    - model_name: Kimi-K2.5_int4_2
+      attention-backend: flashinfer
+      quantization: w4a8_int8
+      tp_size: 16
+      pp_size: 1
+      nnodes: 2
+      context-length: 262144
+      cuda-graph-max-bs: 64
+      max-running-requests: 64
+      max-queued-requests: None
+      chunked-prefill-size: 8192
+      disable-radix-cach: True
+      tool-call-parser: kimi_k2
+      reasoning-parser: kimi_k2
+      mem-fraction-static: 0.8
       remarks: 浪潮MetaX_C500 SGLang启动配置
