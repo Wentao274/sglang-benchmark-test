@@ -92,3 +92,56 @@ python parse_single_chip_model.py
 - 多I/O测试（test_05）额外生成：
   - `i<input_len>_o<output_len>/` - 每个I/O对的性能图表
   - `compare_by_io_conc<concurrency>/` - 固定并发数下的I/O对比图表
+
+
+## 5. 如何生成不同芯片平台对比的性能报告
+**命令**<br>
+python chip_comparison.py
+
+#### 帮助信息：
+usage:<br> 
+chip_comparison.py [-h] [--chip CHIP] [--model MODEL]
+                          [--test-suite TEST_SUITE] [--run-id RUN_ID] [--concurrency CONCURRENCY]
+
+**options**:<br>
+--chip CHIP           Chip names to compare, comma-separated (e.g., inspur_MetaX_C500,nvidia_h100)<br>
+--model MODEL         Model name to test (e.g., MiniMax-M2.5-W8A8)<br>
+--test-suite TEST_SUITE  Test suite name (e.g., test_01)<br>
+--run-id RUN_ID       Run IDs, can be '01' for all chips or '01,02' for each chip<br>
+--concurrency CONCURRENCY  Specific concurrency levels to compare, comma-separated (e.g., 1,2,4,8,10)<br>
+
+#### 示例：
+##### 5.1 对比inspur_MetaX_C500和nvidia_h100芯片
+python chip_comparison.py --chip inspur_MetaX_C500,nvidia_h100 --test-suite test_01
+
+##### 5.2 使用默认参数（对比所有配置的芯片）
+python chip_comparison.py
+
+##### 5.3 指定不同的run-id
+python chip_comparison.py --chip inspur_MetaX_C500,nvidia_h100 --test-suite test_01 --run-id '01,02'
+
+##### 5.4 指定特定并发数进行对比
+python chip_comparison.py --chip inspur_MetaX_C500,nvidia_h100 --test-suite test_01 --concurrency 1,2,4,8
+
+##### 5.5 使用简写-c指定并发数
+python chip_comparison.py -c 1,4,8,16 --chip inspur_MetaX_C500,nvidia_h100
+
+**注意**：
+- run-id 参数如果只有一个值，所有芯片使用相同 run-id
+- run-id 参数如果有多个值（逗号分隔），按 --chip 参数顺序一一对应
+- 所有参数值大小写不敏感
+
+#### 输出说明：
+- 输出目录：`analysis/chip_comparison/<model_name>/<test_suite>/<run_id1_run_id2>/`
+- 生成文件：
+  - `comparison_<test_suite>_<chip_suffix>.csv` - CSV格式对比数据
+  - `chip_comparison_c<conc>_<test_suite>_<chip_suffix>.png` - 各并发级别性能柱状图
+  - `performance_trends_<test_suite>_<chip_suffix>.png` - 性能趋势折线图
+  - `<model_name>_chip_comparison_<test_suite>_<chip_suffix>.md` - Markdown格式报告
+- 比对指标：
+  - Request throughput (req/s)
+  - Output token throughput (tok/s)
+  - Total token throughput (tok/s)
+  - P99 TTFT (ms)
+  - P99 TPOT (ms)
+  - P99 ITL (ms)

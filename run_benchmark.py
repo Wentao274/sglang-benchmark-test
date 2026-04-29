@@ -48,7 +48,6 @@ def run_benchmark(chip_name, base_config, model_config, test_suites, run_id):
     model_name_yaml = model_config.get("name")
     served_model_name = model_config.get("served-model-name")
     model_path_yaml = model_config.get("model_path")
-    tokenizer_path = model_config.get("tokenizer")
 
     if not model_path_yaml:
         print(f"Error: model_path is required in config for model '{model_name_yaml}'")
@@ -108,6 +107,10 @@ def run_benchmark(chip_name, base_config, model_config, test_suites, run_id):
                 output_dir, f"bench-{test_suite}-{nc}-{np}-i{ni}-o{no}.log"
             )
 
+            jsonl_file = os.path.join(
+                output_dir, f"bench-{test_suite}-{nc}-{np}-i{ni}-o{no}.jsonl"
+            )
+
             if gpu_monitor:
                 gpu_monitor.start_monitoring("monitor/logs", model_name_yaml, param_dir)
 
@@ -140,8 +143,10 @@ def run_benchmark(chip_name, base_config, model_config, test_suites, run_id):
                 str(np),
             ]
 
-            if tokenizer_path:
-                cmd.extend(["--tokenizer", tokenizer_path])
+            if model_path_yaml:
+                cmd.extend(["--model", model_path_yaml])
+
+            cmd.extend(["--output-file", jsonl_file])
 
             print(f"Running: {' '.join(cmd)}")
             print(f"Log file: {log_file}")

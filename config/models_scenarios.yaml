@@ -38,11 +38,9 @@ models:
   - name: "MiniMax-M2.5-W8A8"
     served-model-name: "minimax-m2.5"
     model_path: "/data/data_shared/MiniMax-M2.5-W8A8"
-    tokenizer: "/data/data_shared/MiniMax-M2.5-W8A8"
   - name: "Kimi-K2.5_int4_2"
     served-model-name: "kimi-k2.5"
     model_path: "/data2/data_shared/Kimi-K2.5_int4_2"
-    tokenizer: "/data2/data_shared/Kimi-K2.5_int4_2"
 
 # SGLang 版本
 sglang_version: "0.5.9"

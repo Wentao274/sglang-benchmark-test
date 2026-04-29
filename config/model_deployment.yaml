@@ -34,3 +34,19 @@ sglang_configs:
       reasoning-parser: kimi_k2
       mem-fraction-static: 0.8
       remarks: 浪潮MetaX_C500 SGLang启动配置
+  NVIDIA_H100:
+    - model_name: MiniMax-M2.5
+      max-model-len: 196608
+      max-num-seqs: 10
+      max-num-batched-tokens: 8192
+      gpu-memory-utilization: 0.85
+      dtype: default
+      block_size: default
+      dp: 1
+      tp: 8
+      pp: 1
+      enable-export-parallel: True
+      enable-auto-tool-choice: True
+      tool-call-parser: minimax_m2
+      reasoning-parser: minimax_m2
+      remarks: 英伟达H100 VLLM启动配置
