@@ -21,7 +21,7 @@ except ImportError:
     print("matplotlib not available, skipping chart generation")
 
 
-TEST_SUITES = ["test_01", "test_05"]
+TEST_SUITES = ["test_01"]
 
 RUN_ID = "01"
 
@@ -660,6 +660,15 @@ def generate_io_comparison_charts(
     axes[0, 0].set_ylabel("req/s")
     axes[0, 0].set_xticks(x)
     axes[0, 0].set_xticklabels(io_labels, rotation=45, ha="right")
+    for i, v in enumerate(req_throughput):
+        axes[0, 0].text(
+            i,
+            v + 0.02 * max(req_throughput) if max(req_throughput) > 0 else 0.1,
+            f"{v:.2f}",
+            ha="center",
+            va="bottom",
+            fontsize=9,
+        )
     axes[0, 0].grid(axis="y", alpha=0.3)
 
     axes[0, 1].bar(x, output_tput, color=colors[: len(io_labels)], alpha=0.8)
@@ -668,6 +677,15 @@ def generate_io_comparison_charts(
     axes[0, 1].set_ylabel("tok/s")
     axes[0, 1].set_xticks(x)
     axes[0, 1].set_xticklabels(io_labels, rotation=45, ha="right")
+    for i, v in enumerate(output_tput):
+        axes[0, 1].text(
+            i,
+            v + 0.02 * max(output_tput) if max(output_tput) > 0 else 1,
+            f"{v:.0f}",
+            ha="center",
+            va="bottom",
+            fontsize=9,
+        )
     axes[0, 1].grid(axis="y", alpha=0.3)
 
     axes[0, 2].bar(x, total_tput, color=colors[: len(io_labels)], alpha=0.8)
@@ -676,6 +694,15 @@ def generate_io_comparison_charts(
     axes[0, 2].set_ylabel("tok/s")
     axes[0, 2].set_xticks(x)
     axes[0, 2].set_xticklabels(io_labels, rotation=45, ha="right")
+    for i, v in enumerate(total_tput):
+        axes[0, 2].text(
+            i,
+            v + 0.02 * max(total_tput) if max(total_tput) > 0 else 100,
+            f"{v:.0f}",
+            ha="center",
+            va="bottom",
+            fontsize=9,
+        )
     axes[0, 2].grid(axis="y", alpha=0.3)
 
     axes[1, 0].bar(x, e2e_latency, color=colors[: len(io_labels)], alpha=0.8)
@@ -684,6 +711,15 @@ def generate_io_comparison_charts(
     axes[1, 0].set_ylabel("ms")
     axes[1, 0].set_xticks(x)
     axes[1, 0].set_xticklabels(io_labels, rotation=45, ha="right")
+    for i, v in enumerate(e2e_latency):
+        axes[1, 0].text(
+            i,
+            v + 0.02 * max(e2e_latency) if max(e2e_latency) > 0 else 10,
+            f"{v:.0f}",
+            ha="center",
+            va="bottom",
+            fontsize=9,
+        )
     axes[1, 0].grid(axis="y", alpha=0.3)
 
     axes[1, 1].bar(x, ttft_p99, color=colors[: len(io_labels)], alpha=0.8)
@@ -692,6 +728,15 @@ def generate_io_comparison_charts(
     axes[1, 1].set_ylabel("ms")
     axes[1, 1].set_xticks(x)
     axes[1, 1].set_xticklabels(io_labels, rotation=45, ha="right")
+    for i, v in enumerate(ttft_p99):
+        axes[1, 1].text(
+            i,
+            v + 0.02 * max(ttft_p99) if max(ttft_p99) > 0 else 10,
+            f"{v:.0f}",
+            ha="center",
+            va="bottom",
+            fontsize=9,
+        )
     axes[1, 1].grid(axis="y", alpha=0.3)
 
     axes[1, 2].bar(x, tpot_p99, color=colors[: len(io_labels)], alpha=0.8)
@@ -700,6 +745,15 @@ def generate_io_comparison_charts(
     axes[1, 2].set_ylabel("ms")
     axes[1, 2].set_xticks(x)
     axes[1, 2].set_xticklabels(io_labels, rotation=45, ha="right")
+    for i, v in enumerate(tpot_p99):
+        axes[1, 2].text(
+            i,
+            v + 0.02 * max(tpot_p99) if max(tpot_p99) > 0 else 1,
+            f"{v:.2f}",
+            ha="center",
+            va="bottom",
+            fontsize=9,
+        )
     axes[1, 2].grid(axis="y", alpha=0.3)
 
     for ax in axes.flat:
@@ -2032,7 +2086,7 @@ def main():
         "--chip",
         type=str,
         default=None,
-        help="Chip name (e.g., inspur_MetaX_C500)",
+        help="Chip name (e.g., inspur_MetaX_C550)",
     )
     parser.add_argument(
         "--model", type=str, default=None, help="Model name (e.g., MiniMax-M2.5-W8A8)"
@@ -2041,6 +2095,13 @@ def main():
         "--test-suite", type=str, default=None, help="Test suite name (e.g., test_01)"
     )
     parser.add_argument("--run-id", type=str, default=None, help="Run ID (e.g., 01)")
+    parser.add_argument(
+        "--concurrency",
+        "-c",
+        type=str,
+        default=None,
+        help="Specific concurrency levels to include, comma-separated (e.g., 1,2,4,8,10)",
+    )
     args = parser.parse_args()
 
     chip_to_use = args.chip.strip() if args.chip else list(CHIP_BASE_PATHS.keys())[0]
@@ -2116,6 +2177,20 @@ def main():
                         all_concurrencies.add(str(conc))
 
             concurrencies = sorted(all_concurrencies, key=lambda x: int(x))
+
+            if args.concurrency:
+                conc_list = [s.strip() for s in args.concurrency.split(",")]
+                filtered_concs = [c for c in concurrencies if c in conc_list]
+                if filtered_concs:
+                    concurrencies = filtered_concs
+                    print(
+                        f"Using specified concurrency levels: {', '.join(concurrencies)}"
+                    )
+                else:
+                    print(
+                        f"Warning: None of the specified concurrency levels {conc_list} found, using all"
+                    )
+
             print(
                 f"Found {len(concurrencies)} concurrency levels: {', '.join(concurrencies)}"
             )
@@ -2178,6 +2253,20 @@ def main():
                 continue
 
             concurrencies = sorted(all_concurrencies, key=lambda x: int(x))
+
+            if args.concurrency:
+                conc_list = [s.strip() for s in args.concurrency.split(",")]
+                filtered_concs = [c for c in concurrencies if c in conc_list]
+                if filtered_concs:
+                    concurrencies = filtered_concs
+                    print(
+                        f"Using specified concurrency levels: {', '.join(concurrencies)}"
+                    )
+                else:
+                    print(
+                        f"Warning: None of the specified concurrency levels {conc_list} found, using all"
+                    )
+
             print(
                 f"Found {len(concurrencies)} concurrency levels: {', '.join(concurrencies)}"
             )

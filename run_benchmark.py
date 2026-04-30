@@ -9,7 +9,7 @@ from pathlib import Path
 
 API_KEY = os.environ.get("API_KEY", "abc123")
 
-TEST_SUITES = ["test_01", "test_02", "test_03", "test_04", "test_05"]
+TEST_SUITES = ["test_01"]
 
 RUN_ID = "01"
 
@@ -112,7 +112,9 @@ def run_benchmark(chip_name, base_config, model_config, test_suites, run_id):
             )
 
             if gpu_monitor:
-                gpu_monitor.start_monitoring("monitor/logs", model_name_yaml, param_dir)
+                gpu_monitor.start_monitoring(
+                    "monitor/logs", chip_name, model_name_yaml, param_dir
+                )
 
             cmd = [
                 "python3",
@@ -166,7 +168,8 @@ def run_benchmark(chip_name, base_config, model_config, test_suites, run_id):
             if gpu_monitor:
                 gpu_log = gpu_monitor.stop_monitoring()
                 if gpu_log:
-                    generate_gpu_charts(gpu_log, output_dir)
+                    gpu_log_dir = os.path.dirname(gpu_log)
+                    generate_gpu_charts(gpu_log, gpu_log_dir)
 
             print(f"Completed: {log_file}")
             time.sleep(30)
@@ -180,7 +183,7 @@ def main():
         "--chip",
         type=str,
         required=True,
-        help="Chip name to test (e.g., inspur_MetaX_C500, hygon_bw1000, kunlun_p800, nvidia_h100)",
+        help="Chip name to test (e.g., inspur_MetaX_C550, hygon_bw1000, kunlun_p800, nvidia_h100)",
     )
     parser.add_argument(
         "--model",

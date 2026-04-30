@@ -34,7 +34,7 @@ base_config:
   ready-check-timeout-sec: 30
 
 models:
-  inspur_MetaX_C500:
+  inspur_MetaX_C550:
   - name: "MiniMax-M2.5-W8A8"
     served-model-name: "minimax-m2.5"
     model_path: "/data/data_shared/MiniMax-M2.5-W8A8"

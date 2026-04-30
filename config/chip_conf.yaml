@@ -2,7 +2,7 @@
 # 用于生成芯片性能对比报告中的芯片详情
 
 chips:
-  inspur_MetaX_C500:
+  inspur_MetaX_C550:
     - model_name: MiniMax-M2.5-W8A8
       quantization_config: int8
       model_size: 215G
@@ -13,7 +13,7 @@ chips:
       transformers_version: 4.57.6
       sglang_version: 0.5.9+maca3.5.3.204
       python_version: 3.10.10
-      remark: 浪潮MetaX_C500芯片
+      remark: 浪潮MetaX_C550芯片
     - model_name: Kimi-K2.5_int4_2
       quantization_config: int4
       model_size: 496G
@@ -24,7 +24,7 @@ chips:
       transformers_version: 4.56.2
       sglang_version: 0.5.9+maca3.5.3.204
       python_version: 3.10.10
-      remark: 浪潮MetaX_C500芯片
+      remark: 浪潮MetaX_C550芯片
   NVIDIA_H100:
     - model_name: MiniMax-M2.5
       quantization_config: FP16

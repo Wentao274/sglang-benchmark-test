@@ -1,0 +1,7 @@
+Metric,1 并发,10 并发
+Request throughput (req/s),0.27/0.37,0.91/1.75
+Output token throughput (tok/s),69.26/95.49,232.70/447.09
+Total token throughput (tok/s),2839.48/3915.14,9540.82/18330.76
+P99 TTFT (ms),596.38/1181.54,5277.45/1604.56
+P99 TPOT (ms),12.44/9.89,40.89/21.28
+P99 ITL (ms),14.88/9.90,28.12/190.68

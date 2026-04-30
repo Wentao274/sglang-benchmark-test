@@ -26,7 +26,7 @@ TEST_SUITES = ["test_01"]
 RUN_IDS = ["01", "01"]
 
 CHIP_BASE_PATHS = {
-    "inspur_MetaX_C500": "reports/inspur_MetaX_C500/benchmark/MiniMax-M2.5-W8A8",
+    "inspur_MetaX_C550": "reports/inspur_MetaX_C550/benchmark/MiniMax-M2.5-W8A8",
     "nvidia_h100": "reports/nvidia_h100/benchmark/MiniMax-M2.5",
 }
 
@@ -692,7 +692,7 @@ def main():
         "--chip",
         type=str,
         default=None,
-        help="Chip names to compare, comma-separated (e.g., inspur_MetaX_C500,nvidia_h100)",
+        help="Chip names to compare, comma-separated (e.g., inspur_MetaX_C550,nvidia_h100)",
     )
     parser.add_argument(
         "--model", type=str, default=None, help="Model name (e.g., MiniMax-M2.5-W8A8)"
@@ -717,11 +717,11 @@ def main():
 
     scenarios_config = load_models_scenarios()
     chip_key_map = {
-        "inspur_metax_c500": "inspur_MetaX_C500",
+        "inspur_metax_c550": "inspur_MetaX_C550",
         "nvidia_h100": "nvidia_h100",
     }
     chip_key_map_reverse = {
-        "inspur_metax_c500": "inspur_MetaX_C500",
+        "inspur_metax_c550": "inspur_MetaX_C550",
         "nvidia_h100": "nvidia_h100",
     }
 

@@ -13,20 +13,20 @@ run_benchmark.py [-h] --chip CHIP [--model MODEL]
 --test-suite TEST_SUITE  Test suite to run, use "," split multiple test suite; if not specified, use TEST_SUITES list defined in scripts to run <br>
 --run-id RUN_ID       Run ID to identify this test run, if not specified, use RUN_ID defined in scripts <br>
 
-### 1.1 测试 hygon_bw1000 芯片上的 minimax-m2.5 模型
-python run_benchmark.py --chip hygon_bw1000 --model minimax-m2.5
+### 1.1 测试 inspur_MetaX_C550 芯片上的 MiniMax-M2.5-W8A8 模型
+python run_benchmark.py --chip inspur_MetaX_C550 --model MiniMax-M2.5-W8A8
 
-### 1.2 测试 hygon_bw1000 芯片上的 Qwen3.5 模型
-python run_benchmark.py --chip hygon_bw1000 --model Qwen3.5
+### 1.2 测试 inspur_MetaX_C550 芯片上的 MiniMax-M2.5-W8A8 模型
+python run_benchmark.py --chip inspur_MetaX_C550 --model MiniMax-M2.5-W8A8
 
 ### 1.3 不指定模型则测试该芯片下所有配置的模型
-python run_benchmark.py --chip hygon_bw1000
+python run_benchmark.py --chip inspur_MetaX_C550
 
-### 1.4 组合使用: 执行hygon_bw1000平台下Qwen3.5模型的test_01测试场景的第2次测试
-python run_benchmark.py --chip hygon_bw1000 --model Qwen3.5 --test-suite test_01 --run-id 02
+### 1.4 组合使用: 执行inspur_MetaX_C550平台下MiniMax-M2.5-W8A8模型的test_01测试场景的第2次测试
+python run_benchmark.py --chip inspur_MetaX_C550 --model MiniMax-M2.5-W8A8 --test-suite test_01 --run-id 02
 
 ### 1.5 指定多个测试套件
-python run_benchmark.py --chip kunlun_p800 --model qwen3.5-plus --test-suite test_05,test_06 --run-id 02
+python run_benchmark.py --chip inspur_MetaX_C550 --model MiniMax-M2.5-W8A8 --test-suite test_05,test_06 --run-id 02
 
 
 ## 2. 配置文件说明
@@ -48,7 +48,8 @@ gpu_monitor.py 提供GPU监控功能，支持：
 - nvidia-smi (NVIDIA GPU)
 - hy-smi (海光GPU)
 - rocm-smi (AMD GPU)
-- xpu-smi (Intel GPU)
+- xpu-smi (昆仑芯 GPU)
+- mx-smi (浪潮 GPU)
 
 监控数据会保存到 monitor/logs 目录，并生成GPU使用趋势图表。
 
@@ -60,23 +61,30 @@ python parse_single_chip_model.py
 #### 帮助信息：
 usage:<br> 
 parse_single_chip_model.py [-h] [--chip CHIP] [--model MODEL]
-                            [--test-suite TEST_SUITE] [--run-id RUN_ID]
+                            [--test-suite TEST_SUITE] [--run-id RUN_ID] [--concurrency CONCURRENCY]
 
 **options**:<br>
---chip CHIP           Chip name to test (e.g., inspur_MetaX_C500, hygon_bw1000)<br>
+--chip CHIP           Chip name to test (e.g., inspur_MetaX_C550)<br>
 --model MODEL         Model name to test (e.g., MiniMax-M2.5-W8A8)<br>
 --test-suite TEST_SUITE  Test suite name (e.g., test_01, test_05)<br>
 --run-id RUN_ID       Run ID (e.g., 01)<br>
+--concurrency CONCURRENCY  Specific concurrency levels to include, comma-separated (e.g., 1,2,4,8,10)<br>
 
 #### 示例：
-##### 4.1 生成 inspur_MetaX_C500 芯片上 MiniMax-M2.5-W8A8 模型 test_01 测试的第01次报告
-python parse_single_chip_model.py --chip inspur_MetaX_C500 --model MiniMax-M2.5-W8A8 --test-suite test_01 --run-id 01
+##### 4.1 生成 inspur_MetaX_C550 芯片上 MiniMax-M2.5-W8A8 模型 test_01 测试的第01次报告
+python parse_single_chip_model.py --chip inspur_MetaX_C550 --model MiniMax-M2.5-W8A8 --test-suite test_01 --run-id 01
 
 ##### 4.2 生成多I/O测试报告（test_05）
-python parse_single_chip_model.py --chip inspur_MetaX_C500 --model MiniMax-M2.5-W8A8 --test-suite test_05 --run-id 01
+python parse_single_chip_model.py --chip inspur_MetaX_C550 --model MiniMax-M2.5-W8A8 --test-suite test_05 --run-id 01
 
 ##### 4.3 使用默认参数
 python parse_single_chip_model.py
+
+##### 4.4 指定特定并发数生成报告
+python parse_single_chip_model.py --chip inspur_MetaX_C550 --test-suite test_01 --concurrency 1,4,8
+
+##### 4.5 使用简写-c指定并发数
+python parse_single_chip_model.py -c 1,4,8,16 --chip inspur_MetaX_C550 --test-suite test_05
 
 如果不指定任何参数，则默认使用CHIP_BASE_PATHS的第一个Key和代码中定义的MODEL_NAME, TEST_SUITES和RUN_ID
 
@@ -104,27 +112,27 @@ chip_comparison.py [-h] [--chip CHIP] [--model MODEL]
                           [--test-suite TEST_SUITE] [--run-id RUN_ID] [--concurrency CONCURRENCY]
 
 **options**:<br>
---chip CHIP           Chip names to compare, comma-separated (e.g., inspur_MetaX_C500,nvidia_h100)<br>
+--chip CHIP           Chip names to compare, comma-separated (e.g., inspur_MetaX_C550,nvidia_h100)<br>
 --model MODEL         Model name to test (e.g., MiniMax-M2.5-W8A8)<br>
 --test-suite TEST_SUITE  Test suite name (e.g., test_01)<br>
 --run-id RUN_ID       Run IDs, can be '01' for all chips or '01,02' for each chip<br>
 --concurrency CONCURRENCY  Specific concurrency levels to compare, comma-separated (e.g., 1,2,4,8,10)<br>
 
 #### 示例：
-##### 5.1 对比inspur_MetaX_C500和nvidia_h100芯片
-python chip_comparison.py --chip inspur_MetaX_C500,nvidia_h100 --test-suite test_01
+##### 5.1 对比inspur_MetaX_C550和nvidia_h100芯片
+python chip_comparison.py --chip inspur_MetaX_C550,nvidia_h100 --test-suite test_01
 
 ##### 5.2 使用默认参数（对比所有配置的芯片）
 python chip_comparison.py
 
 ##### 5.3 指定不同的run-id
-python chip_comparison.py --chip inspur_MetaX_C500,nvidia_h100 --test-suite test_01 --run-id '01,02'
+python chip_comparison.py --chip inspur_MetaX_C550,nvidia_h100 --test-suite test_01 --run-id '01,02'
 
 ##### 5.4 指定特定并发数进行对比
-python chip_comparison.py --chip inspur_MetaX_C500,nvidia_h100 --test-suite test_01 --concurrency 1,2,4,8
+python chip_comparison.py --chip inspur_MetaX_C550,nvidia_h100 --test-suite test_01 --concurrency 1,2,4,8
 
 ##### 5.5 使用简写-c指定并发数
-python chip_comparison.py -c 1,4,8,16 --chip inspur_MetaX_C500,nvidia_h100
+python chip_comparison.py -c 1,4,8,16 --chip inspur_MetaX_C550,nvidia_h100
 
 **注意**：
 - run-id 参数如果只有一个值，所有芯片使用相同 run-id
