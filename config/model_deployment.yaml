@@ -34,6 +34,23 @@ sglang_configs:
       reasoning-parser: kimi_k2
       mem-fraction-static: 0.8
       remarks: 浪潮MetaX_C550 SGLang启动配置
+    - model_name: GLM-5-W8A8
+      attention-backend: flashinfer
+      quantization: w8a8_int8
+      tp_size: 16
+      dp_size: 4
+      pp_size: 1
+      nnodes: 2
+      context-length: 202752
+      cuda-graph-max-bs: 64
+      max-running-requests: 64
+      max-queued-requests: None
+      chunked-prefill-size: 8192
+      disable-radix-cach: True
+      tool-call-parser: glm47
+      reasoning-parser: glm45
+      mem-fraction-static: 0.8
+      remarks: 浪潮MetaX_C550 SGLang启动配置
   NVIDIA_H100:
     - model_name: MiniMax-M2.5
       max-model-len: 196608

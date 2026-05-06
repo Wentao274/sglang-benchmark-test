@@ -32,7 +32,6 @@ base_config:
   temperature: 0.7
   seed: 123
   ready-check-timeout-sec: 30
-
 models:
   inspur_MetaX_C550:
   - name: "MiniMax-M2.5-W8A8"
@@ -41,6 +40,9 @@ models:
   - name: "Kimi-K2.5_int4_2"
     served-model-name: "kimi-k2.5"
     model_path: "/data2/data_shared/Kimi-K2.5_int4_2"
+  - name: "GLM-5-W8A8"
+    served-model-name: "glm-5"
+    model_path: "/var_docker/data_shared/GLM-5-W8A8"
 
 # SGLang 版本
 sglang_version: "0.5.9"

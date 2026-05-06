@@ -25,6 +25,17 @@ chips:
       sglang_version: 0.5.9+maca3.5.3.204
       python_version: 3.10.10
       remark: 浪潮MetaX_C550芯片
+    - model_name: GLM-5-W8A8
+      quantization_config: int8
+      model_size: 712G
+      max_position_embeddings: 202752
+      temperature: N/A
+      top_k: N/A
+      top_p: N/A
+      transformers_version: 5.1.0
+      sglang_version: 0.5.9+maca3.5.3.204
+      python_version: 3.10.10
+      remark: 浪潮MetaX_C550芯片
   NVIDIA_H100:
     - model_name: MiniMax-M2.5
       quantization_config: FP16
