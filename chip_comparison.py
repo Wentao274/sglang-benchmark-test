@@ -26,8 +26,8 @@ TEST_SUITES = ["test_01"]
 RUN_IDS = ["01", "01"]
 
 CHIP_BASE_PATHS = {
-    "inspur_MetaX_C550": "reports/inspur_MetaX_C550/benchmark/MiniMax-M2.5-W8A8",
-    "nvidia_h100": "reports/nvidia_h100/benchmark/MiniMax-M2.5",
+    "inspur_MetaX_C550": "reports/benchmark/inspur_MetaX_C550/MiniMax-M2.5-W8A8",
+    "nvidia_h100": "reports/benchmark/nvidia_h100/MiniMax-M2.5",
 }
 
 MODEL_NAME = "MiniMax-M2.5-W8A8,MiniMax-M2.5"
@@ -725,7 +725,7 @@ def get_common_model_prefix(model_names):
 def check_reports_exist(chip_models):
     missing = []
     for chip_name, model_name in chip_models:
-        report_path = f"reports/{chip_name}/benchmark/{model_name}"
+        report_path = f"reports/benchmark/{chip_name}/{model_name}"
         if not os.path.exists(report_path):
             missing.append((chip_name, model_name, report_path))
     return missing
@@ -805,7 +805,7 @@ def main():
 
     chip_base_paths = {}
     for i, (chip_name, model_name) in enumerate(chip_models):
-        base_path = f"reports/{chip_name}/benchmark/{model_name}"
+        base_path = f"reports/benchmark/{chip_name}/{model_name}"
         chip_base_paths[chip_name] = {"base_path": base_path, "model": model_name}
 
     scenarios_config = load_models_scenarios()

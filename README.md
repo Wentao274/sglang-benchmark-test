@@ -54,6 +54,71 @@ gpu_monitor.py 提供GPU监控功能，支持：
 监控数据会保存到 monitor/logs 目录，并生成GPU使用趋势图表。
 
 
+## 4. 数据目录结构
+
+### 4.1 Benchmark 测试结果目录结构
+
+测试结果保存在 `reports` 目录下。
+
+#### 目录结构：
+```
+reports/benchmark/<chip_name>/<model_name>/<test_suite>/<run_id>/<concurrency>-<num_prompts>-i<input_len>-o<output_len>/
+```
+
+#### 示例：
+```
+reports/benchmark/inspur_MetaX_C550/MiniMax-M2.5-W8A8/test_01/01/1-320-i10240-o256/
+reports/benchmark/nvidia_h100/MiniMax-M2.5/test_03/02/4-100-i194560-o1024/
+```
+
+#### 说明：
+- `benchmark`: 固定目录名
+- `{chip_name}`: 芯片平台（如 `inspur_MetaX_C550`, `nvidia_h100`）
+- `{model_name}`: 模型名称（如 `MiniMax-M2.5-W8A8`）
+- `{test_suite}`: 测试套件（如 `test_01`, `test_03`, `test_05` 等）
+- `{run_id}`: 测试运行 ID（如 `01`, `02`）
+- `{concurrency}-{num_prompts}-i{input_len}-o{output_len}`: 并发数-提示数-输入长度-输出长度
+
+#### 输出文件：
+- `bench-<test_suite>-<conc>-<num_prompts>-i<input>-o<output>.log`: 测试日志
+
+
+### 4.2 GPU 监控日志目录结构
+
+在运行 benchmark 测试时，会自动启动 GPU 监控，记录 GPU 使用情况。监控日志保存在 `monitor` 目录下。
+
+#### 目录结构：
+```
+monitor/logs/<chip_name>/<model_name>/<test_suite>/<run_id>/<concurrency>-<num_prompts>-i<input_len>-o<output_len>/
+```
+
+#### 示例：
+```
+monitor/logs/inspur_MetaX_C550/MiniMax-M2.5-W8A8/test_01/01/1-320-i10240-o256/gpu_monitor_20260430123341.log
+monitor/logs/nvidia_h100/MiniMax-M2.5/test_03/01/4-100-i194560-o1024/gpu_monitor_20260430143239.log
+```
+
+#### 说明：
+- `logs`: 固定目录名
+- `{chip_name}`: 芯片平台（如 `inspur_MetaX_C550`, `nvidia_h100`）
+- `{model_name}`: 模型名称（如 `MiniMax-M2.5-W8A8`）
+- `{test_suite}`: 测试套件（如 `test_01`, `test_03`, `test_05` 等）
+- `{run_id}`: 测试运行 ID（如 `01`, `02`）
+- `{concurrency}-{num_prompts}-i{input_len}-o{output_len}`: 并发数-提示数-输入长度-输出长度
+- `gpu_monitor_{timestamp}.log`: GPU 监控日志文件
+
+#### 日志格式：
+日志文件为 CSV 格式，包含以下字段：
+- Time: 时间戳
+- GPU: GPU 索引
+- Name: GPU 名称
+- Used_MB: 已使用显存 (MB)
+- Total_MB: 总显存 (MB)
+- Utilization_%: GPU 利用率 (%)
+- Memory_%: 显存利用率 (%)
+- Temperature_C: 温度 (°C)
+
+
 ## 4. 如何生成单个平台下的单个模型的单次测试的性能变化
 **命令**<br>
 python parse_single_chip_model.py

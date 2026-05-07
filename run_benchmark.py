@@ -68,7 +68,7 @@ def run_benchmark(chip_name, base_config, model_config, test_suites, run_id):
     ready_timeout = base_config.get("ready-check-timeout-sec", 30)
 
     M = model_name_yaml
-    output_base = f"reports/{chip_name}/benchmark/{M}"
+    output_base = f"reports/benchmark/{chip_name}/{M}"
 
     params_config = base_config.get("params", {})
 
