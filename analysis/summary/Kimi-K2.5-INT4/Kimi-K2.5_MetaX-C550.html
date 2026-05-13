@@ -1,0 +1,611 @@
+<!doctype html>
+<html>
+<head>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<title>Kimi-K2.5_MetaX-C550</title><link href='https://fonts.loli.net/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css' /><style type='text/css'>html {overflow-x: initial !important;}:root { --bg-color:#ffffff; --text-color:#333333; --select-text-bg-color:#B5D6FC; --select-text-font-color:auto; --monospace:"Lucida Console",Consolas,"Courier",monospace; }
+html { font-size: 14px; background-color: var(--bg-color); color: var(--text-color); font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-size: 1rem; line-height: 1.42857; overflow-x: hidden; background: inherit; }
+iframe { margin: auto; }
+a.url { word-break: break-all; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { text-shadow: none; background: var(--select-text-bg-color); color: var(--select-text-font-color); }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; word-wrap: break-word; position: relative; white-space: normal; overflow-x: visible; padding-top: 40px; }
+#write.first-line-indent p { text-indent: 2em; }
+#write.first-line-indent li p, #write.first-line-indent p * { text-indent: 0px; }
+#write.first-line-indent li { margin-left: 2em; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+.typora-export .footnote-line, .typora-export li, .typora-export p { white-space: pre-wrap; }
+@media screen and (max-width: 500px) {
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  #write { padding-left: 20px; padding-right: 20px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+#write li > figure:first-child { margin-top: -20px; }
+#write ol, #write ul { position: relative; }
+img { max-width: 100%; vertical-align: middle; }
+button, input, select, textarea { color: inherit; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; font-size: inherit; line-height: inherit; font-family: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+*, ::after, ::before { box-sizing: border-box; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p, #write pre { width: inherit; }
+#write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write p { position: relative; }
+h1, h2, h3, h4, h5, h6 { break-after: avoid-page; break-inside: avoid; orphans: 2; }
+p { orphans: 4; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+.md-math-block, .md-rawblock, h1, h2, h3, h4, h5, h6, p { margin-top: 1rem; margin-bottom: 1rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: 700; font-style: italic; }
+a { cursor: pointer; }
+sup.md-footnote { padding: 2px 4px; background-color: rgba(238, 238, 238, 0.7); color: rgb(85, 85, 85); border-radius: 4px; cursor: pointer; }
+sup.md-footnote a, sup.md-footnote a:hover { color: inherit; text-transform: inherit; text-decoration: inherit; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; }
+figure { overflow-x: auto; margin: 1.2em 0px; max-width: calc(100% + 16px); padding: 0px; }
+figure > table { margin: 0px !important; }
+tr { break-inside: avoid; break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; break-inside: auto; text-align: left; }
+table.md-table td { min-width: 32px; }
+.CodeMirror-gutters { border-right: 0px; background-color: inherit; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+#write pre { white-space: pre-wrap; }
+#write.fences-no-line-wrapping pre { white-space: pre; }
+#write pre.ty-contain-cm { white-space: normal; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background: inherit; position: relative !important; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+#write .md-fences.mock-cm { white-space: pre-wrap; }
+.md-fences.md-fences-with-lineno { padding-left: 0px; }
+#write.fences-no-line-wrapping .md-fences.mock-cm { white-space: pre; overflow-x: auto; }
+.md-fences.mock-cm.md-fences-with-lineno { padding-left: 8px; }
+.CodeMirror-line, twitterwidget { break-inside: avoid; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; margin-top: 1em; margin-bottom: 1em; }
+.footnotes + .footnotes { margin-top: 0px; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background: 0px 0px; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; -webkit-tap-highlight-color: transparent; line-height: normal; font-weight: 400; text-align: left; box-sizing: content-box; direction: ltr; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li .mathjax-block, li p { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child, li > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; white-space: normal; }
+#write .footnote-line { white-space: pre-wrap; }
+@media print {
+  body, html { border: 1px solid transparent; height: 99%; break-after: avoid; break-before: avoid; }
+  #write { margin-top: 0px; padding-top: 0px; border-color: transparent !important; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { padding-left: 32px; padding-right: 32px; padding-bottom: 0px; break-after: avoid; }
+  .typora-export #write::after { height: 0px; }
+  @page { margin: 20mm 0px; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 0.8rem; white-space: pre-wrap; background: rgb(204, 204, 204); display: block; overflow-x: hidden; }
+p > .md-image:only-child:not(.md-img-error) img, p > img:only-child { display: block; margin: auto; }
+p > .md-image:only-child { display: inline-block; width: 100%; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.md-math-block { width: 100%; }
+.md-math-block:not(:empty)::after { display: none; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus { outline: 0px; box-shadow: none; }
+.md-task-list-item { position: relative; list-style-type: none; }
+.task-list-item.md-task-list-item { padding-left: 0px; }
+.md-task-list-item > input { position: absolute; top: 0px; left: 0px; margin-left: -1.2em; margin-top: calc(1em - 10px); }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc-content::after, .md-toc::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); }
+.md-toc-item a { text-decoration: none; }
+.md-toc-inner:hover { text-decoration: underline; }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: 700; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) {
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: "."; }
+code, pre, samp, tt { font-family: var(--monospace); }
+kbd { margin: 0px 0.1em; padding: 0.1em 0.6em; font-size: 0.8em; color: rgb(36, 39, 41); background: rgb(255, 255, 255); border: 1px solid rgb(173, 179, 185); border-radius: 3px; box-shadow: rgba(12, 13, 14, 0.2) 0px 1px 0px, rgb(255, 255, 255) 0px 0px 0px 2px inset; white-space: nowrap; vertical-align: middle; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: var(--monospace); }
+code { text-align: left; vertical-align: initial; }
+a.md-print-anchor { white-space: pre !important; border-width: initial !important; border-style: none !important; border-color: initial !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: 0px !important; background: 0px 0px !important; text-decoration: initial !important; text-shadow: initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.html-for-mac .inline-math-svg .MathJax_SVG { vertical-align: 0.2px; }
+.md-math-block .MathJax_SVG_Display { text-align: center; margin: 0px; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; overflow-y: hidden; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: var(--monospace); }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: 400; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { transition: none; }
+.MathJax_SVG_Display svg { vertical-align: middle !important; margin-bottom: 0px !important; }
+.os-windows.monocolor-emoji .md-emoji { font-family: "Segoe UI Symbol", sans-serif; }
+.md-diagram-panel > svg { max-width: 100%; }
+[lang="mermaid"] svg, [lang="flow"] svg { max-width: 100%; }
+[lang="mermaid"] .node text { font-size: 1rem; }
+table tr th { border-bottom: 0px; }
+video { max-width: 100%; display: block; margin: 0px auto; }
+iframe { max-width: 100%; width: 100%; border: none; }
+.highlight td, .highlight tr { border: 0px; }
+
+
+.CodeMirror { height: auto; }
+.CodeMirror.cm-s-inner { background: inherit; }
+.CodeMirror-scroll { overflow-y: hidden; overflow-x: auto; z-index: 3; }
+.CodeMirror-gutter-filler, .CodeMirror-scrollbar-filler { background-color: rgb(255, 255, 255); }
+.CodeMirror-gutters { border-right: 1px solid rgb(221, 221, 221); background: inherit; white-space: nowrap; }
+.CodeMirror-linenumber { padding: 0px 3px 0px 5px; text-align: right; color: rgb(153, 153, 153); }
+.cm-s-inner .cm-keyword { color: rgb(119, 0, 136); }
+.cm-s-inner .cm-atom, .cm-s-inner.cm-atom { color: rgb(34, 17, 153); }
+.cm-s-inner .cm-number { color: rgb(17, 102, 68); }
+.cm-s-inner .cm-def { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-variable { color: rgb(0, 0, 0); }
+.cm-s-inner .cm-variable-2 { color: rgb(0, 85, 170); }
+.cm-s-inner .cm-variable-3 { color: rgb(0, 136, 85); }
+.cm-s-inner .cm-string { color: rgb(170, 17, 17); }
+.cm-s-inner .cm-property { color: rgb(0, 0, 0); }
+.cm-s-inner .cm-operator { color: rgb(152, 26, 26); }
+.cm-s-inner .cm-comment, .cm-s-inner.cm-comment { color: rgb(170, 85, 0); }
+.cm-s-inner .cm-string-2 { color: rgb(255, 85, 0); }
+.cm-s-inner .cm-meta { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-qualifier { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-builtin { color: rgb(51, 0, 170); }
+.cm-s-inner .cm-bracket { color: rgb(153, 153, 119); }
+.cm-s-inner .cm-tag { color: rgb(17, 119, 0); }
+.cm-s-inner .cm-attribute { color: rgb(0, 0, 204); }
+.cm-s-inner .cm-header, .cm-s-inner.cm-header { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-quote, .cm-s-inner.cm-quote { color: rgb(0, 153, 0); }
+.cm-s-inner .cm-hr, .cm-s-inner.cm-hr { color: rgb(153, 153, 153); }
+.cm-s-inner .cm-link, .cm-s-inner.cm-link { color: rgb(0, 0, 204); }
+.cm-negative { color: rgb(221, 68, 68); }
+.cm-positive { color: rgb(34, 153, 34); }
+.cm-header, .cm-strong { font-weight: 700; }
+.cm-del { text-decoration: line-through; }
+.cm-em { font-style: italic; }
+.cm-link { text-decoration: underline; }
+.cm-error { color: red; }
+.cm-invalidchar { color: red; }
+.cm-constant { color: rgb(38, 139, 210); }
+.cm-defined { color: rgb(181, 137, 0); }
+div.CodeMirror span.CodeMirror-matchingbracket { color: rgb(0, 255, 0); }
+div.CodeMirror span.CodeMirror-nonmatchingbracket { color: rgb(255, 34, 34); }
+.cm-s-inner .CodeMirror-activeline-background { background: inherit; }
+.CodeMirror { position: relative; overflow: hidden; }
+.CodeMirror-scroll { height: 100%; outline: 0px; position: relative; box-sizing: content-box; background: inherit; }
+.CodeMirror-sizer { position: relative; }
+.CodeMirror-gutter-filler, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-vscrollbar { position: absolute; z-index: 6; display: none; }
+.CodeMirror-vscrollbar { right: 0px; top: 0px; overflow: hidden; }
+.CodeMirror-hscrollbar { bottom: 0px; left: 0px; overflow: hidden; }
+.CodeMirror-scrollbar-filler { right: 0px; bottom: 0px; }
+.CodeMirror-gutter-filler { left: 0px; bottom: 0px; }
+.CodeMirror-gutters { position: absolute; left: 0px; top: 0px; padding-bottom: 30px; z-index: 3; }
+.CodeMirror-gutter { white-space: normal; height: 100%; box-sizing: content-box; padding-bottom: 30px; margin-bottom: -32px; display: inline-block; }
+.CodeMirror-gutter-wrapper { position: absolute; z-index: 4; background: 0px 0px !important; border: none !important; }
+.CodeMirror-gutter-background { position: absolute; top: 0px; bottom: 0px; z-index: 4; }
+.CodeMirror-gutter-elt { position: absolute; cursor: default; z-index: 4; }
+.CodeMirror-lines { cursor: text; }
+.CodeMirror pre { border-radius: 0px; border-width: 0px; background: 0px 0px; font-family: inherit; font-size: inherit; margin: 0px; white-space: pre; word-wrap: normal; color: inherit; z-index: 2; position: relative; overflow: visible; }
+.CodeMirror-wrap pre { word-wrap: break-word; white-space: pre-wrap; word-break: normal; }
+.CodeMirror-code pre { border-right: 30px solid transparent; width: fit-content; }
+.CodeMirror-wrap .CodeMirror-code pre { border-right: none; width: auto; }
+.CodeMirror-linebackground { position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 0; }
+.CodeMirror-linewidget { position: relative; z-index: 2; overflow: auto; }
+.CodeMirror-wrap .CodeMirror-scroll { overflow-x: hidden; }
+.CodeMirror-measure { position: absolute; width: 100%; height: 0px; overflow: hidden; visibility: hidden; }
+.CodeMirror-measure pre { position: static; }
+.CodeMirror div.CodeMirror-cursor { position: absolute; visibility: hidden; border-right: none; width: 0px; }
+.CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+.CodeMirror-focused div.CodeMirror-cursor { visibility: inherit; }
+.cm-searching { background: rgba(255, 255, 0, 0.4); }
+@media print {
+  .CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+}
+
+
+:root { --side-bar-bg-color: #fafafa; --control-text-color: #777; }
+html { font-size: 16px; }
+body { font-family: "Open Sans", "Clear Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; color: rgb(51, 51, 51); line-height: 1.6; }
+#write { max-width: 860px; margin: 0px auto; padding: 30px 30px 100px; }
+#write > ul:first-child, #write > ol:first-child { margin-top: 30px; }
+a { color: rgb(65, 131, 196); }
+h1, h2, h3, h4, h5, h6 { position: relative; margin-top: 1rem; margin-bottom: 1rem; font-weight: bold; line-height: 1.4; cursor: text; }
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor, h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor { text-decoration: none; }
+h1 tt, h1 code { font-size: inherit; }
+h2 tt, h2 code { font-size: inherit; }
+h3 tt, h3 code { font-size: inherit; }
+h4 tt, h4 code { font-size: inherit; }
+h5 tt, h5 code { font-size: inherit; }
+h6 tt, h6 code { font-size: inherit; }
+h1 { padding-bottom: 0.3em; font-size: 2.25em; line-height: 1.2; border-bottom: 1px solid rgb(238, 238, 238); }
+h2 { padding-bottom: 0.3em; font-size: 1.75em; line-height: 1.225; border-bottom: 1px solid rgb(238, 238, 238); }
+h3 { font-size: 1.5em; line-height: 1.43; }
+h4 { font-size: 1.25em; }
+h5 { font-size: 1em; }
+h6 { font-size: 1em; color: rgb(119, 119, 119); }
+p, blockquote, ul, ol, dl, table { margin: 0.8em 0px; }
+li > ol, li > ul { margin: 0px; }
+hr { height: 2px; padding: 0px; margin: 16px 0px; background-color: rgb(231, 231, 231); border: 0px none; overflow: hidden; box-sizing: content-box; }
+li p.first { display: inline-block; }
+ul, ol { padding-left: 30px; }
+ul:first-child, ol:first-child { margin-top: 0px; }
+ul:last-child, ol:last-child { margin-bottom: 0px; }
+blockquote { border-left: 4px solid rgb(223, 226, 229); padding: 0px 15px; color: rgb(119, 119, 119); }
+blockquote blockquote { padding-right: 0px; }
+table { padding: 0px; word-break: initial; }
+table tr { border-top: 1px solid rgb(223, 226, 229); margin: 0px; padding: 0px; }
+table tr:nth-child(2n), thead { background-color: rgb(248, 248, 248); }
+table tr th { font-weight: bold; border-width: 1px 1px 0px; border-top-style: solid; border-right-style: solid; border-left-style: solid; border-top-color: rgb(223, 226, 229); border-right-color: rgb(223, 226, 229); border-left-color: rgb(223, 226, 229); border-image: initial; border-bottom-style: initial; border-bottom-color: initial; text-align: left; margin: 0px; padding: 6px 13px; }
+table tr td { border: 1px solid rgb(223, 226, 229); text-align: left; margin: 0px; padding: 6px 13px; }
+table tr th:first-child, table tr td:first-child { margin-top: 0px; }
+table tr th:last-child, table tr td:last-child { margin-bottom: 0px; }
+.CodeMirror-lines { padding-left: 4px; }
+.code-tooltip { box-shadow: rgba(0, 28, 36, 0.3) 0px 1px 1px 0px; border-top: 1px solid rgb(238, 242, 242); }
+.md-fences, code, tt { border: 1px solid rgb(231, 234, 237); background-color: rgb(248, 248, 248); border-radius: 3px; padding: 2px 4px 0px; font-size: 0.9em; }
+code { background-color: rgb(243, 244, 244); padding: 0px 2px; }
+.md-fences { margin-bottom: 15px; margin-top: 15px; padding-top: 8px; padding-bottom: 6px; }
+.md-task-list-item > input { margin-left: -1.3em; }
+@media print {
+  html { font-size: 13px; }
+  table, pre { break-inside: avoid; }
+  pre { word-wrap: break-word; }
+}
+.md-fences { background-color: rgb(248, 248, 248); }
+#write pre.md-meta-block { padding: 1rem; font-size: 85%; line-height: 1.45; background-color: rgb(247, 247, 247); border: 0px; border-radius: 3px; color: rgb(119, 119, 119); margin-top: 0px !important; }
+.mathjax-block > .code-tooltip { bottom: 0.375rem; }
+.md-mathjax-midline { background: rgb(250, 250, 250); }
+#write > h3.md-focus::before { left: -1.5625rem; top: 0.375rem; }
+#write > h4.md-focus::before { left: -1.5625rem; top: 0.285714rem; }
+#write > h5.md-focus::before { left: -1.5625rem; top: 0.285714rem; }
+#write > h6.md-focus::before { left: -1.5625rem; top: 0.285714rem; }
+.md-image > .md-meta { border-radius: 3px; padding: 2px 0px 0px 4px; font-size: 0.9em; color: inherit; }
+.md-tag { color: rgb(167, 167, 167); opacity: 1; }
+.md-toc { margin-top: 20px; padding-bottom: 20px; }
+.sidebar-tabs { border-bottom: none; }
+#typora-quick-open { border: 1px solid rgb(221, 221, 221); background-color: rgb(248, 248, 248); }
+#typora-quick-open-item { background-color: rgb(250, 250, 250); border-color: rgb(254, 254, 254) rgb(229, 229, 229) rgb(229, 229, 229) rgb(238, 238, 238); border-style: solid; border-width: 1px; }
+.on-focus-mode blockquote { border-left-color: rgba(85, 85, 85, 0.12); }
+header, .context-menu, .megamenu-content, footer { font-family: "Segoe UI", Arial, sans-serif; }
+.file-node-content:hover .file-node-icon, .file-node-content:hover .file-node-open-state { visibility: visible; }
+.mac-seamless-mode #typora-sidebar { background-color: var(--side-bar-bg-color); }
+.md-lang { color: rgb(180, 101, 77); }
+.html-for-mac .context-menu { --item-hover-bg-color: #E6F0FE; }
+#md-notification .btn { border: 0px; }
+.dropdown-menu .divider { border-color: rgb(229, 229, 229); }
+@media print {
+  body::before { content: ""; position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-image: url("datacanvas.png"); background-repeat: repeat; background-position: center center; background-size: 200px 200px; opacity: 0.1; pointer-events: none; z-index: 9999; }
+}
+#write::before { content: ""; position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-image: url("watermark.png"); background-repeat: repeat; background-position: center center; background-size: 200px 200px; opacity: 0.05; pointer-events: none; z-index: -1; }
+
+
+
+
+
+ .typora-export li, .typora-export p, .typora-export,  .footnote-line {white-space: normal;} 
+</style>
+
+<style>
+/* ========== 水印系统 ========== */
+
+/* 页面水印容器 - 每页显示 */
+@page {
+    margin: 15mm;
+    @top-center {
+        content: "九章云极";
+        font-size: 10pt;
+        color: rgba(180, 180, 180, 0.4);
+        font-family: "Microsoft YaHei", Arial, sans-serif;
+    }
+    @bottom-center {
+        content: "九章云极";
+        font-size: 10pt;
+        color: rgba(180, 180, 180, 0.4);
+        font-family: "Microsoft YaHei", Arial, sans-serif;
+    }
+}
+
+/* 屏幕显示水印 - 固定在页面中央，确保完整显示，覆盖所有内容 */
+.screen-watermark {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotate(-30deg) !important;
+    font-size: 60px !important;
+    font-weight: bold !important;
+    color: rgba(200, 200, 200, 0.12) !important;
+    pointer-events: none !important;
+    z-index: 99999 !important;
+    white-space: nowrap !important;
+    font-family: "Microsoft YaHei", "SimHei", Arial, sans-serif !important;
+    letter-spacing: 10px !important;
+}
+
+/* 打印时的水印 - 使用绝对定位确保不溢出，覆盖所有内容 */
+@media print {
+    .screen-watermark {
+        position: fixed !important;
+        font-size: 50px !important;
+        color: rgba(180, 180, 180, 0.15) !important;
+        z-index: 99999 !important;
+        transform: translate(-50%, -50%) rotate(-30deg) !important;
+    }
+    
+    /* 打印时为每个图片添加水印 */
+    .image-watermark {
+        position: absolute !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) rotate(-30deg) !important;
+        font-size: 30px !important;
+        font-weight: bold !important;
+        color: rgba(180, 180, 180, 0.3) !important;
+        pointer-events: none !important;
+        z-index: 9999 !important;
+        white-space: nowrap !important;
+        font-family: "Microsoft YaHei", Arial, sans-serif !important;
+    }
+    
+    /* 确保图片容器支持水印定位 */
+    .image-container {
+        position: relative !important;
+    }
+}
+
+/* 图片水印容器 */
+.image-container {
+    position: relative !important;
+    display: inline-block !important;
+    width: 100% !important;
+}
+
+/* 图片上的水印 - 屏幕显示 */
+.image-watermark {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotate(-30deg) !important;
+    font-size: 35px !important;
+    font-weight: bold !important;
+    color: rgba(200, 200, 200, 0.25) !important;
+    pointer-events: none !important;
+    z-index: 9999 !important;
+    white-space: nowrap !important;
+    font-family: "Microsoft YaHei", Arial, sans-serif !important;
+    letter-spacing: 8px !important;
+}
+
+/* 确保图片正常显示 */
+.image-container img {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+}
+
+/* 表格水印容器 */
+.table-container {
+    position: relative !important;
+    display: block !important;
+    width: 100% !important;
+    margin: 1em 0 !important;
+}
+
+/* 表格上的水印 - 屏幕显示 */
+.table-watermark {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotate(-30deg) !important;
+    font-size: 45px !important;
+    font-weight: bold !important;
+    color: rgba(200, 200, 200, 0.15) !important;
+    pointer-events: none !important;
+    z-index: 9999 !important;
+    white-space: nowrap !important;
+    font-family: "Microsoft YaHei", Arial, sans-serif !important;
+    letter-spacing: 8px !important;
+}
+
+/* 确保表格正常显示 */
+.table-container table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+}
+
+/* 打印时表格水印 */
+@media print {
+    .table-watermark {
+        position: absolute !important;
+        font-size: 40px !important;
+        color: rgba(180, 180, 180, 0.2) !important;
+        z-index: 9999 !important;
+    }
+}
+
+/* 页面四个角的水印 - 确保不溢出 */
+.corner-watermark {
+    position: fixed !important;
+    font-size: 14px !important;
+    color: rgba(180, 180, 180, 0.3) !important;
+    pointer-events: none !important;
+    z-index: 9999 !important;
+    font-family: "Microsoft YaHei", Arial, sans-serif !important;
+}
+
+.corner-watermark.top-left {
+    top: 20px !important;
+    left: 20px !important;
+}
+
+.corner-watermark.top-right {
+    top: 20px !important;
+    right: 20px !important;
+}
+
+.corner-watermark.bottom-left {
+    bottom: 20px !important;
+    left: 20px !important;
+}
+
+.corner-watermark.bottom-right {
+    bottom: 20px !important;
+    right: 20px !important;
+}
+
+@media print {
+    .corner-watermark {
+        position: absolute !important;
+        font-size: 12px !important;
+        color: rgba(180, 180, 180, 0.4) !important;
+    }
+}
+</style>
+
+</head>
+<body class='typora-export os-windows' >
+<!-- 水印元素 -->
+<div class="screen-watermark">九章云极</div>
+<div class="corner-watermark top-left">九章云极</div>
+<div class="corner-watermark top-right">九章云极</div>
+<div class="corner-watermark bottom-left">九章云极</div>
+<div class="corner-watermark bottom-right">九章云极</div>
+
+<div  id='write'  class = 'is-node'><h1><a name='header-n0' class='md-header-anchor '></a>浪潮MetaX-C550 - 两节点Kimi-K2.5模型整体测试报告</h1><div align="center">
+*测试日期：2026-04-27 ~ 2026-05-11 <br>
+*测试人员：九章云极</div><p></div></p><hr /><h2><a name='header-n5' class='md-header-anchor '></a>1. 模型配置信息</h2><figure><div class="table-container">
+<table><thead><tr><th>芯片名称</th><th><strong>MetaX-C550</strong></th><th>实际使用</th></tr></thead><tbody><tr><td><strong>model_name</strong></td><td>Kimi-K2.5-INT4</td><td>&nbsp;</td></tr><tr><td><strong>quantization_config</strong></td><td>int-4</td><td>&nbsp;</td></tr><tr><td><strong>model_size</strong></td><td>496G</td><td>&nbsp;</td></tr><tr><td><strong>max_position_embeddings</strong></td><td>262144</td><td>&nbsp;</td></tr><tr><td><strong>temperature</strong></td><td>N/A</td><td>&nbsp;</td></tr><tr><td><strong>top_p</strong></td><td>N/A</td><td>&nbsp;</td></tr><tr><td><strong>top_k</strong></td><td>N/A</td><td>&nbsp;</td></tr><tr><td><strong>transformers_version</strong></td><td>4.57.6</td><td>4.57.1</td></tr><tr><td><strong>sglang_version</strong></td><td>0.5.9+maca3.5.3.204</td><td>&nbsp;</td></tr><tr><td><strong>python_version</strong></td><td>3.10.10</td><td>&nbsp;</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h2><a name='header-n52' class='md-header-anchor '></a>2. 推理框架主要启动参数</h2><figure><div class="table-container">
+<table><thead><tr><th>参数名称</th><th><strong>MetaX-C550</strong></th></tr></thead><tbody><tr><td>context-length</td><td>262144</td></tr><tr><td>max-running-requests</td><td>64</td></tr><tr><td>chunked-prefill-size</td><td>8192</td></tr><tr><td>cuda-graph-max-bs</td><td>64</td></tr><tr><td>mem-fraction-static</td><td>0.8</td></tr><tr><td>tp</td><td>16</td></tr><tr><td>nnodes</td><td>2</td></tr><tr><td>tool-call-parser</td><td>kimi_k2</td></tr><tr><td>reasoning-parser</td><td>kimi_k2</td></tr><tr><td>disable-radix-cache</td><td>true</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><blockquote><p>MetaX-C550平台，Kimi-K2.5模型详细部署完整脚本见本报告 <strong>《附录一》</strong></p></blockquote><h2><a name='header-n90' class='md-header-anchor '></a>3. 测试场景及概况</h2><h3><a name='header-n91' class='md-header-anchor '></a>3.1 测试场景列表</h3><figure><div class="table-container">
+<table><thead><tr><th>序号</th><th>测试场景</th></tr></thead><tbody><tr><td>场景一</td><td>sglang benchmark基准测试</td></tr><tr><td>场景二</td><td>单、多并发超长上下文请求</td></tr><tr><td>场景三</td><td>多并发长上下文极限验证</td></tr><tr><td>场景四</td><td>多I/O测试</td></tr><tr><td>场景五</td><td>模型精度测试</td></tr><tr><td>场景六</td><td>模型推理功能</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h3><a name='header-n115' class='md-header-anchor '></a>3.2 模型部署问题汇总</h3><p>N/A</p><h3><a name='header-n117' class='md-header-anchor '></a>3.3 模型推理测试问题汇总</h3><ul><li>思考模式开关不生效，同minimax模型</li></ul><hr /><hr /><h2><a name='header-n124' class='md-header-anchor '></a>以下是每个测试场景的详细结果报告</h2><hr /><h2><a name='header-n126' class='md-header-anchor '></a>测试场景一：sglang benchmark基准测试</h2><p><strong>测试目标</strong>：在相同请求数、基础长度上下文参数下，使用sglang bench serve工具对并发数逐级增加场景的性能基准验证.</p><p><strong>主要采集指标</strong>：</p><figure><div class="table-container">
+<table><thead><tr><th>指标</th><th>单位</th><th>含义</th></tr></thead><tbody><tr><td>E2E Latency</td><td>ms</td><td>End-to-End Latency，端到端延迟</td></tr><tr><td>TTFT</td><td>ms</td><td>Time To First Token，首 token 延迟</td></tr><tr><td>TPOT</td><td>ms/token</td><td>Time Per Output Token，每 token 生成时间</td></tr><tr><td>ITL</td><td>ms</td><td>Inter-Token Latency，token间延迟</td></tr><tr><td>Throughput</td><td>tokens/s</td><td>系统总吞吐</td></tr><tr><td>QPS</td><td>requests/s</td><td>请求吞吐</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h3><a name='header-n158' class='md-header-anchor '></a>📊 测试概览</h3><figure><div class="table-container">
+<table><thead><tr><th>项目</th><th>配置</th><th>备注</th></tr></thead><tbody><tr><td><strong>数据集</strong></td><td>random</td><td>&nbsp;</td></tr><tr><td><strong>并发数</strong></td><td>1, 2, 4, 8, 10, 16, 32, 64, 80, 128</td><td>&nbsp;</td></tr><tr><td><strong>总请求数</strong></td><td>320</td><td>&nbsp;</td></tr><tr><td><strong>请求输入上下文长度</strong></td><td>10240（10k）</td><td>&nbsp;</td></tr><tr><td><strong>请求输出上下文长度</strong></td><td>256（0.25k）</td><td>&nbsp;</td></tr><tr><td><strong>被测芯片</strong></td><td>MetaX_C550</td><td>&nbsp;</td></tr><tr><td><strong>被测模型</strong></td><td>Kimi-K2.5-INT4</td><td>&nbsp;</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h3><a name='header-n193' class='md-header-anchor '></a>📋 测试结果汇总</h3><figure><div class="table-container">
+<table><thead><tr><th>并发数</th><th>请求吞吐量 (req/s)</th><th>输出Token吞吐量 (tok/s)</th><th>总Token吞吐量 (tok/s)</th><th>TTFT P99 (ms)</th><th>TPOT P99 (ms)</th><th>E2E延迟均值 (ms)</th></tr></thead><tbody><tr><td>1</td><td>0.26</td><td>67.32</td><td>2760.23</td><td>988.73</td><td>14.65</td><td>3802.13</td></tr><tr><td>2</td><td>0.40</td><td>102.11</td><td>4186.34</td><td>1691.82</td><td>23.44</td><td>5010.27</td></tr><tr><td>4</td><td>0.53</td><td>134.71</td><td>5522.99</td><td>1809.49</td><td>35.67</td><td>7583.94</td></tr><tr><td>8</td><td>0.64</td><td>164.94</td><td>6762.64</td><td>4535.68</td><td>63.19</td><td>12377.05</td></tr><tr><td>10</td><td>0.68</td><td>173.25</td><td>7103.40</td><td>5894.17</td><td>75.90</td><td>14701.05</td></tr><tr><td>16</td><td>0.76</td><td>194.95</td><td>7992.89</td><td>11294.80</td><td>108.34</td><td>20865.09</td></tr><tr><td>32</td><td>0.80</td><td>204.84</td><td>8398.28</td><td>32597.67</td><td>136.15</td><td>39234.36</td></tr><tr><td>64</td><td>0.80</td><td>204.79</td><td>8396.31</td><td>73549.17</td><td>136.18</td><td>75077.66</td></tr><tr><td>80</td><td>0.80</td><td>204.78</td><td>8395.88</td><td>90053.76</td><td>136.30</td><td>91474.37</td></tr><tr><td>128</td><td>0.80</td><td>204.83</td><td>8397.97</td><td>152296.59</td><td>135.98</td><td>134708.95</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><hr /><h3><a name='header-n285' class='md-header-anchor '></a>📊 各并发级别性能柱状图</h3><p><div class="image-container">
+<img src="./test_01_concurrency_comparison.png" width="1000" />
+<div class="image-watermark">九章云极</div>
+</div></p><h3><a name='header-n288' class='md-header-anchor '></a>📈 性能趋势分析</h3><p><div class="image-container">
+<img src="./test_01_performance_trends.png" width="1000" />
+<div class="image-watermark">九章云极</div>
+</div></p><hr /><h4><a name='header-n291' class='md-header-anchor '></a>🎯 服务基准结果详情</h4><figure><div class="table-container">
+<table><thead><tr><th>指标</th><th>1 并发</th><th>2 并发</th><th>4 并发</th><th>8 并发</th><th>10 并发</th><th>16 并发</th><th>32 并发</th><th>64 并发</th><th>80 并发</th><th>128 并发</th></tr></thead><tbody><tr><td>成功请求数</td><td>320</td><td>320</td><td>320</td><td>320</td><td>320</td><td>320</td><td>320</td><td>320</td><td>320</td><td>320</td></tr><tr><td>测试持续时间 (s)</td><td>1216.83</td><td>802.31</td><td>608.13</td><td>496.66</td><td>472.83</td><td>420.21</td><td>399.93</td><td>400.02</td><td>400.04</td><td>399.94</td></tr><tr><td>总输入 tokens</td><td>3276800</td><td>3276800</td><td>3276800</td><td>3276800</td><td>3276800</td><td>3276800</td><td>3276800</td><td>3276800</td><td>3276800</td><td>3276800</td></tr><tr><td>总生成 tokens</td><td>81920</td><td>81920</td><td>81920</td><td>81920</td><td>81920</td><td>81920</td><td>81920</td><td>81920</td><td>81920</td><td>81920</td></tr><tr><td><strong>请求吞吐量 (req/s)</strong></td><td>0.26</td><td>0.40</td><td>0.53</td><td>0.64</td><td>0.68</td><td>0.76</td><td>0.80</td><td>0.80</td><td>0.80</td><td>0.80</td></tr><tr><td><strong>输出 token 吞吐量 (tok/s)</strong></td><td>67.32</td><td>102.11</td><td>134.71</td><td>164.94</td><td>173.25</td><td>194.95</td><td>204.84</td><td>204.79</td><td>204.78</td><td>204.83</td></tr><tr><td>峰值输出 token 吞吐量 (tok/s)</td><td>115.00</td><td>180.00</td><td>278.00</td><td>406.00</td><td>463.00</td><td>620.00</td><td>718.00</td><td>702.00</td><td>704.00</td><td>699.00</td></tr><tr><td>峰值并发请求数</td><td>2</td><td>4</td><td>6</td><td>11</td><td>13</td><td>20</td><td>38</td><td>70</td><td>86</td><td>134</td></tr><tr><td><strong>总 token 吞吐量 (tok/s)</strong></td><td>2760.23</td><td>4186.34</td><td>5522.99</td><td>6762.64</td><td>7103.40</td><td>7992.89</td><td>8398.28</td><td>8396.31</td><td>8395.88</td><td>8397.97</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h4><a name='header-n414' class='md-header-anchor '></a>⏱️ 端到端延迟 (E2E Latency)</h4><figure><div class="table-container">
+<table><thead><tr><th>指标</th><th>1 并发</th><th>2 并发</th><th>4 并发</th><th>8 并发</th><th>10 并发</th><th>16 并发</th><th>32 并发</th><th>64 并发</th><th>80 并发</th><th>128 并发</th></tr></thead><tbody><tr><td>平均 E2E 延迟 (ms)</td><td>3802.13</td><td>5010.27</td><td>7583.94</td><td>12377.05</td><td>14701.05</td><td>20865.09</td><td>39234.36</td><td>75077.66</td><td>91474.37</td><td>134708.95</td></tr><tr><td>中位 E2E 延迟 (ms)</td><td>3761.61</td><td>4963.62</td><td>7516.79</td><td>12279.29</td><td>14562.28</td><td>20764.98</td><td>39301.61</td><td>78490.29</td><td>98187.46</td><td>155597.31</td></tr><tr><td>P90 E2E 延迟 (ms)</td><td>4051.19</td><td>5395.86</td><td>8580.77</td><td>13819.57</td><td>16782.27</td><td>24045.24</td><td>44779.99</td><td>83766.79</td><td>103364.93</td><td>162139.46</td></tr><tr><td>P99 E2E 延迟 (ms)</td><td>4792.19</td><td>6899.49</td><td>10642.44</td><td>18033.48</td><td>20937.21</td><td>32461.94</td><td>57351.70</td><td>97818.99</td><td>115386.58</td><td>176314.05</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h4><a name='header-n477' class='md-header-anchor '></a>⏱️ 首Token延迟 (TTFT)</h4><figure><div class="table-container">
+<table><thead><tr><th>指标</th><th>1 并发</th><th>2 并发</th><th>4 并发</th><th>8 并发</th><th>10 并发</th><th>16 并发</th><th>32 并发</th><th>64 并发</th><th>80 并发</th><th>128 并发</th></tr></thead><tbody><tr><td>平均 TTFT (ms)</td><td>901.81</td><td>947.17</td><td>984.34</td><td>1101.70</td><td>1210.21</td><td>1510.87</td><td>16246.03</td><td>52096.83</td><td>68496.03</td><td>111782.93</td></tr><tr><td>中位 TTFT (ms)</td><td>897.55</td><td>913.63</td><td>913.12</td><td>923.95</td><td>931.94</td><td>938.35</td><td>16328.37</td><td>55427.05</td><td>75456.51</td><td>133493.89</td></tr><tr><td>P99 TTFT (ms)</td><td>988.73</td><td>1691.82</td><td>1809.49</td><td>4535.68</td><td>5894.17</td><td>11294.80</td><td>32597.67</td><td>73549.17</td><td>90053.76</td><td>152296.59</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h4><a name='header-n528' class='md-header-anchor '></a>⚡ 每Token生成时间 (TPOT)</h4><figure><div class="table-container">
+<table><thead><tr><th>指标</th><th>1 并发</th><th>2 并发</th><th>4 并发</th><th>8 并发</th><th>10 并发</th><th>16 并发</th><th>32 并发</th><th>64 并发</th><th>80 并发</th><th>128 并发</th></tr></thead><tbody><tr><td>平均 TPOT (ms)</td><td>11.37</td><td>15.93</td><td>25.88</td><td>44.22</td><td>52.91</td><td>75.90</td><td>90.15</td><td>90.12</td><td>90.11</td><td>89.91</td></tr><tr><td>中位 TPOT (ms)</td><td>11.21</td><td>15.85</td><td>25.85</td><td>44.36</td><td>53.12</td><td>76.02</td><td>91.35</td><td>91.46</td><td>91.35</td><td>91.22</td></tr><tr><td>P99 TPOT (ms)</td><td>14.65</td><td>23.44</td><td>35.67</td><td>63.19</td><td>75.90</td><td>108.34</td><td>136.15</td><td>136.18</td><td>136.30</td><td>135.98</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h4><a name='header-n579' class='md-header-anchor '></a>🔄 Token间延迟 (ITL)</h4><figure><div class="table-container">
+<table><thead><tr><th>指标</th><th>1 并发</th><th>2 并发</th><th>4 并发</th><th>8 并发</th><th>10 并发</th><th>16 并发</th><th>32 并发</th><th>64 并发</th><th>80 并发</th><th>128 并发</th></tr></thead><tbody><tr><td>平均 ITL (ms)</td><td>11.37</td><td>15.93</td><td>25.88</td><td>44.22</td><td>52.91</td><td>75.90</td><td>90.15</td><td>90.12</td><td>90.11</td><td>89.91</td></tr><tr><td>中位 ITL (ms)</td><td>10.96</td><td>12.21</td><td>15.34</td><td>20.06</td><td>22.20</td><td>26.39</td><td>29.39</td><td>29.40</td><td>29.46</td><td>29.43</td></tr><tr><td>P95 ITL (ms)</td><td>21.84</td><td>24.44</td><td>30.88</td><td>41.68</td><td>311.31</td><td>463.73</td><td>462.06</td><td>461.76</td><td>461.88</td><td>461.77</td></tr><tr><td>P99 ITL (ms)</td><td>22.31</td><td>25.49</td><td>456.82</td><td>466.65</td><td>589.03</td><td>916.82</td><td>925.38</td><td>926.00</td><td>925.37</td><td>924.61</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><hr /><hr /><h2><a name='header-n644' class='md-header-anchor '></a>测试场景二：超长上下文请求测试</h2><p><strong>测试目标</strong>：对超长上下文的请求，使用sglang bench serve工具对并发数逐级增加场景的性能基准验证.</p><h3><a name='header-n646' class='md-header-anchor '></a>📊 测试概览</h3><figure><div class="table-container">
+<table><thead><tr><th>项目</th><th>配置</th><th>备注</th></tr></thead><tbody><tr><td><strong>数据集</strong></td><td>random</td><td>&nbsp;</td></tr><tr><td><strong>并发数</strong></td><td>1, 2, 4, 8, 10</td><td>&nbsp;</td></tr><tr><td><strong>总请求数</strong></td><td>100</td><td>&nbsp;</td></tr><tr><td><strong>请求输入上下文长度</strong></td><td>194560（190k）</td><td>&nbsp;</td></tr><tr><td><strong>请求输出上下文长度</strong></td><td>1024（1k）</td><td>&nbsp;</td></tr><tr><td><strong>被测芯片</strong></td><td>MetaX_C550</td><td>&nbsp;</td></tr><tr><td><strong>被测模型</strong></td><td>Kimi-K2.5-INT4</td><td>&nbsp;</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><p>&nbsp;</p><h3><a name='header-n681' class='md-header-anchor '></a>📋 测试结果汇总</h3><figure><div class="table-container">
+<table><thead><tr><th>并发数</th><th>请求吞吐量 (req/s)</th><th>输出Token吞吐量 (tok/s)</th><th>总Token吞吐量 (tok/s)</th><th>TTFT P99 (ms)</th><th>TPOT P99 (ms)</th><th>E2E延迟均值 (ms)</th></tr></thead><tbody><tr><td>1</td><td>0.01</td><td>14.55</td><td>2835.64</td><td>42319.55</td><td>34.98</td><td>68965.79</td></tr><tr><td>2</td><td>0.01</td><td>14.62</td><td>2848.75</td><td>118444.54</td><td>35.40</td><td>136610.77</td></tr><tr><td>4</td><td>0.01</td><td>14.62</td><td>2848.60</td><td>259153.98</td><td>35.40</td><td>270487.20</td></tr><tr><td>8</td><td>0.01</td><td>14.62</td><td>2848.20</td><td>540048.79</td><td>35.42</td><td>529877.17</td></tr><tr><td>10</td><td>0.01</td><td>14.62</td><td>2848.26</td><td>679117.63</td><td>35.42</td><td>655336.51</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><hr /><h3><a name='header-n732' class='md-header-anchor '></a>📊 各并发级别性能柱状图</h3><p><div class="image-container">
+<img src="./test_02_concurrency_comparison.png" width="1000" />
+<div class="image-watermark">九章云极</div>
+</div></p><hr /><h3><a name='header-n735' class='md-header-anchor '></a>📈 性能趋势分析</h3><p><div class="image-container">
+<img src="./test_02_performance_trends.png" width="1000" />
+<div class="image-watermark">九章云极</div>
+</div></p><hr /><h4><a name='header-n738' class='md-header-anchor '></a>🎯 服务基准结果详情</h4><figure><div class="table-container">
+<table><thead><tr><th>指标</th><th>1 并发</th><th>2 并发</th><th>4 并发</th><th>8 并发</th><th>10 并发</th></tr></thead><tbody><tr><td>成功请求数</td><td>100</td><td>100</td><td>100</td><td>100</td><td>100</td></tr><tr><td>测试持续时间 (s)</td><td>6896.63</td><td>6864.89</td><td>6865.26</td><td>6866.22</td><td>6866.06</td></tr><tr><td>总输入 tokens</td><td>19456000</td><td>19456000</td><td>19456000</td><td>19456000</td><td>19456000</td></tr><tr><td>总生成 tokens</td><td>100354</td><td>100354</td><td>100354</td><td>100354</td><td>100354</td></tr><tr><td><strong>请求吞吐量 (req/s)</strong></td><td>0.01</td><td>0.01</td><td>0.01</td><td>0.01</td><td>0.01</td></tr><tr><td><strong>输出 token 吞吐量 (tok/s)</strong></td><td>14.55</td><td>14.62</td><td>14.62</td><td>14.62</td><td>14.62</td></tr><tr><td>峰值输出 token 吞吐量 (tok/s)</td><td>47.00</td><td>47.00</td><td>47.00</td><td>48.00</td><td>47.00</td></tr><tr><td>峰值并发请求数</td><td>2</td><td>3</td><td>5</td><td>9</td><td>11</td></tr><tr><td><strong>总 token 吞吐量 (tok/s)</strong></td><td>2835.64</td><td>2848.75</td><td>2848.60</td><td>2848.20</td><td>2848.26</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h4><a name='header-n811' class='md-header-anchor '></a>⏱️ 端到端延迟 (E2E Latency)</h4><figure><div class="table-container">
+<table><thead><tr><th>指标</th><th>1 并发</th><th>2 并发</th><th>4 并发</th><th>8 并发</th><th>10 并发</th></tr></thead><tbody><tr><td>平均 E2E 延迟 (ms)</td><td>68965.79</td><td>136610.77</td><td>270487.20</td><td>529877.17</td><td>655336.51</td></tr><tr><td>中位 E2E 延迟 (ms)</td><td>70244.75</td><td>139815.23</td><td>280307.16</td><td>559497.09</td><td>697480.02</td></tr><tr><td>P90 E2E 延迟 (ms)</td><td>72878.42</td><td>143957.19</td><td>285963.73</td><td>565469.57</td><td>704392.97</td></tr><tr><td>P99 E2E 延迟 (ms)</td><td>77217.61</td><td>147480.32</td><td>288560.85</td><td>570042.23</td><td>708999.73</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h4><a name='header-n849' class='md-header-anchor '></a>⏱️ 首Token延迟 (TTFT)</h4><figure><div class="table-container">
+<table><thead><tr><th>指标</th><th>1 并发</th><th>2 并发</th><th>4 并发</th><th>8 并发</th><th>10 并发</th></tr></thead><tbody><tr><td>平均 TTFT (ms)</td><td>40645.80</td><td>108264.32</td><td>242126.95</td><td>501516.70</td><td>626964.83</td></tr><tr><td>中位 TTFT (ms)</td><td>41415.82</td><td>110985.42</td><td>250863.44</td><td>530794.21</td><td>669938.13</td></tr><tr><td>P99 TTFT (ms)</td><td>42319.55</td><td>118444.54</td><td>259153.98</td><td>540048.79</td><td>679117.63</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h4><a name='header-n880' class='md-header-anchor '></a>⚡ 每Token生成时间 (TPOT)</h4><figure><div class="table-container">
+<table><thead><tr><th>指标</th><th>1 并发</th><th>2 并发</th><th>4 并发</th><th>8 并发</th><th>10 并发</th></tr></thead><tbody><tr><td>平均 TPOT (ms)</td><td>28.25</td><td>28.27</td><td>28.29</td><td>28.29</td><td>28.30</td></tr><tr><td>中位 TPOT (ms)</td><td>28.21</td><td>28.24</td><td>28.26</td><td>28.27</td><td>28.27</td></tr><tr><td>P99 TPOT (ms)</td><td>34.98</td><td>35.40</td><td>35.40</td><td>35.42</td><td>35.42</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h4><a name='header-n911' class='md-header-anchor '></a>🔄 Token间延迟 (ITL)</h4><figure><div class="table-container">
+<table><thead><tr><th>指标</th><th>1 并发</th><th>2 并发</th><th>4 并发</th><th>8 并发</th><th>10 并发</th></tr></thead><tbody><tr><td>平均 ITL (ms)</td><td>28.25</td><td>28.27</td><td>28.29</td><td>28.29</td><td>28.30</td></tr><tr><td>中位 ITL (ms)</td><td>21.48</td><td>21.49</td><td>21.50</td><td>21.51</td><td>21.51</td></tr><tr><td>P95 ITL (ms)</td><td>42.95</td><td>42.96</td><td>42.98</td><td>42.99</td><td>43.00</td></tr><tr><td>P99 ITL (ms)</td><td>43.56</td><td>43.59</td><td>43.57</td><td>43.52</td><td>43.59</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><hr /><hr /><h2><a name='header-n950' class='md-header-anchor '></a>测试场景三：长上下文高并发极限验证</h2><p><strong>测试目标</strong>：多并发长上下文的情况下，验证芯片平台同时能处理的最大请求数。</p><h3><a name='header-n952' class='md-header-anchor '></a>📊 测试概览</h3><figure><div class="table-container">
+<table><thead><tr><th>项目</th><th>配置</th><th>备注</th></tr></thead><tbody><tr><td><strong>数据集</strong></td><td>random</td><td>&nbsp;</td></tr><tr><td><strong>并发数</strong></td><td>32, 64</td><td>&nbsp;</td></tr><tr><td><strong>总请求数</strong></td><td>1000</td><td>&nbsp;</td></tr><tr><td><strong>请求输入上下文长度</strong></td><td>90000（约90k）</td><td>&nbsp;</td></tr><tr><td><strong>请求输出上下文长度</strong></td><td>2000（约2k）</td><td>&nbsp;</td></tr><tr><td><strong>被测芯片</strong></td><td>MetaX_C550</td><td>&nbsp;</td></tr><tr><td><strong>被测模型</strong></td><td>Kimi-K2.5-INT4</td><td>&nbsp;</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h3><a name='header-n987' class='md-header-anchor '></a>监控处理请求极限</h3><p><strong>Master节点： Prefill阶段同时处理请求数：1, Decode阶段同时处理请求数：2</strong></p><p><div class="image-container">
+<img src='test_03_img.png' alt='test_03_img.png' referrerPolicy='no-referrer' />
+<div class="image-watermark">九章云极</div>
+</div></p><p><strong>Slave节点: （日志文件在服务端，暂未获取）</strong></p><h3><a name='header-n991' class='md-header-anchor '></a>📋 测试结果汇总</h3><figure><div class="table-container">
+<table><thead><tr><th>并发数</th><th>请求吞吐量 (req/s)</th><th>输出Token吞吐量 (tok/s)</th><th>总Token吞吐量 (tok/s)</th><th>TTFT P99 (ms)</th><th>TPOT P99 (ms)</th><th>E2E延迟均值 (ms)</th></tr></thead><tbody><tr><td>32</td><td>0.03</td><td>52.87</td><td>2432.03</td><td>1202590.10</td><td>47.41</td><td>1192521.83</td></tr><tr><td>64</td><td>0.03</td><td>52.84</td><td>2430.50</td><td>2422100.16</td><td>46.53</td><td>2348201.18</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><hr /><hr /><h2><a name='header-n1020' class='md-header-anchor '></a>测试场景四：多I/O测试</h2><h3><a name='header-n1021' class='md-header-anchor '></a>测试目标</h3><p>测试不同输入输出长度和并发级别下的性能表现，分析同一芯片同一模型在不同输入输出长度和并发级别下的性能指标变化趋势。</p><h3><a name='header-n1023' class='md-header-anchor '></a>📊 测试概览</h3><figure><div class="table-container">
+<table><thead><tr><th>项目</th><th>配置</th><th>备注</th></tr></thead><tbody><tr><td><strong>数据集</strong></td><td>random</td><td>&nbsp;</td></tr><tr><td><strong>并发数</strong></td><td>1, 4, 8, 16, 32, 64, 128</td><td>&nbsp;</td></tr><tr><td><strong>总请求数</strong></td><td>1000</td><td>&nbsp;</td></tr><tr><td><strong>输入输出长度</strong></td><td>(128, 128), (512, 256), (1024, 512), (2048, 1024), (4096, 2048), (8192, 1024)</td><td>&nbsp;</td></tr><tr><td><strong>模型</strong></td><td>Kimi-K2.5-INT4</td><td>&nbsp;</td></tr><tr><td><strong>被测芯片</strong></td><td>inspur_MetaX_C550</td><td>&nbsp;</td></tr><tr><td><strong>SGLang版本</strong></td><td>0.5.9</td><td>&nbsp;</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h3><a name='header-n1058' class='md-header-anchor '></a>📊 I/O对比（固定并发数）</h3><blockquote><p><strong>由于本场景测试在Kimi-K2.5模型未测试完全，本报告仅列出一组单并发下随上下文长度变化的性能趋势</strong></p></blockquote><h4><a name='header-n1061' class='md-header-anchor '></a>并发数 = 1</h4><figure><div class="table-container">
+<table><thead><tr><th>指标</th><th>i128_o128</th><th>i512_o256</th><th>i1024_o512</th><th>i2048_o1024</th><th>i4096_o2048</th><th>i8192_o1024</th></tr></thead><tbody><tr><td>请求吞吐量 (req/s)</td><td>0.78</td><td>0.44</td><td>0.23</td><td>0.11</td><td>0.05</td><td>0.08</td></tr><tr><td>输出Token吞吐量 (tok/s)</td><td>100.13</td><td>112.45</td><td>118.27</td><td>113.16</td><td>94.92</td><td>83.55</td></tr><tr><td>总Token吞吐量 (tok/s)</td><td>200.25</td><td>337.34</td><td>354.80</td><td>339.49</td><td>284.76</td><td>751.95</td></tr><tr><td>TTFT P99 (ms)</td><td>130.84</td><td>137.35</td><td>155.84</td><td>235.23</td><td>401.71</td><td>804.92</td></tr><tr><td>TPOT P99 (ms)</td><td>12.66</td><td>11.69</td><td>11.70</td><td>11.64</td><td>13.40</td><td>14.76</td></tr><tr><td>E2E延迟均值 (ms)</td><td>1278.05</td><td>2276.25</td><td>4328.83</td><td>9048.39</td><td>21575.70</td><td>12255.59</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><p><div class="image-container">
+<img src='./compare_by_io_conc1/io_comparison.png' alt='I/O对比' referrerPolicy='no-referrer' />
+<div class="image-watermark">九章云极</div>
+</div></p><hr /><hr /><h2><a name='header-n1124' class='md-header-anchor '></a>测试场景五：模型精度测试</h2><h3><a name='header-n1125' class='md-header-anchor '></a>测试目标</h3><p>模型精度测试目标主要是通过标准指标（如准确率、精确率、召回率、F1值、mAP、AUC）衡量模型在测试集上的输出与真实标签的一致性，评估其基本判别能力。</p><h3><a name='header-n1127' class='md-header-anchor '></a>Kimi-K2.5模型 - 精度测试结果</h3><figure><div class="table-container">
+<table><thead><tr><th>Task</th><th>Score</th></tr></thead><tbody><tr><td>IFBench (Strict)</td><td>0.6067</td></tr><tr><td>IFBench (Loose)</td><td>0.6600</td></tr><tr><td>lm-eval:gsm_plus (Flexible)</td><td>0.7514</td></tr><tr><td>lm-eval:gsm_plus (Strict)</td><td>0.7510</td></tr><tr><td>lm-eval:mmlu_pro</td><td>0.8264</td></tr><tr><td>lm-eval:ruler</td><td>0.9672</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h4><a name='header-n1151' class='md-header-anchor '></a>Kimi-K2.5模型  - lm-eval:mmlu_pro任务子数据集详细结果</h4><figure><div class="table-container">
+<table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody><tr><td>biology</td><td>0.9358</td></tr><tr><td>business</td><td>0.8657</td></tr><tr><td>chemistry</td><td>0.8587</td></tr><tr><td>computer_science</td><td>0.8780</td></tr><tr><td>economics</td><td>0.8614</td></tr><tr><td>engineering</td><td>0.7668</td></tr><tr><td>health</td><td>0.7958</td></tr><tr><td>history</td><td>0.7113</td></tr><tr><td>law</td><td>0.6213</td></tr><tr><td>math</td><td>0.9275</td></tr><tr><td>other</td><td>0.7965</td></tr><tr><td>philosophy</td><td>0.8096</td></tr><tr><td>physics</td><td>0.8645</td></tr><tr><td>psychology</td><td>0.8333</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h4><a name='header-n1198' class='md-header-anchor '></a>Kimi-K2.5模型 - lm-eval:ruler任务子数据集详细结果</h4><figure><div class="table-container">
+<table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody><tr><td>niah_multikey_1</td><td>1.0000</td></tr><tr><td>niah_multikey_2</td><td>1.0000</td></tr><tr><td>niah_multikey_3</td><td>1.0000</td></tr><tr><td>niah_multiquery</td><td>1.0000</td></tr><tr><td>niah_multivalue</td><td>0.9922</td></tr><tr><td>niah_single_1</td><td>1.0000</td></tr><tr><td>niah_single_2</td><td>1.0000</td></tr><tr><td>niah_single_3</td><td>1.0000</td></tr><tr><td>ruler_cwe</td><td>0.9719</td></tr><tr><td>ruler_fwe</td><td>0.9896</td></tr><tr><td>ruler_qa_hotpot</td><td>0.8438</td></tr><tr><td>ruler_qa_squad</td><td>0.7760</td></tr><tr><td>ruler_vt</td><td>1.0000</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><hr /><hr /><h2><a name='header-n1244' class='md-header-anchor '></a>测试场景六：基础推理能力验证</h2><h3><a name='header-n1245' class='md-header-anchor '></a>测试目标：</h3><p>验证模型在芯片环境上的基础推理和兼容性的支持能力情况，可作为快速选型的一个基础指标。</p><h3><a name='header-n1247' class='md-header-anchor '></a>测试说明</h3><blockquote><p>本报告只列出在MetaX-C550芯片平台上Kimi-K2.5-INT4模型的测试结果</p></blockquote><blockquote><p>状态说明：✅ 已通过，⏳ 未测试，❌ 未通过，⚠️ 部分通过</p></blockquote><h3><a name='header-n1252' class='md-header-anchor '></a>A. 基础推理能力</h3><figure><div class="table-container">
+<table><thead><tr><th>#</th><th>测试点</th><th>测试内容</th><th>状态</th></tr></thead><tbody><tr><td>A1</td><td>单轮对话</td><td>发送单条prompt，验证正常生成</td><td>✅</td></tr><tr><td>A2</td><td>多轮对话</td><td>5轮对话，验证上下文保持和连贯性</td><td>✅</td></tr><tr><td>A3</td><td>System Prompt</td><td>设置系统角色，验证模型遵循程度</td><td>✅</td></tr><tr><td>A4</td><td>流式输出</td><td>stream=true，验证SSE逐token返回</td><td>✅</td></tr><tr><td>A5</td><td>非流式输出</td><td>stream=false，验证完整返回</td><td>✅</td></tr><tr><td>A6</td><td>Temperature 控制</td><td>temp=0 vs temp=1.0，验证输出差异</td><td>✅</td></tr><tr><td>A7</td><td>Top-p/Top-k采样</td><td>不同top_p/top_k值，验证多样性控制</td><td>✅</td></tr><tr><td>A8</td><td>Max Tokens限制</td><td>设置max_tokens，验证输出不超限</td><td>✅</td></tr><tr><td>A9</td><td>Stop Sequences</td><td>设置stop token，验证截断</td><td>✅</td></tr><tr><td>A10</td><td>Seed 可复现性</td><td>相同seed+temp=0，验证输出一致</td><td>✅</td></tr><tr><td>A11</td><td>多语言能力</td><td>中/英/日/韩/法等多语言输入输出</td><td>✅</td></tr><tr><td>A12</td><td>特殊Token处理</td><td>含emoji、代码块、数学符号、HTML标签</td><td>✅</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h3><a name='header-n1320' class='md-header-anchor '></a>B. 高级生成功能</h3><figure><div class="table-container">
+<table><thead><tr><th>#</th><th>测试点</th><th>测试内容</th><th>状态</th><th>备注</th></tr></thead><tbody><tr><td>B1</td><td>思考模式（Thinking）</td><td>开启thinking mode，验证返回思考链...</td><td>✅</td><td>&nbsp;</td></tr><tr><td>B2</td><td>非思考模式（Instant）</td><td>关闭thinking，验证无hidden th...</td><td>❌</td><td>使用默认temperature 0.7</td></tr><tr><td>B3</td><td>思考模式切换</td><td>同一会话内thinking↔non-think...</td><td>❌</td><td>使用默认temperature 0.7</td></tr><tr><td>B4</td><td>工具调用-单工具</td><td>定义单个function，验证模型正确调用并传参</td><td>✅</td><td>&nbsp;</td></tr><tr><td>B5</td><td>工具调用-多工具</td><td>定义多个function，验证模型选择正确的工具</td><td>✅</td><td>&nbsp;</td></tr><tr><td>B6</td><td>工具调用-并行调用</td><td>单次回复中并行调用多个工具</td><td>✅</td><td>&nbsp;</td></tr><tr><td>B7</td><td>工具调用-多步链式</td><td>工具结果作为下一步输入，验证3+步链式执行</td><td>✅</td><td>有时候工具调用不完整</td></tr><tr><td>B8</td><td>JSON Mode</td><td>response_format=json_ob...</td><td>✅</td><td>&nbsp;</td></tr><tr><td>B9</td><td>结构化输出</td><td>JSON Schema约束输出格式，验证字段完整性</td><td>✅</td><td>&nbsp;</td></tr><tr><td>B10</td><td>Prefix/Suffix约束</td><td>指定输出前缀或格式模板，验证遵循度</td><td>❌</td><td>&nbsp;</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h3><a name='header-n1389' class='md-header-anchor '></a>C. 多模态能力</h3><figure><div class="table-container">
+<table><thead><tr><th>#</th><th>测试点</th><th>测试内容</th><th>状态</th><th>&nbsp;</th></tr></thead><tbody><tr><td>C1</td><td>单图理解</td><td>图片+文本提问</td><td>⚠️</td><td>程序生成的图片测试通过，真实图片测试未查看到执行结果</td></tr><tr><td>C2</td><td>多图对比</td><td>跨图比较</td><td>✅</td><td>真实图片测试通过</td></tr><tr><td>C3</td><td>高分辨率图片</td><td>4K分辨率</td><td>⚠️</td><td>程序生成的图片测试通过，真实图片测试未查看到执行结果</td></tr><tr><td>C4</td><td>图表/OCR</td><td>表格截图</td><td>✅</td><td>&nbsp;</td></tr><tr><td>C5</td><td>视频理解</td><td>视频文件</td><td>❌</td><td>本地真实视频文件未识别到，需重新验证（可使用在线视频验证）</td></tr><tr><td>C6</td><td>代码截图→代码</td><td>UI截图</td><td>⏳</td><td>未看到响应结果，暂标记未测试</td></tr><tr><td>C7</td><td>多模态工具调用</td><td>图片触发工具</td><td>✅</td><td>&nbsp;</td></tr><tr><td>C8</td><td>图片格式兼容性</td><td>PNG/JPEG/WebP</td><td>✅</td><td>&nbsp;</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h3><a name='header-n1446' class='md-header-anchor '></a>D. 长上下文处理</h3><figure><div class="table-container">
+<table><thead><tr><th>#</th><th>测试点</th><th>测试内容</th><th>状态</th></tr></thead><tbody><tr><td>D1</td><td>短上下文基线</td><td>1K tokens</td><td>✅</td></tr><tr><td>D2</td><td>中等上下文</td><td>8K-16K tokens</td><td>✅</td></tr><tr><td>D3</td><td>长上下文</td><td>32K-64K tokens</td><td>✅</td></tr><tr><td>D4</td><td>超长上下文</td><td>128K+ tokens</td><td>✅</td></tr><tr><td>D5</td><td>大海捞针</td><td>NIAH</td><td>✅</td></tr><tr><td>D6</td><td>上下文边界行为</td><td>max_model_len</td><td>✅</td></tr><tr><td>D7</td><td>超出上下文截断</td><td>截断/拒绝</td><td>✅</td></tr><tr><td>D8</td><td>长输出生成</td><td>4K-8K tokens</td><td>✅</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h3><a name='header-n1494' class='md-header-anchor '></a>F. 稳定性与边界</h3><figure><div class="table-container">
+<table><thead><tr><th>#</th><th>测试点</th><th>测试内容</th><th>状态</th></tr></thead><tbody><tr><td>F1</td><td>空输入</td><td>空prompt</td><td>✅</td></tr><tr><td>F2</td><td>超大输入</td><td>超max_model_len</td><td>✅</td></tr><tr><td>F3</td><td>非法参数</td><td>temperature=-1, max_tokens=0,非法温度值：超过范围（&gt;2）</td><td>✅</td></tr><tr><td>F4</td><td>特殊字符注入</td><td>SQL/Prompt注入</td><td>✅</td></tr><tr><td>F5</td><td>并发稳定性</td><td>200+并发（实际测试50并发）</td><td>✅</td></tr><tr><td>F6</td><td>OOM恢复</td><td>显存耗尽</td><td>⏳</td></tr><tr><td>F7</td><td>长时间运行</td><td>24小时</td><td>⏳</td></tr><tr><td>F8</td><td>请求超时处理</td><td>超时断开</td><td>⏳</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h3><a name='header-n1542' class='md-header-anchor '></a>G. API兼容性</h3><figure><div class="table-container">
+<table><thead><tr><th>#</th><th>测试点</th><th>测试内容</th><th>状态</th></tr></thead><tbody><tr><td>G1</td><td>OpenAI Chat Completions</td><td>/v1/chat/completions 接口兼容</td><td>✅</td></tr><tr><td>G2</td><td>OpenAI Completions</td><td>/v1/completions 接口兼容</td><td>✅</td></tr><tr><td>G3</td><td>模型列表</td><td>/v1/models 返回可用模型</td><td>✅</td></tr><tr><td>G4</td><td>Usage 统计</td><td>usage 字段准确</td><td>✅</td></tr><tr><td>G5</td><td>错误码规范</td><td>400/401/404/429/500 错误码</td><td>⏳</td></tr><tr><td>G6</td><td>客户端 SDK 兼容</td><td>Python openai / JS @ope...</td><td>⏳</td></tr><tr><td>G7</td><td>响应格式变体</td><td>不同response_format</td><td>✅</td></tr><tr><td>G8</td><td>Stream参数</td><td>stream参数测试</td><td>✅</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h3><a name='header-n1589' class='md-header-anchor '></a>H. 质量评估</h3><figure><div class="table-container">
+<table><thead><tr><th>#</th><th>测试点</th><th>测试内容</th><th>状态</th></tr></thead><tbody><tr><td>H1</td><td>生成质量</td><td>质量对比</td><td>✅</td></tr><tr><td>H2</td><td>生成一致性</td><td>多次生成</td><td>✅</td></tr><tr><td>H3</td><td>幻觉率</td><td>事实错误</td><td>✅</td></tr><tr><td>H4</td><td>指令遵循度</td><td>格式/角色</td><td>✅</td></tr><tr><td>H5</td><td>响应相关性</td><td>问答相关性</td><td>✅</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><h3><a name='header-n1622' class='md-header-anchor '></a>I. 超长上下文验证</h3><figure><div class="table-container">
+<table><thead><tr><th>#</th><th>测试点</th><th>测试内容</th><th>状态</th></tr></thead><tbody><tr><td>I1</td><td>超长上下文（非流式）</td><td>验证超长上下文请求的非流式输出</td><td>✅</td></tr><tr><td>I2</td><td>超长上下文（流式）</td><td>验证超长上下文请求的流式输出</td><td>✅</td></tr><tr><td>I3</td><td>超长上下文（边界验证）</td><td>使用二分法逼近模型最大上下文长度</td><td>⏳</td></tr><tr><td>I4</td><td>超长上下文（思考模式）</td><td>验证超长上下文下reasoning_conte...</td><td>✅</td></tr></tbody></table>
+<div class="table-watermark">九章云极</div>
+</div></figure><hr /><hr /><h2><a name='header-n1652' class='md-header-anchor '></a>附录一：MetaX-C550平台Kimi-K2.5模型部署脚本</h2><h3><a name='header-n1653' class='md-header-anchor '></a>master节点</h3><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm modeLoaded" lang="shell" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="shell"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"><pre><span>xxxxxxxxxx</span></pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-meta">#!/bin/bash</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment"># 10.130.70.1</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment"># 10.130.70.2</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">#mx-smi -r -i all</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">GLOO_SOCKET_IFNAME</span><span class="cm-operator">=</span>ens12f0</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">MCCL_SOCKET_IFNAM</span><span class="cm-operator">=</span>ens12f0</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">MCCL_IB_HCA</span><span class="cm-operator">=</span>mlx5_0,mlx5_1,mlx5_2,mlx5_3,mlx5_4,mlx5_5,mlx5_6,mlx5_7</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">MACA_SMALL_PAGESIZE_ENABLE</span><span class="cm-operator">=</span><span class="cm-number">1</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">TRITON_ENABLE_MACA_OPT_MOVE_DOT_OPERANDS_OUT_LOOP</span><span class="cm-operator">=</span><span class="cm-number">1</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">TRITON_ENABLE_MACA_CHAIN_DOT_OPT</span><span class="cm-operator">=</span><span class="cm-number">1</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">PYTORCH_ENABLE_PG_HIGH_PRIORITY_STREAM</span><span class="cm-operator">=</span><span class="cm-number">1</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">MACA_QUEUE_SCHEDULE_POLICY</span><span class="cm-operator">=</span><span class="cm-number">1</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">MACA_DIRECT_DISPATCH</span><span class="cm-operator">=</span><span class="cm-number">1</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-builtin">service</span> <span class="cm-builtin">ssh</span> <span class="cm-builtin">restart</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-def">model_name</span><span class="cm-operator">=</span>Kimi-K2.5_int4_2</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-def">model_path</span><span class="cm-operator">=</span><span class="cm-string">"/data2/data_shared/</span><span class="cm-def">${model_name}</span><span class="cm-string">"</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-def">log_file</span><span class="cm-operator">=</span>./log-sglang-server-master-<span class="cm-def">${model_name}</span>.log</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">#TP16 + MTP213</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">python3 <span class="cm-attribute">-m</span> sglang.launch_server \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--model-path</span> <span class="cm-def">$model_path</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--trust-remote-code</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--attention-backend</span> flashinfer \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--served-model-name</span> kimi-k2.5 \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--quantization</span> w4a8_int8 \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--tp-size</span> <span class="cm-number">16</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--dist-init-addr</span> <span class="cm-number">10</span>.130.70.1:36550 \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--host</span> <span class="cm-number">0</span>.0.0.0 \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--port</span> <span class="cm-number">8000</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--nnodes</span> <span class="cm-number">2</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--node-rank</span> <span class="cm-number">0</span> &nbsp; \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--disable-radix-cache</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--cuda-graph-max-bs</span> <span class="cm-number">64</span>  \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--context-length</span> <span class="cm-number">262144</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--max-running-requests</span> <span class="cm-number">64</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--chunked-prefill-size</span> <span class="cm-number">8192</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--tool-call-parser</span> kimi_k2 \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--reasoning-parser</span> kimi_k2 \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--mem-fraction-static</span> <span class="cm-number">0</span>.8 \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--speculative-algo</span> EAGLE3  \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--speculative-num-steps</span> <span class="cm-number">2</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--speculative-eagle-topk</span> <span class="cm-number">1</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--speculative-num-draft-tokens</span> <span class="cm-number">3</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--speculative-draft-model-path</span>  /data2/data_shared/Kimi-K25-eagle3/  \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--speculative-draft-model-quantization</span> unquant <span class="cm-number">2</span>&gt;&amp;1  | <span class="cm-builtin">tee</span> <span class="cm-attribute">-a</span> &nbsp;<span class="cm-def">${log_file}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 1219px;"></div><div class="CodeMirror-gutters" style="display: none; height: 1219px;"></div></div></div></pre><h3><a name='header-n1655' class='md-header-anchor '></a>slave节点</h3><pre spellcheck="false" class="md-fences md-end-block ty-contain-cm md-focus" lang="shell" style="break-inside: unset;"><div class="CodeMirror cm-s-inner CodeMirror-wrap" lang="shell"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 8px;"><textarea autocorrect="off" autocapitalize="off" spellcheck="false" tabindex="0" style="position: absolute; bottom: -1em; padding: 0px; width: 1000px; height: 1em; outline: none;"></textarea></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; margin-bottom: 0px; border-right-width: 0px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div role="presentation" style="position: relative; outline: none;"><div class="CodeMirror-measure"></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" role="presentation" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><div class="CodeMirror-gutter-background CodeMirror-activeline-gutter" style="left: 0px; width: 0px;"></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-meta">#!/bin/bash</span></span></pre></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment"># 10.130.70.1</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment"># 10.130.70.2</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">#mx-smi -r -i all</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">GLOO_SOCKET_IFNAME</span><span class="cm-operator">=</span>ens12f0</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">MCCL_SOCKET_IFNAM</span><span class="cm-operator">=</span>ens12f0</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">MCCL_IB_HCA</span><span class="cm-operator">=</span>mlx5_0,mlx5_1,mlx5_2,mlx5_3,mlx5_4,mlx5_5,mlx5_6,mlx5_7</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">MACA_SMALL_PAGESIZE_ENABLE</span><span class="cm-operator">=</span><span class="cm-number">1</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">TRITON_ENABLE_MACA_OPT_MOVE_DOT_OPERANDS_OUT_LOOP</span><span class="cm-operator">=</span><span class="cm-number">1</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">TRITON_ENABLE_MACA_CHAIN_DOT_OPT</span><span class="cm-operator">=</span><span class="cm-number">1</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">PYTORCH_ENABLE_PG_HIGH_PRIORITY_STREAM</span><span class="cm-operator">=</span><span class="cm-number">1</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">MACA_QUEUE_SCHEDULE_POLICY</span><span class="cm-operator">=</span><span class="cm-number">1</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-keyword">export</span> <span class="cm-def">MACA_DIRECT_DISPATCH</span><span class="cm-operator">=</span><span class="cm-number">1</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-builtin">service</span> <span class="cm-builtin">ssh</span> <span class="cm-builtin">restart</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-def">model_name</span><span class="cm-operator">=</span>Kimi-K2.5_int4_2</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-def">model_path</span><span class="cm-operator">=</span><span class="cm-string">"/data2/data_shared/</span><span class="cm-def">${model_name}</span><span class="cm-string">"</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-def">log_file</span><span class="cm-operator">=</span>./log-sglang-server-master-<span class="cm-def">${model_name}</span>.log</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span cm-text="">​</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"><span class="cm-comment">#TP16 + MTP213</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;">python3 <span class="cm-attribute">-m</span> sglang.launch_server \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--model-path</span> <span class="cm-def">$model_path</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--trust-remote-code</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--attention-backend</span> flashinfer \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--served-model-name</span> kimi-k2.5 \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--quantization</span> w4a8_int8 \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--tp-size</span> <span class="cm-number">16</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--dist-init-addr</span> <span class="cm-number">10</span>.130.70.1:36550 \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--host</span> <span class="cm-number">0</span>.0.0.0 \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--port</span> <span class="cm-number">8000</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--nnodes</span> <span class="cm-number">2</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--node-rank</span> <span class="cm-number">1</span> &nbsp; \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--disable-radix-cache</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--cuda-graph-max-bs</span> <span class="cm-number">64</span>  \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--max-running-requests</span> <span class="cm-number">64</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--context-length</span> <span class="cm-number">262144</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--chunked-prefill-size</span> <span class="cm-number">8192</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--tool-call-parser</span> kimi_k2 \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--reasoning-parser</span> kimi_k2 \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--mem-fraction-static</span> <span class="cm-number">0</span>.8 \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--speculative-algo</span> EAGLE3  \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--speculative-num-steps</span> <span class="cm-number">2</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--speculative-eagle-topk</span> <span class="cm-number">1</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--speculative-num-draft-tokens</span> <span class="cm-number">3</span> \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--speculative-draft-model-path</span>  /data2/data_shared/Kimi-K25-eagle3/  \</span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;<span class="cm-attribute">--speculative-draft-model-quantization</span> unquant <span class="cm-number">2</span>&gt;&amp;1  | <span class="cm-builtin">tee</span> <span class="cm-attribute">-a</span> &nbsp;<span class="cm-def">${log_file}</span></span></pre><pre class=" CodeMirror-line " role="presentation"><span role="presentation" style="padding-right: 0.1px;"> &nbsp; &nbsp;</span></pre></div></div></div></div></div><div style="position: absolute; height: 0px; width: 1px; border-bottom: 0px solid transparent; top: 1219px;"></div><div class="CodeMirror-gutters" style="display: none; height: 1219px;"></div></div></div></pre></div>
+</body>
+</html>

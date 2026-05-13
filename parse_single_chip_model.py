@@ -289,114 +289,64 @@ def generate_comparison_charts(
     ttft_p99 = get_values("P99 TTFT (ms)")
     tpot_p99 = get_values("P99 TPOT (ms)")
 
-    fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+    num_conc = len(concurrencies)
+    fig_height = 10 if num_conc <= 5 else (12 if num_conc <= 10 else 14)
+    fig, axes = plt.subplots(2, 3, figsize=(15, fig_height), constrained_layout=True)
     fig.suptitle(
         f"{actual_model_name} on {chip_name} - Concurrency Comparison",
         fontsize=14,
         fontweight="bold",
     )
 
-    axes[0, 0].bar(x, req_throughput, color=colors[: len(concurrencies)], alpha=0.8)
-    axes[0, 0].set_title("Request Throughput (req/s)", fontsize=11)
-    axes[0, 0].set_xlabel("Concurrency")
-    axes[0, 0].set_ylabel("req/s")
-    axes[0, 0].set_xticks(x)
-    axes[0, 0].set_xticklabels(concurrencies, rotation=45)
-    for i, v in enumerate(req_throughput):
-        axes[0, 0].text(
-            i,
-            v + 0.02 * max(req_throughput) if max(req_throughput) > 0 else 0.1,
-            f"{v:.2f}",
-            ha="center",
-            va="bottom",
-            fontsize=9,
-        )
-    axes[0, 0].grid(axis="y", alpha=0.3)
+    def safe_bar_with_labels(ax, data, title, ylabel, value_format):
+        max_val = max(data) if data else 0
+        ax.bar(x, data, color=colors[: len(concurrencies)], alpha=0.8)
+        ax.set_title(title, fontsize=11)
+        ax.set_xlabel("Concurrency")
+        ax.set_ylabel(ylabel)
+        ax.set_xticks(x)
+        ax.set_xticklabels(concurrencies, rotation=45, ha="right")
 
-    axes[0, 1].bar(x, output_tput, color=colors[: len(concurrencies)], alpha=0.8)
-    axes[0, 1].set_title("Output Token Throughput (tok/s)", fontsize=11)
-    axes[0, 1].set_xlabel("Concurrency")
-    axes[0, 1].set_ylabel("tok/s")
-    axes[0, 1].set_xticks(x)
-    axes[0, 1].set_xticklabels(concurrencies, rotation=45)
-    for i, v in enumerate(output_tput):
-        axes[0, 1].text(
-            i,
-            v + 0.02 * max(output_tput) if max(output_tput) > 0 else 1,
-            f"{v:.0f}",
-            ha="center",
-            va="bottom",
-            fontsize=9,
-        )
-    axes[0, 1].grid(axis="y", alpha=0.3)
+        if max_val > 0:
+            for i, v in enumerate(data):
+                if v > 0:
+                    ax.text(
+                        i,
+                        v + 0.02 * max_val,
+                        value_format.format(v),
+                        ha="center",
+                        va="bottom",
+                        fontsize=9,
+                    )
+        else:
+            ax.text(
+                0.5,
+                0.5,
+                "No Data",
+                ha="center",
+                va="center",
+                transform=ax.transAxes,
+                fontsize=12,
+                color="gray",
+            )
+            ax.set_ylim(0, 1)
 
-    axes[0, 2].bar(x, total_tput, color=colors[: len(concurrencies)], alpha=0.8)
-    axes[0, 2].set_title("Total Token Throughput (tok/s)", fontsize=11)
-    axes[0, 2].set_xlabel("Concurrency")
-    axes[0, 2].set_ylabel("tok/s")
-    axes[0, 2].set_xticks(x)
-    axes[0, 2].set_xticklabels(concurrencies, rotation=45)
-    for i, v in enumerate(total_tput):
-        axes[0, 2].text(
-            i,
-            v + 0.02 * max(total_tput) if max(total_tput) > 0 else 100,
-            f"{v:.0f}",
-            ha="center",
-            va="bottom",
-            fontsize=9,
-        )
-    axes[0, 2].grid(axis="y", alpha=0.3)
+        ax.grid(axis="y", alpha=0.3)
 
-    axes[1, 0].bar(x, e2e_latency, color=colors[: len(concurrencies)], alpha=0.8)
-    axes[1, 0].set_title("Mean E2E Latency (ms)", fontsize=11)
-    axes[1, 0].set_xlabel("Concurrency")
-    axes[1, 0].set_ylabel("ms")
-    axes[1, 0].set_xticks(x)
-    axes[1, 0].set_xticklabels(concurrencies, rotation=45)
-    for i, v in enumerate(e2e_latency):
-        axes[1, 0].text(
-            i,
-            v + 0.02 * max(e2e_latency) if max(e2e_latency) > 0 else 10,
-            f"{v:.0f}",
-            ha="center",
-            va="bottom",
-            fontsize=9,
-        )
-    axes[1, 0].grid(axis="y", alpha=0.3)
-
-    axes[1, 1].bar(x, ttft_p99, color=colors[: len(concurrencies)], alpha=0.8)
-    axes[1, 1].set_title("TTFT P99 (ms)", fontsize=11)
-    axes[1, 1].set_xlabel("Concurrency")
-    axes[1, 1].set_ylabel("ms")
-    axes[1, 1].set_xticks(x)
-    axes[1, 1].set_xticklabels(concurrencies, rotation=45)
-    for i, v in enumerate(ttft_p99):
-        axes[1, 1].text(
-            i,
-            v + 0.02 * max(ttft_p99) if max(ttft_p99) > 0 else 10,
-            f"{v:.0f}",
-            ha="center",
-            va="bottom",
-            fontsize=9,
-        )
-    axes[1, 1].grid(axis="y", alpha=0.3)
-
-    axes[1, 2].bar(x, tpot_p99, color=colors[: len(concurrencies)], alpha=0.8)
-    axes[1, 2].set_title("TPOT P99 (ms)", fontsize=11)
-    axes[1, 2].set_xlabel("Concurrency")
-    axes[1, 2].set_ylabel("ms")
-    axes[1, 2].set_xticks(x)
-    axes[1, 2].set_xticklabels(concurrencies, rotation=45)
-    for i, v in enumerate(tpot_p99):
-        axes[1, 2].text(
-            i,
-            v + 0.02 * max(tpot_p99) if max(tpot_p99) > 0 else 1,
-            f"{v:.2f}",
-            ha="center",
-            va="bottom",
-            fontsize=9,
-        )
-    axes[1, 2].grid(axis="y", alpha=0.3)
+    safe_bar_with_labels(
+        axes[0, 0], req_throughput, "Request Throughput (req/s)", "req/s", "{:.2f}"
+    )
+    safe_bar_with_labels(
+        axes[0, 1], output_tput, "Output Token Throughput (tok/s)", "tok/s", "{:.0f}"
+    )
+    safe_bar_with_labels(
+        axes[0, 2], total_tput, "Total Token Throughput (tok/s)", "tok/s", "{:.0f}"
+    )
+    safe_bar_with_labels(
+        axes[1, 0], e2e_latency, "Mean E2E Latency (ms)", "ms", "{:.0f}"
+    )
+    safe_bar_with_labels(axes[1, 1], ttft_p99, "TTFT P99 (ms)", "ms", "{:.0f}")
+    safe_bar_with_labels(axes[1, 2], tpot_p99, "TPOT P99 (ms)", "ms", "{:.2f}")
 
     for ax in axes.flat:
         ax.spines["top"].set_visible(False)
@@ -405,8 +355,6 @@ def generate_comparison_charts(
     fig.set_facecolor("#f0f0f0")
     for ax in axes.flat:
         ax.set_facecolor("white")
-
-    plt.tight_layout()
 
     chart_file = os.path.join(output_dir, "concurrency_comparison.png")
     plt.savefig(chart_file, dpi=150, bbox_inches="tight")
@@ -427,7 +375,9 @@ def generate_performance_trends(
 
     colors = ["#3498db", "#2ecc71", "#e74c3c", "#f39c12", "#9b59b6"]
 
-    fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+    num_conc = len(concurrencies)
+    fig_height = 10 if num_conc <= 5 else (12 if num_conc <= 10 else 14)
+    fig, axes = plt.subplots(2, 3, figsize=(15, fig_height), constrained_layout=True)
     fig.suptitle(
         f"{actual_model_name} on {chip_name} - Performance Trends by Concurrency",
         fontsize=14,
@@ -544,32 +494,44 @@ def generate_performance_trends(
 
     values_mean = get_values("Mean TPOT (ms)")
     values_p99 = get_values("P99 TPOT (ms)")
-    axes[1, 2].plot(
-        concurrencies_int,
-        values_mean,
-        "-o",
-        color=colors[0],
-        linewidth=2,
-        markersize=6,
-        label="Mean",
-    )
-    axes[1, 2].plot(
-        concurrencies_int,
-        values_p99,
-        "--s",
-        color=colors[1],
-        linewidth=1,
-        markersize=4,
-        alpha=0.6,
-        label="P99",
-    )
+    max_tpot = max(values_mean + values_p99) if (values_mean or values_p99) else 0
+    if max_tpot > 0:
+        axes[1, 2].plot(
+            concurrencies_int,
+            values_mean,
+            "-o",
+            color=colors[0],
+            linewidth=2,
+            markersize=6,
+            label="Mean",
+        )
+        axes[1, 2].plot(
+            concurrencies_int,
+            values_p99,
+            "--s",
+            color=colors[1],
+            linewidth=1,
+            markersize=4,
+            alpha=0.6,
+            label="P99",
+        )
+        axes[1, 2].legend()
+    else:
+        axes[1, 2].text(
+            0.5,
+            0.5,
+            "No Data",
+            ha="center",
+            va="center",
+            transform=axes[1, 2].transAxes,
+            fontsize=12,
+            color="gray",
+        )
+        axes[1, 2].set_ylim(0, 1)
     axes[1, 2].set_title("TPOT Latency (ms)")
     axes[1, 2].set_xlabel("Concurrency")
     axes[1, 2].set_ylabel("ms")
-    axes[1, 2].legend()
     axes[1, 2].grid(True, alpha=0.3)
-
-    plt.tight_layout()
 
     chart_file = os.path.join(output_dir, "performance_trends.png")
     plt.savefig(chart_file, dpi=150, bbox_inches="tight")
@@ -647,114 +609,86 @@ def generate_io_comparison_charts(
     ttft_p99 = get_values("P99 TTFT (ms)")
     tpot_p99 = get_values("P99 TPOT (ms)")
 
-    fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+    fig, axes = plt.subplots(2, 3, figsize=(15, 10), constrained_layout=True)
     fig.suptitle(
         f"{actual_model_name} on {chip_name} - I/O Comparison (Concurrency={fixed_conc})",
         fontsize=14,
         fontweight="bold",
     )
 
-    axes[0, 0].bar(x, req_throughput, color=colors[: len(io_labels)], alpha=0.8)
-    axes[0, 0].set_title("Request Throughput (req/s)", fontsize=11)
-    axes[0, 0].set_xlabel("Input/Output Length")
-    axes[0, 0].set_ylabel("req/s")
-    axes[0, 0].set_xticks(x)
-    axes[0, 0].set_xticklabels(io_labels, rotation=45, ha="right")
-    for i, v in enumerate(req_throughput):
-        axes[0, 0].text(
-            i,
-            v + 0.02 * max(req_throughput) if max(req_throughput) > 0 else 0.1,
-            f"{v:.2f}",
-            ha="center",
-            va="bottom",
-            fontsize=9,
-        )
-    axes[0, 0].grid(axis="y", alpha=0.3)
+    def safe_bar_with_labels(ax, data, title, xlabel, ylabel, value_format):
+        max_val = max(data) if data else 0
+        ax.bar(x, data, color=colors[: len(io_labels)], alpha=0.8)
+        ax.set_title(title, fontsize=11)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+        ax.set_xticks(x)
+        ax.set_xticklabels(io_labels, rotation=45, ha="right")
 
-    axes[0, 1].bar(x, output_tput, color=colors[: len(io_labels)], alpha=0.8)
-    axes[0, 1].set_title("Output Token Throughput (tok/s)", fontsize=11)
-    axes[0, 1].set_xlabel("Input/Output Length")
-    axes[0, 1].set_ylabel("tok/s")
-    axes[0, 1].set_xticks(x)
-    axes[0, 1].set_xticklabels(io_labels, rotation=45, ha="right")
-    for i, v in enumerate(output_tput):
-        axes[0, 1].text(
-            i,
-            v + 0.02 * max(output_tput) if max(output_tput) > 0 else 1,
-            f"{v:.0f}",
-            ha="center",
-            va="bottom",
-            fontsize=9,
-        )
-    axes[0, 1].grid(axis="y", alpha=0.3)
+        if max_val > 0:
+            for i, v in enumerate(data):
+                if v > 0:
+                    ax.text(
+                        i,
+                        v + 0.02 * max_val,
+                        value_format.format(v),
+                        ha="center",
+                        va="bottom",
+                        fontsize=9,
+                    )
+        else:
+            ax.text(
+                0.5,
+                0.5,
+                "No Data",
+                ha="center",
+                va="center",
+                transform=ax.transAxes,
+                fontsize=12,
+                color="gray",
+            )
+            ax.set_ylim(0, 1)
 
-    axes[0, 2].bar(x, total_tput, color=colors[: len(io_labels)], alpha=0.8)
-    axes[0, 2].set_title("Total Token Throughput (tok/s)", fontsize=11)
-    axes[0, 2].set_xlabel("Input/Output Length")
-    axes[0, 2].set_ylabel("tok/s")
-    axes[0, 2].set_xticks(x)
-    axes[0, 2].set_xticklabels(io_labels, rotation=45, ha="right")
-    for i, v in enumerate(total_tput):
-        axes[0, 2].text(
-            i,
-            v + 0.02 * max(total_tput) if max(total_tput) > 0 else 100,
-            f"{v:.0f}",
-            ha="center",
-            va="bottom",
-            fontsize=9,
-        )
-    axes[0, 2].grid(axis="y", alpha=0.3)
+        ax.grid(axis="y", alpha=0.3)
 
-    axes[1, 0].bar(x, e2e_latency, color=colors[: len(io_labels)], alpha=0.8)
-    axes[1, 0].set_title("Mean E2E Latency (ms)", fontsize=11)
-    axes[1, 0].set_xlabel("Input/Output Length")
-    axes[1, 0].set_ylabel("ms")
-    axes[1, 0].set_xticks(x)
-    axes[1, 0].set_xticklabels(io_labels, rotation=45, ha="right")
-    for i, v in enumerate(e2e_latency):
-        axes[1, 0].text(
-            i,
-            v + 0.02 * max(e2e_latency) if max(e2e_latency) > 0 else 10,
-            f"{v:.0f}",
-            ha="center",
-            va="bottom",
-            fontsize=9,
-        )
-    axes[1, 0].grid(axis="y", alpha=0.3)
-
-    axes[1, 1].bar(x, ttft_p99, color=colors[: len(io_labels)], alpha=0.8)
-    axes[1, 1].set_title("TTFT P99 (ms)", fontsize=11)
-    axes[1, 1].set_xlabel("Input/Output Length")
-    axes[1, 1].set_ylabel("ms")
-    axes[1, 1].set_xticks(x)
-    axes[1, 1].set_xticklabels(io_labels, rotation=45, ha="right")
-    for i, v in enumerate(ttft_p99):
-        axes[1, 1].text(
-            i,
-            v + 0.02 * max(ttft_p99) if max(ttft_p99) > 0 else 10,
-            f"{v:.0f}",
-            ha="center",
-            va="bottom",
-            fontsize=9,
-        )
-    axes[1, 1].grid(axis="y", alpha=0.3)
-
-    axes[1, 2].bar(x, tpot_p99, color=colors[: len(io_labels)], alpha=0.8)
-    axes[1, 2].set_title("TPOT P99 (ms)", fontsize=11)
-    axes[1, 2].set_xlabel("Input/Output Length")
-    axes[1, 2].set_ylabel("ms")
-    axes[1, 2].set_xticks(x)
-    axes[1, 2].set_xticklabels(io_labels, rotation=45, ha="right")
-    for i, v in enumerate(tpot_p99):
-        axes[1, 2].text(
-            i,
-            v + 0.02 * max(tpot_p99) if max(tpot_p99) > 0 else 1,
-            f"{v:.2f}",
-            ha="center",
-            va="bottom",
-            fontsize=9,
-        )
-    axes[1, 2].grid(axis="y", alpha=0.3)
+    safe_bar_with_labels(
+        axes[0, 0],
+        req_throughput,
+        "Request Throughput (req/s)",
+        "Input/Output Length",
+        "req/s",
+        "{:.2f}",
+    )
+    safe_bar_with_labels(
+        axes[0, 1],
+        output_tput,
+        "Output Token Throughput (tok/s)",
+        "Input/Output Length",
+        "tok/s",
+        "{:.0f}",
+    )
+    safe_bar_with_labels(
+        axes[0, 2],
+        total_tput,
+        "Total Token Throughput (tok/s)",
+        "Input/Output Length",
+        "tok/s",
+        "{:.0f}",
+    )
+    safe_bar_with_labels(
+        axes[1, 0],
+        e2e_latency,
+        "Mean E2E Latency (ms)",
+        "Input/Output Length",
+        "ms",
+        "{:.0f}",
+    )
+    safe_bar_with_labels(
+        axes[1, 1], ttft_p99, "TTFT P99 (ms)", "Input/Output Length", "ms", "{:.0f}"
+    )
+    safe_bar_with_labels(
+        axes[1, 2], tpot_p99, "TPOT P99 (ms)", "Input/Output Length", "ms", "{:.2f}"
+    )
 
     for ax in axes.flat:
         ax.spines["top"].set_visible(False)
@@ -764,140 +698,12 @@ def generate_io_comparison_charts(
     for ax in axes.flat:
         ax.set_facecolor("white")
 
-    plt.tight_layout()
-
     chart_file = os.path.join(output_dir, "io_comparison.png")
     plt.savefig(chart_file, dpi=150, bbox_inches="tight")
     plt.close()
 
     print(f"Generated chart: {chart_file}")
     return [chart_file]
-
-
-def generate_markdown_report_for_io_comparison(
-    chip_data,
-    io_pairs_sorted,
-    output_dir,
-    test_suite,
-    chip_name,
-    model_name=None,
-    scenarios_config=None,
-    fixed_conc="32",
-):
-    current_date = datetime.now().strftime("%Y-%m-%d")
-    actual_model_name = model_name if model_name else MODEL_NAME
-
-    def make_table_for_metric(key_name):
-        values = []
-        for io_pair in io_pairs_sorted:
-            io_key = f"i{io_pair[0]}_o{io_pair[1]}"
-            value = chip_data.get(chip_name, {}).get(io_key, {}).get(key_name, "")
-            values.append(value)
-        return " | ".join(values)
-
-    io_header = " | ".join([f"input:{p[0]}, output:{p[1]}" for p in io_pairs_sorted])
-    io_separator = " | ".join(["-----------"] * len(io_pairs_sorted))
-
-    serving_metrics = [
-        ("请求吞吐量 (req/s)", "Request throughput (req/s)"),
-        ("输出token吞吐量 (tok/s)", "Output token throughput (tok/s)"),
-        ("总token吞吐量 (tok/s)", "Total token throughput (tok/s)"),
-    ]
-
-    e2e_metrics = [
-        ("平均E2E延迟 (ms)", "Mean E2E Latency (ms)"),
-        ("P99 E2E延迟 (ms)", "P99 E2E Latency (ms)"),
-    ]
-
-    ttft_metrics = [
-        ("平均TTFT (ms)", "Mean TTFT (ms)"),
-        ("P99 TTFT (ms)", "P99 TTFT (ms)"),
-    ]
-
-    tpot_metrics = [
-        ("平均TPOT (ms)", "Mean TPOT (ms)"),
-        ("P99 TPOT (ms)", "P99 TPOT (ms)"),
-    ]
-
-    serving_table = "\n".join(
-        [f"| {name} | {make_table_for_metric(key)} |" for name, key in serving_metrics]
-    )
-    e2e_table = "\n".join(
-        [f"| {name} | {make_table_for_metric(key)} |" for name, key in e2e_metrics]
-    )
-    ttft_table = "\n".join(
-        [f"| {name} | {make_table_for_metric(key)} |" for name, key in ttft_metrics]
-    )
-    tpot_table = "\n".join(
-        [f"| {name} | {make_table_for_metric(key)} |" for name, key in tpot_metrics]
-    )
-
-    io_comparison_img = '<img src="./io_comparison.png" width="1000" />'
-
-    md_content = f"""# {actual_model_name}模型在{chip_name}上的I/O对比测试报告
-
-<div align="center">
-**测试日期：** {current_date}
-</div>
-
----
-
-## 测试场景
-固定并发数为 {fixed_conc}，比较不同输入输出长度下的性能表现。
-
----
-
-## 📊 I/O对比测试汇总
-
-| 指标 | {io_header} |
-|------|{io_separator}|
-{serving_table}
-
----
-
-## ⏱️ 端到端延迟 (E2E Latency)
-
-| 指标 | {io_header} |
-|------|{io_separator}|
-{e2e_table}
-
----
-
-## ⏱️ 首Token延迟 (TTFT)
-
-| 指标 | {io_header} |
-|------|{io_separator}|
-{ttft_table}
-
----
-
-## ⚡ 每Token生成时间 (TPOT)
-
-| 指标 | {io_header} |
-|------|{io_separator}|
-{tpot_table}
-
----
-
-## 📊 I/O对比柱状图
-
-{io_comparison_img}
-
----
-
-<div align="center">
-*报告生成时间: {current_date}*
-</div>
-"""
-
-    md_file = os.path.join(
-        output_dir, f"{actual_model_name}_{chip_name}_io_comparison.md"
-    )
-    with open(md_file, "w", encoding="utf-8") as f:
-        f.write(md_content)
-
-    print(f"Generated: {md_file}")
-    return md_file
 
 
 def generate_multi_io_markdown_report(
@@ -919,12 +725,24 @@ def generate_multi_io_markdown_report(
     sglang_configs_raw = sglang_config.get("sglang_configs", {})
     chip_configs_list = chips_raw.get(chip_name, [])
     if isinstance(chip_configs_list, list):
-        chips_info = chip_configs_list[0] if chip_configs_list else {}
+        chips_info = None
+        for cfg in chip_configs_list:
+            if cfg.get("model_name") == actual_model_name:
+                chips_info = cfg
+                break
+        if chips_info is None:
+            chips_info = chip_configs_list[0] if chip_configs_list else {}
     else:
         chips_info = chip_configs_list if chip_configs_list else {}
     sglang_cfg_list = sglang_configs_raw.get(chip_name, [])
     if isinstance(sglang_cfg_list, list):
-        sglang_cfg = sglang_cfg_list[0] if sglang_cfg_list else {}
+        sglang_cfg = None
+        for cfg in sglang_cfg_list:
+            if cfg.get("model_name") == actual_model_name:
+                sglang_cfg = cfg
+                break
+        if sglang_cfg is None:
+            sglang_cfg = sglang_cfg_list[0] if sglang_cfg_list else {}
     else:
         sglang_cfg = sglang_cfg_list if sglang_cfg_list else {}
 
@@ -933,6 +751,12 @@ def generate_multi_io_markdown_report(
     )
     num_prompts = test_cfg.get("num-prompts", [])
     input_output_lens = test_cfg.get("random-input-output-len", [])
+    config_concurrencies = test_cfg.get("max-concurrency", [])
+    display_concurrencies = (
+        [str(c) for c in config_concurrencies]
+        if config_concurrencies
+        else concurrencies
+    )
 
     def format_tokens(val):
         try:
@@ -954,39 +778,27 @@ def generate_multi_io_markdown_report(
     input_ctx = format_tokens(input_len[0]) if input_len else "N/A"
     output_ctx = format_tokens(output_len[0]) if output_len else "N/A"
 
-    chip_param_names = [
-        "model_name",
-        "quantization_config",
-        "model_size",
-        "max_position_embeddings",
-        "temperature",
-        "top_k",
-        "top_p",
-    ]
     chip_table_rows = []
-    for param in chip_param_names:
-        val = chips_info.get(param, "N/A")
+    for param, val in chips_info.items():
+        if param == "remark":
+            continue
+        if val is None:
+            val = "N/A"
         chip_table_rows.append(f"| **{param}** | {val} |")
     chip_table = "\n".join(chip_table_rows)
 
-    sglang_param_mapping = {
-        "model_name": "Model Name",
-        "attention-backend": "Attention Backend",
-        "quantization": "Quantization",
-        "tp_size": "TP Size",
-        "pp_size": "PP Size",
-        "nnodes": "Num Nodes",
-        "dtype": "Data Type",
-        "context-length": "Context Length",
-        "max-running-requests": "Max Running Requests",
-    }
     sglang_table_rows = []
-    for param, display_name in sglang_param_mapping.items():
-        val = sglang_cfg.get(param, "N/A")
+    for param, val in sglang_cfg.items():
+        if param == "remarks":
+            continue
         if val is None:
             val = "N/A"
+        display_name = param.replace("-", " ").replace("_", " ").title()
         sglang_table_rows.append(f"| **{display_name}** | {val} |")
     sglang_table = "\n".join(sglang_table_rows)
+
+    remark = sglang_cfg.get("remarks", "")
+    remarks_section = f"- **{chip_name}**: {remark}" if remark else ""
 
     sglang_version = scenarios_config.get("sglang_version", "N/A")
     fixed_conc_list = concurrencies
@@ -1061,8 +873,10 @@ def generate_multi_io_markdown_report(
                 f"| {conc} | {req_tp} | {out_tp} | {total_tp} | {ttft_p99} | {tpot_p99} | {e2e_mean} |"
             )
 
-        header = " | ".join([f"{conc} 并发" for conc in concurrencies])
-        separator = "----------- | " + " | ".join(["-----------"] * len(concurrencies))
+        header = " | ".join([f"{conc} 并发" for conc in display_concurrencies])
+        separator = "----------- | " + " | ".join(
+            ["-----------"] * len(display_concurrencies)
+        )
 
         serving_table_rows = [f"| 指标 | {header} |"]
         serving_table_rows.append(f"| {separator} |")
@@ -1155,14 +969,29 @@ def generate_multi_io_markdown_report(
 | Throughput          | tokens/s   | 系统总吞吐                              |
 | QPS                 | requests/s | 请求吞吐                               |
 
----
+
+## 🤖 芯片和模型配置信息
+
+| 参数名称                    | {chip_name} |
+|------------------------|-------------|
+{chip_table}
+
+
+## 🤖 SGLang启动配置信息
+
+| 参数名称                   | {chip_name} |
+|------------------------|-------------|
+{sglang_table}
+
+{remarks_section}
+
 
 ## 📊 测试概览
 
 | 项目            | 配置                                     | 备注  |
 |---------------|----------------------------------------|-----|
 | **数据集**       | random                                 |     |
-| **并发数**       | {", ".join(concurrencies)}    |     |
+| **并发数**       | {", ".join(display_concurrencies)}    |     |
 | **总请求数**      | {num_prompts[0] if num_prompts else "N/A"}                                    |     |
 | **输入输出长度** | {", ".join([f"({p[0]}, {p[1]})" for p in io_pairs])} |     |
 | **模型**        | {actual_model_name}                           |     |
@@ -1171,23 +1000,7 @@ def generate_multi_io_markdown_report(
 
 ---
 
-## 🤖 芯片和模型配置信息
-
-| 参数名称                    | {chip_name} |
-|------------------------|-------------|
-{chip_table}
-
----
-
-## 🤖 SGLang启动配置信息
-
-| 参数名称                   | {chip_name} |
-|------------------------|-------------|
-{sglang_table}
-
----
-
-## 📋 各I/O测试汇总（随并发变化）
+## 📋 各I/O测试汇总（固定上下文长度，随并发变化）
 
 """
 
@@ -1197,7 +1010,7 @@ def generate_multi_io_markdown_report(
         md_content += f"![性能图表](./i{io_sec['input_len']}_o{io_sec['output_len']}/concurrency_comparison.png)\n\n"
         md_content += "---\n\n"
 
-    md_content += "## 📊 I/O对比（固定并发数）\n\n"
+    md_content += "## 📊 I/O对比（固定并发数，随上下文长度变化）\n\n"
 
     for fixed_conc in fixed_conc_list:
         io_labels = [
@@ -1372,7 +1185,7 @@ def generate_multi_io_markdown_report(
 
 | 项目 | 配置 |
 |------|------|
-| **并发数** | {", ".join(concurrencies)} |
+| **并发数** | {", ".join(display_concurrencies)} |
 | **总请求数** | {num_prompts[0] if num_prompts else "N/A"} |
 | **输入输出长度** | {", ".join([f"({p[0]}, {p[1]})" for p in io_pairs])} |
 | **模型** | {actual_model_name} |
@@ -1380,7 +1193,7 @@ def generate_multi_io_markdown_report(
 
 ---
 
-## 📋 各I/O测试汇总（随并发变化）
+## 📋 各I/O测试汇总（固定上下文长度，随并发变化）
 
 """
 
@@ -1390,7 +1203,7 @@ def generate_multi_io_markdown_report(
         md_content += f"![性能图表](./i{io_sec['input_len']}_o{io_sec['output_len']}/concurrency_comparison.png)\n\n"
         md_content += "---\n\n"
 
-    md_content += "## 📊 I/O对比（固定并发数）\n\n"
+    md_content += "## 📊 I/O对比（固定并发数，随上下文长度变化）\n\n"
 
     for fixed_conc in fixed_conc_list:
         io_labels = [
@@ -1751,6 +1564,12 @@ def generate_markdown_report(
     base_config = scenarios_config.get("base_config", {})
     params = base_config.get("params", {})
     test_cfg = params.get(test_suite, {})
+    config_concurrencies = test_cfg.get("max-concurrency", [])
+    display_concurrencies = (
+        [str(c) for c in config_concurrencies]
+        if config_concurrencies
+        else concurrencies
+    )
 
     models_config = scenarios_config.get("models", {})
     chip_models = models_config.get(chip_name, [])
@@ -1896,42 +1715,22 @@ def generate_markdown_report(
     output_ctx = format_tokens(output_len[0]) if output_len else "N/A"
 
     chip_info = chips_info
-    chip_param_names = [
-        "model_name",
-        "quantization_config",
-        "model_size",
-        "max_position_embeddings",
-        "temperature",
-        "top_k",
-        "top_p",
-    ]
     chip_table_rows = []
-    for param in chip_param_names:
-        val = chip_info.get(param, "N/A")
+    for param, val in chip_info.items():
+        if param == "remark":
+            continue
+        if val is None:
+            val = "N/A"
         chip_table_rows.append(f"| **{param}** | {val} |")
     chip_table = "\n".join(chip_table_rows)
 
-    sglang_param_mapping = {
-        "model_name": "Model Name",
-        "attention-backend": "Attention Backend",
-        "quantization": "Quantization",
-        "tp_size": "TP Size",
-        "pp_size": "PP Size",
-        "nnodes": "Num Nodes",
-        "dtype": "Data Type",
-        "context-length": "Context Length",
-        "max-running-requests": "Max Running Requests",
-        "max-queued-requests": "Max Queued Requests",
-        "disable-radix-cach": "Disable Radix Cache",
-        "tool-call-parser": "Tool Call Parser",
-        "reasoning-parser": "Reasoning Parser",
-        "mem-fraction-static": "Memory Fraction Static",
-    }
     sglang_table_rows = []
-    for param, display_name in sglang_param_mapping.items():
-        val = sglang_cfg.get(param, "N/A")
+    for param, val in sglang_cfg.items():
+        if param == "remarks":
+            continue
         if val is None:
             val = "N/A"
+        display_name = param.replace("-", " ").replace("_", " ").title()
         sglang_table_rows.append(f"| **{display_name}** | {val} |")
     sglang_table = "\n".join(sglang_table_rows)
 
@@ -1950,7 +1749,7 @@ def generate_markdown_report(
 ---
 
 ## 测试场景
-在固定请求数，输入上下文和输出上下文长度下，使用sglang bench serve工具对并发数逐级增加场景的性能基准验证。分析同一芯片同一模型在不同并发级别下的性能指标变化趋势。
+使用sglang bench serve基准测试工具对不同并发数，请求上下文长度下的性能变化趋势。
 
 **主要采集指标**：
 
@@ -1964,28 +1763,12 @@ def generate_markdown_report(
 | QPS                 | requests/s | 请求吞吐                               |
 
 
-## 📊 测试概览
-
-| 项目            | 配置                                     | 备注  |
-|---------------|----------------------------------------|-----|
-| **数据集**       | {dataset}                                 |     |
-| **并发数**       | {", ".join(concurrencies)}    |     |
-| **总请求数**      | {num_prompts[0] if num_prompts else "N/A"}                                    |     |
-| **请求输入上下文长度** | {input_len[0] if input_len else "N/A"}（{input_ctx}）                             |     |
-| **请求输出上下文长度** | {output_len[0] if output_len else "N/A"}（{output_ctx}）                             |     |
-| **模型**        | {actual_model_name}                           |     |
-| **被测芯片**      | {chip_name} |     |
-| **SGLang版本**   | {sglang_version}                           |     |
-
----
-
 ## 🤖 芯片和模型配置信息
 
 | 参数名称                    | {chip_name} |
 |------------------------|-------------|
 {chip_table}
 
----
 
 ## 🤖 SGLang启动配置信息
 
@@ -1995,19 +1778,31 @@ def generate_markdown_report(
 
 {remarks_section}
 
+
+## 📊 测试概览
+
+| 项目            | 配置                                     | 备注  |
+|---------------|----------------------------------------|-----|
+| **数据集**       | {dataset}                                 |     |
+| **并发数**       | {", ".join(display_concurrencies)}    |     |
+| **总请求数**      | {num_prompts[0] if num_prompts else "N/A"}                                    |     |
+| **请求输入上下文长度** | {input_len[0] if input_len else "N/A"}（{input_ctx}）                             |     |
+| **请求输出上下文长度** | {output_len[0] if output_len else "N/A"}（{output_ctx}）                             |     |
+| **模型**        | {actual_model_name}                           |     |
+| **被测芯片**      | {chip_name} |     |
+| **SGLang版本**   | {sglang_version}                           |     |
+
 ---
 
-## 📋 测试汇总
+## 📋 测试结果汇总
 
 {summary_table}
 
----
 
 ## 📊 各并发级别性能柱状图
 
 {concurrency_comparison_img}
 
----
 
 ## 📈 性能趋势分析
 
@@ -2015,39 +1810,35 @@ def generate_markdown_report(
 
 ---
 
-## 🎯 服务基准结果
+### 🎯 服务基准结果详情
 
 | 指标 | {header} |
 |------|{separator}|
 {serving_table}
 
----
 
-## ⏱️ 端到端延迟 (E2E Latency)
+### ⏱️ 端到端延迟 (E2E Latency)
 
 | 指标 | {header} |
 |------|{separator}|
 {e2e_table}
 
----
 
-## ⏱️ 首Token延迟 (TTFT)
+### ⏱️ 首Token延迟 (TTFT)
 
 | 指标 | {header} |
 |------|{separator}|
 {ttft_table}
 
----
 
-## ⚡ 每Token生成时间 (TPOT)
+### ⚡ 每Token生成时间 (TPOT)
 
 | 指标 | {header} |
 |------|{separator}|
 {tpot_table}
 
----
 
-## 🔄 Token间延迟 (ITL)
+### 🔄 Token间延迟 (ITL)
 
 | 指标 | {header} |
 |------|{separator}|

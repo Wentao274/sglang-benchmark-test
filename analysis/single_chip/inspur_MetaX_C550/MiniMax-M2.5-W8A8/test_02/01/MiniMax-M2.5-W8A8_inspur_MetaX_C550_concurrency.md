@@ -1,14 +1,14 @@
 # MiniMax-M2.5-W8A8模型在inspur_MetaX_C550上的Benchmark基准测试报告
 
 <div align="center">
-**测试日期：** 2026-04-30
+**测试日期：** 2026-05-13
 
 </div>
 
 ---
 
 ## 测试场景
-在固定请求数，输入上下文和输出上下文长度下，使用sglang bench serve工具对并发数逐级增加场景的性能基准验证。分析同一芯片同一模型在不同并发级别下的性能指标变化趋势。
+使用sglang bench serve基准测试工具对不同并发数，请求上下文长度下的性能变化趋势。
 
 **主要采集指标**：
 
@@ -20,6 +20,43 @@
 | ITL                 | ms         | Inter-Token Latency，token间延迟       |
 | Throughput          | tokens/s   | 系统总吞吐                              |
 | QPS                 | requests/s | 请求吞吐                               |
+
+
+## 🤖 芯片和模型配置信息
+
+| 参数名称                    | inspur_MetaX_C550 |
+|------------------------|-------------|
+| **model_name** | MiniMax-M2.5-W8A8 |
+| **quantization_config** | int8 |
+| **model_size** | 215G |
+| **max_position_embeddings** | 196608 |
+| **temperature** | N/A |
+| **top_k** | 40 |
+| **top_p** | 0.95 |
+| **transformers_version** | 4.57.6 |
+| **sglang_version** | 0.5.9+maca3.5.3.204 |
+| **python_version** | 3.10.10 |
+
+
+## 🤖 SGLang启动配置信息
+
+| 参数名称                   | inspur_MetaX_C550 |
+|------------------------|-------------|
+| **Model Name** | MiniMax-M2.5-W8A8 |
+| **Attention Backend** | flashinfer |
+| **Quantization** | w8a8_int8 |
+| **Tp Size** | 8 |
+| **Pp Size** | 1 |
+| **Nnodes** | 1 |
+| **Context Length** | 196608 |
+| **Max Running Requests** | 64 |
+| **Max Queued Requests** | None |
+| **Disable Radix Cache** | True |
+| **Tool Call Parser** | minimax-m2 |
+| **Reasoning Parser** | minimax-append-think |
+| **Mem Fraction Static** | 0.9 |
+
+- **inspur_MetaX_C550**: 浪潮MetaX_C550 SGLang启动配置
 
 
 ## 📊 测试概览
@@ -37,44 +74,7 @@
 
 ---
 
-## 🤖 芯片和模型配置信息
-
-| 参数名称                    | inspur_MetaX_C550 |
-|------------------------|-------------|
-| **model_name** | MiniMax-M2.5-W8A8 |
-| **quantization_config** | int8 |
-| **model_size** | 215G |
-| **max_position_embeddings** | 196608 |
-| **temperature** | N/A |
-| **top_k** | 40 |
-| **top_p** | 0.95 |
-
----
-
-## 🤖 SGLang启动配置信息
-
-| 参数名称                   | inspur_MetaX_C550 |
-|------------------------|-------------|
-| **Model Name** | MiniMax-M2.5-W8A8 |
-| **Attention Backend** | flashinfer |
-| **Quantization** | w8a8_int8 |
-| **TP Size** | 8 |
-| **PP Size** | 1 |
-| **Num Nodes** | 1 |
-| **Data Type** | N/A |
-| **Context Length** | 196608 |
-| **Max Running Requests** | 64 |
-| **Max Queued Requests** | None |
-| **Disable Radix Cache** | True |
-| **Tool Call Parser** | minimax-m2 |
-| **Reasoning Parser** | minimax-append-think |
-| **Memory Fraction Static** | 0.9 |
-
-- **inspur_MetaX_C550**: 浪潮MetaX_C550 SGLang启动配置
-
----
-
-## 📋 测试汇总
+## 📋 测试结果汇总
 
 | 并发数 | 请求吞吐量 (req/s) | 输出Token吞吐量 (tok/s) | 总Token吞吐量 (tok/s) | TTFT P99 (ms) | TPOT P99 (ms) | E2E延迟均值 (ms) |
 | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- |
@@ -84,13 +84,11 @@
 | 8 | 0.01 | 14.35 | 2741.37 | 550123.80 | 229.02 | 558870.27 |
 | 10 | 0.01 | 14.34 | 2739.59 | 721962.01 | 229.15 | 690123.07 |
 
----
 
 ## 📊 各并发级别性能柱状图
 
 <img src="./concurrency_comparison.png" width="1000" />
 
----
 
 ## 📈 性能趋势分析
 
@@ -98,7 +96,7 @@
 
 ---
 
-## 🎯 服务基准结果
+### 🎯 服务基准结果详情
 
 | 指标 | 1 并发 | 2 并发 | 4 并发 | 8 并发 | 10 并发 |
 |------|----------- | ----------- | ----------- | ----------- | -----------|
@@ -112,9 +110,8 @@
 | 峰值并发请求数 | 3 | 5 | 8 | 12 | 14 |
 | **总 token 吞吐量 (tok/s)** | 2424.14 | 2610.79 | 2739.69 | 2741.37 | 2739.59 |
 
----
 
-## ⏱️ 端到端延迟 (E2E Latency)
+### ⏱️ 端到端延迟 (E2E Latency)
 
 | 指标 | 1 并发 | 2 并发 | 4 并发 | 8 并发 | 10 并发 |
 |------|----------- | ----------- | ----------- | ----------- | -----------|
@@ -123,9 +120,8 @@
 | P90 E2E 延迟 (ms) | 84131.89 | 156219.53 | 297678.91 | 594851.66 | 892727.67 |
 | P99 E2E 延迟 (ms) | 84165.35 | 156247.42 | 297902.96 | 595179.12 | 892917.91 |
 
----
 
-## ⏱️ 首Token延迟 (TTFT)
+### ⏱️ 首Token延迟 (TTFT)
 
 | 指标 | 1 并发 | 2 并发 | 4 并发 | 8 并发 | 10 并发 |
 |------|----------- | ----------- | ----------- | ----------- | -----------|
@@ -133,9 +129,8 @@
 | 中位 TTFT (ms) | 63251.29 | 63633.21 | 126783.24 | 423822.71 | 550150.31 |
 | P99 TTFT (ms) | 63374.54 | 126438.40 | 252746.14 | 550123.80 | 721962.01 |
 
----
 
-## ⚡ 每Token生成时间 (TPOT)
+### ⚡ 每Token生成时间 (TPOT)
 
 | 指标 | 1 并发 | 2 并发 | 4 并发 | 8 并发 | 10 并发 |
 |------|----------- | ----------- | ----------- | ----------- | -----------|
@@ -143,9 +138,8 @@
 | 中位 TPOT (ms) | 20.32 | 29.20 | 105.27 | 105.27 | 105.41 |
 | P99 TPOT (ms) | 20.33 | 90.66 | 228.93 | 229.02 | 229.15 |
 
----
 
-## 🔄 Token间延迟 (ITL)
+### 🔄 Token间延迟 (ITL)
 
 | 指标 | 1 并发 | 2 并发 | 4 并发 | 8 并发 | 10 并发 |
 |------|----------- | ----------- | ----------- | ----------- | -----------|
@@ -201,5 +195,5 @@ ITL随并发增加呈上升趋势。
 ---
 
 <div align="center">
-*报告生成时间: 2026-04-30*
+*报告生成时间: 2026-05-13*
 </div>

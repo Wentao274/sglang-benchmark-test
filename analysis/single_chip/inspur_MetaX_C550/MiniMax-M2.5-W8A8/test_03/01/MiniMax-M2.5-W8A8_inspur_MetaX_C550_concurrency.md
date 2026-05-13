@@ -1,14 +1,14 @@
 # MiniMax-M2.5-W8A8模型在inspur_MetaX_C550上的Benchmark基准测试报告
 
 <div align="center">
-**测试日期：** 2026-04-30
+**测试日期：** 2026-05-13
 
 </div>
 
 ---
 
 ## 测试场景
-在固定请求数，输入上下文和输出上下文长度下，使用sglang bench serve工具对并发数逐级增加场景的性能基准验证。分析同一芯片同一模型在不同并发级别下的性能指标变化趋势。
+使用sglang bench serve基准测试工具对不同并发数，请求上下文长度下的性能变化趋势。
 
 **主要采集指标**：
 
@@ -20,6 +20,43 @@
 | ITL                 | ms         | Inter-Token Latency，token间延迟       |
 | Throughput          | tokens/s   | 系统总吞吐                              |
 | QPS                 | requests/s | 请求吞吐                               |
+
+
+## 🤖 芯片和模型配置信息
+
+| 参数名称                    | inspur_MetaX_C550 |
+|------------------------|-------------|
+| **model_name** | MiniMax-M2.5-W8A8 |
+| **quantization_config** | int8 |
+| **model_size** | 215G |
+| **max_position_embeddings** | 196608 |
+| **temperature** | N/A |
+| **top_k** | 40 |
+| **top_p** | 0.95 |
+| **transformers_version** | 4.57.6 |
+| **sglang_version** | 0.5.9+maca3.5.3.204 |
+| **python_version** | 3.10.10 |
+
+
+## 🤖 SGLang启动配置信息
+
+| 参数名称                   | inspur_MetaX_C550 |
+|------------------------|-------------|
+| **Model Name** | MiniMax-M2.5-W8A8 |
+| **Attention Backend** | flashinfer |
+| **Quantization** | w8a8_int8 |
+| **Tp Size** | 8 |
+| **Pp Size** | 1 |
+| **Nnodes** | 1 |
+| **Context Length** | 196608 |
+| **Max Running Requests** | 64 |
+| **Max Queued Requests** | None |
+| **Disable Radix Cache** | True |
+| **Tool Call Parser** | minimax-m2 |
+| **Reasoning Parser** | minimax-append-think |
+| **Mem Fraction Static** | 0.9 |
+
+- **inspur_MetaX_C550**: 浪潮MetaX_C550 SGLang启动配置
 
 
 ## 📊 测试概览
@@ -37,57 +74,18 @@
 
 ---
 
-## 🤖 芯片和模型配置信息
-
-| 参数名称                    | inspur_MetaX_C550 |
-|------------------------|-------------|
-| **model_name** | MiniMax-M2.5-W8A8 |
-| **quantization_config** | int8 |
-| **model_size** | 215G |
-| **max_position_embeddings** | 196608 |
-| **temperature** | N/A |
-| **top_k** | 40 |
-| **top_p** | 0.95 |
-
----
-
-## 🤖 SGLang启动配置信息
-
-| 参数名称                   | inspur_MetaX_C550 |
-|------------------------|-------------|
-| **Model Name** | MiniMax-M2.5-W8A8 |
-| **Attention Backend** | flashinfer |
-| **Quantization** | w8a8_int8 |
-| **TP Size** | 8 |
-| **PP Size** | 1 |
-| **Num Nodes** | 1 |
-| **Data Type** | N/A |
-| **Context Length** | 196608 |
-| **Max Running Requests** | 64 |
-| **Max Queued Requests** | None |
-| **Disable Radix Cache** | True |
-| **Tool Call Parser** | minimax-m2 |
-| **Reasoning Parser** | minimax-append-think |
-| **Memory Fraction Static** | 0.9 |
-
-- **inspur_MetaX_C550**: 浪潮MetaX_C550 SGLang启动配置
-
----
-
-## 📋 测试汇总
+## 📋 测试结果汇总
 
 | 并发数 | 请求吞吐量 (req/s) | 输出Token吞吐量 (tok/s) | 总Token吞吐量 (tok/s) | TTFT P99 (ms) | TPOT P99 (ms) | E2E延迟均值 (ms) |
 | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- | ----------- |
 | 32 | 0.04 | 74.75 | 3438.38 | 857488.09 | 124.93 | 846163.95 |
 | 64 | 0.04 | 74.77 | 3439.56 | 1699446.48 | 124.97 | 1665095.54 |
 
----
 
 ## 📊 各并发级别性能柱状图
 
 <img src="./concurrency_comparison.png" width="1000" />
 
----
 
 ## 📈 性能趋势分析
 
@@ -95,7 +93,7 @@
 
 ---
 
-## 🎯 服务基准结果
+### 🎯 服务基准结果详情
 
 | 指标 | 32 并发 | 64 并发 |
 |------|----------- | -----------|
@@ -109,9 +107,8 @@
 | 峰值并发请求数 | 42 | 74 |
 | **总 token 吞吐量 (tok/s)** | 3438.38 | 3439.56 |
 
----
 
-## ⏱️ 端到端延迟 (E2E Latency)
+### ⏱️ 端到端延迟 (E2E Latency)
 
 | 指标 | 32 并发 | 64 并发 |
 |------|----------- | -----------|
@@ -120,9 +117,8 @@
 | P90 E2E 延迟 (ms) | 1056601.94 | 1855025.08 |
 | P99 E2E 延迟 (ms) | 1081494.77 | 1875852.49 |
 
----
 
-## ⏱️ 首Token延迟 (TTFT)
+### ⏱️ 首Token延迟 (TTFT)
 
 | 指标 | 32 并发 | 64 并发 |
 |------|----------- | -----------|
@@ -130,9 +126,8 @@
 | 中位 TTFT (ms) | 650829.87 | 1485885.19 |
 | P99 TTFT (ms) | 857488.09 | 1699446.48 |
 
----
 
-## ⚡ 每Token生成时间 (TPOT)
+### ⚡ 每Token生成时间 (TPOT)
 
 | 指标 | 32 并发 | 64 并发 |
 |------|----------- | -----------|
@@ -140,9 +135,8 @@
 | 中位 TPOT (ms) | 86.29 | 86.30 |
 | P99 TPOT (ms) | 124.93 | 124.97 |
 
----
 
-## 🔄 Token间延迟 (ITL)
+### 🔄 Token间延迟 (ITL)
 
 | 指标 | 32 并发 | 64 并发 |
 |------|----------- | -----------|
@@ -195,5 +189,5 @@ ITL随并发增加呈上升趋势。
 ---
 
 <div align="center">
-*报告生成时间: 2026-04-30*
+*报告生成时间: 2026-05-13*
 </div>

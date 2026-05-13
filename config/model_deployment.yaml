@@ -13,7 +13,7 @@ sglang_configs:
       context-length: 196608
       max-running-requests: 64
       max-queued-requests: None
-      disable-radix-cach: True
+      disable-radix-cache: True
       tool-call-parser: minimax-m2
       reasoning-parser: minimax-append-think
       mem-fraction-static: 0.9
@@ -29,7 +29,7 @@ sglang_configs:
       max-running-requests: 64
       max-queued-requests: None
       chunked-prefill-size: 8192
-      disable-radix-cach: True
+      disable-radix-cache: True
       tool-call-parser: kimi_k2
       reasoning-parser: kimi_k2
       mem-fraction-static: 0.8
@@ -46,7 +46,7 @@ sglang_configs:
       max-running-requests: 64
       max-queued-requests: None
       chunked-prefill-size: 8192
-      disable-radix-cach: True
+      disable-radix-cache: True
       tool-call-parser: glm47
       reasoning-parser: glm45
       mem-fraction-static: 0.8

@@ -148,12 +148,18 @@ def get_chip_metrics(chip_config, concurrency):
 
 
 COMPARISON_METRICS = [
-    ("Request throughput (req/s)", "Request throughput (req/s)"),
-    ("Output token throughput (tok/s)", "Output token throughput (tok/s)"),
-    ("Total token throughput (tok/s)", "Total token throughput (tok/s)"),
-    ("P99 TTFT (ms)", "P99 TTFT (ms)"),
-    ("P99 TPOT (ms)", "P99 TPOT (ms)"),
-    ("P99 ITL (ms)", "P99 ITL (ms)"),
+    ("请求吞吐量（Request throughput (req/s)）", "Request throughput (req/s)"),
+    (
+        "输出token吞吐量（Output token throughput (tok/s)）",
+        "Output token throughput (tok/s)",
+    ),
+    (
+        "总token吞吐量（Total token throughput (tok/s)）",
+        "Total token throughput (tok/s)",
+    ),
+    ("首token延迟（P99 TTFT (ms)）", "P99 TTFT (ms)"),
+    ("每token生成时间（P99 TPOT (ms)）", "P99 TPOT (ms)"),
+    ("token间延迟（P99 ITL (ms)）", "P99 ITL (ms)"),
 ]
 
 
@@ -587,6 +593,98 @@ def generate_markdown_report(
                 pass
         return " | ".join(values)
 
+    def get_value_with_format(chip_name, conc, key_name, highlight_best=True):
+        value = chip_data.get(chip_name, {}).get(conc, {}).get(key_name, "")
+        if value == "" or value is None:
+            return "N/A"
+        return value
+
+    def find_best_value(conc, key_name, find_max=True):
+        best_val = None
+        best_chip = None
+        for chip in chip_names:
+            value = chip_data.get(chip, {}).get(conc, {}).get(key_name, "")
+            if value and value != "N/A":
+                try:
+                    val_float = float(value)
+                    if (
+                        best_val is None
+                        or (find_max and val_float > best_val)
+                        or (not find_max and val_float < best_val)
+                    ):
+                        best_val = val_float
+                        best_chip = chip
+                except:
+                    pass
+        return best_chip
+
+    metric_trends_section = ""
+
+    for display_name, key_name in COMPARISON_METRICS:
+        is_throughput = key_name in [
+            "Request throughput (req/s)",
+            "Output token throughput (tok/s)",
+            "Total token throughput (tok/s)",
+        ]
+        find_max = is_throughput
+
+        chip_header = " | ".join(chip_names)
+        chip_separator = " | ".join(["-----------"] * len(chip_names))
+        header = f"{chip_header} | 差值 | 百分比"
+        separator = f"{chip_separator} | ----------- | -----------"
+
+        metric_rows = []
+        for conc in concurrencies:
+            base_value = None
+            values = []
+            best_chip = find_best_value(conc, key_name, find_max) if find_max else None
+
+            for chip in chip_names:
+                value = get_value_with_format(chip, conc, key_name)
+                if best_chip == chip and value != "N/A":
+                    value = f"**{value}** ⭐"
+                values.append(value)
+
+                if chip == chip_names[0] and value != "N/A":
+                    try:
+                        base_value = float(
+                            value.replace("**", "").replace("⭐", "").strip()
+                        )
+                    except:
+                        base_value = None
+
+            if len(chip_names) > 1 and base_value is not None and base_value != 0:
+                last_value_str = (
+                    values[-1].replace("**", "").replace("⭐", "").strip()
+                    if values[-1] != "N/A"
+                    else None
+                )
+                if last_value_str:
+                    try:
+                        last_value = float(last_value_str)
+                        diff = last_value - base_value
+                        pct = (diff / base_value) * 100
+                        diff_str = f"+{diff:.2f}" if diff >= 0 else f"{diff:.2f}"
+                        pct_str = f"+{pct:.1f}%" if pct >= 0 else f"{pct:.1f}%"
+                        extra_cols = f" | {diff_str} | {pct_str}"
+                    except:
+                        extra_cols = " | N/A | N/A"
+                else:
+                    extra_cols = " | N/A | N/A"
+            else:
+                extra_cols = " | N/A | N/A"
+
+            metric_rows.append(f"| {conc}   | {' | '.join(values)}{extra_cols} |")
+
+        metric_trends_section += f"""
+#### {display_name}
+
+| 并发数 | {header} |
+|-----|{separator}|
+{chr(10).join(metric_rows)}
+
+"""
+
     concurrency_tables = ""
 
     for conc in concurrencies:
@@ -606,18 +704,17 @@ def generate_markdown_report(
             )
 
         concurrency_tables += f"""
-### {conc} 并发
+#### {conc} 并发
 
 | 指标 | {header} |
 |------|{separator}|
 {chr(10).join(metric_rows)}
 
----
 """
 
     chart_images = "\n".join(
         [
-            f'<img src="./chip_comparison_c{conc}_{test_suite}_{chip_suffix}.png" width="1000" />'
+            f'\n**{conc}并发**\n\n<img src="./chip_comparison_c{conc}_{test_suite}_{chip_suffix}.png" width="1000" />'
             for conc in concurrencies
         ]
     )
@@ -660,7 +757,7 @@ def generate_markdown_report(
 | Throughput          | tokens/s   | 系统总吞吐                              |
 | QPS                 | requests/s | 请求吞吐                               |
 
-## 📊 测试概览
+### 📊 测试概览
 
 | 项目            | 配置                                     | 备注  |
 |---------------|----------------------------------------|-----|
@@ -674,19 +771,22 @@ def generate_markdown_report(
 
 ---
 
-## 📊 芯片性能对比柱状图
+### 📊 芯片性能对比柱状图
 
 {chart_images}
 
----
 
-## 📈 性能趋势对比图 (所有芯片)
+### 📈 性能趋势对比图 (所有芯片)
 
 {performance_trends_img}
 
 ---
 
-## 📈 各并发级别性能对比详情
+### 📈 各指标随并发级别性能对比详情
+
+{metric_trends_section}
+
+### 📈 各并发级别性能对比详情
 
 {concurrency_tables}
 

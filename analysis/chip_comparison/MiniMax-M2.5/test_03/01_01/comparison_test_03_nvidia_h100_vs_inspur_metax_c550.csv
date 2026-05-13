@@ -1,0 +1,7 @@
+Metric,32 并发,64 并发
+请求吞吐量（Request throughput (req/s)）,0.15/0.04,0.15/0.04
+输出token吞吐量（Output token throughput (tok/s)）,307.27/74.75,307.19/74.77
+总token吞吐量（Total token throughput (tok/s)）,14140.63/3438.38,14136.71/3439.56
+首token延迟（P99 TTFT (ms)）,151671.11/857488.09,345223.92/1699446.48
+每token生成时间（P99 TPOT (ms)）,40.78/124.93,40.79/124.97
+token间延迟（P99 ITL (ms)）,363.93/58.30,364.12/58.25

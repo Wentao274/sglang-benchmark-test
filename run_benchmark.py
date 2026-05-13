@@ -124,11 +124,6 @@ def run_benchmark(chip_name, base_config, model_config, test_suites, run_id):
                 "sglang",
                 "--dataset-name",
                 test_params.get("dataset-name", "random"),
-                "--dataset-path",
-                base_config.get(
-                    "dataset-path",
-                    "/home/workspace/ShareGPT_V3_unfiltered_cleaned_split.json",
-                ),
                 "--random-range-ratio",
                 "1.0",
                 "--host",
