@@ -10,7 +10,7 @@ run_benchmark.py [-h] --chip CHIP [--model MODEL]
 **options**:<br>
 --chip CHIP           Chip name to test <br>
 --model MODEL         Model name to test (e.g., minimax-m2.5, Qwen3.5) <br>
---test-suite TEST_SUITE  Test suite to run, use "," split multiple test suite; if not specified, use TEST_SUITES list defined in scripts to run <br>
+--test-suite TEST_SUITE  Test suite to run, use "," split multiple test suite; if not specified, use TEST_SUITES list defined in scripts to run (default: test_00) <br>
 --run-id RUN_ID       Run ID to identify this test run, if not specified, use RUN_ID defined in scripts <br>
 
 ### 1.1 测试 inspur_MetaX_C550 芯片上的 MiniMax-M2.5-W8A8 模型
@@ -128,7 +128,7 @@ parse_single_chip_model.py [-h] [--chip CHIP] [--model MODEL]
 **options**:<br>
 --chip CHIP           Chip name to test (e.g., inspur_MetaX_C550)<br>
 --model MODEL         Model name to test (e.g., MiniMax-M2.5-W8A8)<br>
---test-suite TEST_SUITE  Test suite name (e.g., test_01, test_05)<br>
+--test-suite TEST_SUITE  Test suite name (e.g., test_01, test_05) (default: test_00)<br>
 --run-id RUN_ID       Run ID (e.g., 01)<br>
 --concurrency CONCURRENCY  Specific concurrency levels to include, comma-separated (e.g., 1,2,4,8,10)<br>
 
@@ -176,7 +176,7 @@ chip_comparison.py [-h] [--chip CHIP] [--model MODEL]
 **options**:<br>
 --chip CHIP           Chip names to compare, comma-separated (e.g., inspur_MetaX_C550,nvidia_h100)<br>
 --model MODEL         Model name to test (e.g., MiniMax-M2.5-W8A8)<br>
---test-suite TEST_SUITE  Test suite name (e.g., test_01)<br>
+--test-suite TEST_SUITE  Test suite name (e.g., test_01) (default: test_00)<br>
 --run-id RUN_ID       Run IDs, can be '01' for all chips or '01,02' for each chip<br>
 --concurrency CONCURRENCY  Specific concurrency levels to compare, comma-separated (e.g., 1,2,4,8,10)<br>
 
@@ -231,7 +231,7 @@ model_comparison.py [-h] --chip CHIP --model MODEL
 **options**:<br>
 --chip CHIP           Chip platform (e.g., inspur_MetaX_C550, nvidia_h100)<br>
 --model MODEL         Model names to compare, separated by comma (e.g., MiniMax-M2.5-W8A8,GLM-5-W8A8)<br>
---test-suite TEST_SUITE  Test suite name (e.g., test_01)<br>
+--test-suite TEST_SUITE  Test suite name (e.g., test_01) (default: test_00)<br>
 --run-id RUN_ID       Run IDs for each model, separated by comma (e.g., 01 or 01,02)<br>
 -c CONCURRENCY        Specific concurrency levels to compare, comma-separated (e.g., 1,2,4,8,10)<br>
 
@@ -242,7 +242,7 @@ python model_comparison.py --chip inspur_MetaX_C550 --model "MiniMax-M2.5-W8A8,G
 ##### 6.2 对比不同run-id（第一个模型用01，第二个用02）
 python model_comparison.py --chip inspur_MetaX_C550 --model "MiniMax-M2.5-W8A8,GLM-5-W8A8" --test-suite test_01 --run-id '01,02'
 
-##### 6.3 使用默认参数（test_01, run-id 01）
+##### 6.3 使用默认参数（test_00, run-id 01）
 python model_comparison.py --chip inspur_MetaX_C550 --model "MiniMax-M2.5-W8A8,GLM-5-W8A8"
 
 ##### 6.4 指定特定并发级别
@@ -281,7 +281,7 @@ model_comparison_all_concurrency.py [-h] --chip CHIP --model MODEL
 **options**:<br>
 --chip CHIP           Chip platform (e.g., inspur_MetaX_C550, nvidia_h100)<br>
 --model MODEL         Model names to compare, separated by comma (e.g., MiniMax-M2.5-W8A8,GLM-5-W8A8)<br>
---test-suite TEST_SUITE  Test suite name (e.g., test_01)<br>
+--test-suite TEST_SUITE  Test suite name (e.g., test_01) (default: test_00)<br>
 --run-id RUN_ID       Run IDs for each model, separated by comma (e.g., 01 or 01,02)<br>
 
 #### 示例：
@@ -291,7 +291,7 @@ python model_comparison_all_concurrency.py --chip inspur_MetaX_C550 --model "Min
 ##### 7.2 对比不同run-id（第一个模型用01，第二个用02）
 python model_comparison_all_concurrency.py --chip inspur_MetaX_C550 --model "MiniMax-M2.5-W8A8,GLM-5-W8A8" --test-suite test_01 --run-id '01,02'
 
-##### 7.3 使用默认参数（test_01, run-id 01）
+##### 7.3 使用默认参数（test_00, run-id 01）
 python model_comparison_all_concurrency.py --chip inspur_MetaX_C550 --model "MiniMax-M2.5-W8A8,GLM-5-W8A8"
 
 **注意**：此脚本会自动生成所有并发级别的对比数据，并合并到一个Markdown报告中
@@ -326,7 +326,7 @@ compare_runids.py [-h] --chip CHIP --model MODEL
 **options**:<br>
 --chip CHIP           Chip platform (e.g., inspur_MetaX_C550, nvidia_h100)<br>
 --model MODEL         Model name (e.g., MiniMax-M2.5-W8A8)<br>
---test-suite TEST_SUITE  Test suite name (e.g., test_01, test_05)<br>
+--test-suite TEST_SUITE  Test suite name (e.g., test_01, test_05) (default: test_00)<br>
 --run-id RUN_ID       Run IDs to compare, separated by comma (e.g., 01,02 or 01,02,03)<br>
 --concurrency CONCURRENCY  Specific concurrency levels, comma-separated (e.g., 1,2,4,8,10)<br>
 
@@ -379,7 +379,7 @@ run_benchmark_gen_report.py [-h] --chip CHIP [--model MODEL]
 **options**:<br>
 --chip CHIP           Chip platform (e.g., inspur_MetaX_C550, nvidia_h100)<br>
 --model MODEL         Model name to test. If not specified, uses first model in config.<br>
---test-suite TEST_SUITE  Test suite name (e.g., test_01, test_05)<br>
+--test-suite TEST_SUITE  Test suite name (e.g., test_01, test_05) (default: test_00)<br>
 --run-id RUN_ID       Run ID to identify this test run (default: 01)<br>
 --skip-benchmark      Skip running benchmark, only generate reports<br>
 --only-report         Only generate reports without running benchmark<br>

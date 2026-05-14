@@ -21,7 +21,7 @@ except ImportError:
     print("matplotlib not available, skipping chart generation")
 
 
-TEST_SUITES = ["test_01"]
+TEST_SUITES = ["test_00"]
 
 RUN_ID = "01"
 

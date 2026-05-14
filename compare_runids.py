@@ -54,7 +54,6 @@ def load_chip_config_by_model(chip_name, model_name):
 
     chip_key_map = {
         "inspur_metax_c550": "inspur_MetaX_C550",
-        "inspur_metax_c500": "inspur_MetaX_C500",
         "nvidia_h100": "nvidia_h100",
     }
     chip_key = chip_key_map.get(chip_name.lower(), chip_name)
@@ -76,7 +75,6 @@ def load_sglang_config_by_model(chip_name, model_name):
 
     chip_key_map = {
         "inspur_metax_c550": "inspur_MetaX_C550",
-        "inspur_metax_c500": "inspur_MetaX_C500",
         "nvidia_h100": "nvidia_h100",
     }
     chip_key = chip_key_map.get(chip_name.lower(), chip_name)
@@ -966,7 +964,7 @@ def main():
     parser.add_argument(
         "--test-suite",
         type=str,
-        default="test_01",
+        default="test_00",
         help="Test suite name (e.g., test_01)",
     )
     parser.add_argument(
