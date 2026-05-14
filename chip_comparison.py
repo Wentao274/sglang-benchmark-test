@@ -2,6 +2,7 @@ import os
 import re
 import glob
 import yaml
+import numpy as np
 from pathlib import Path
 from datetime import datetime
 from collections import defaultdict
@@ -125,6 +126,45 @@ def get_all_concurrencies(chip_config):
                 concurrency_set.add(conc)
 
     return sorted(concurrency_set, key=lambda x: int(x))
+
+
+def get_all_input_output_pairs(chip_config):
+    io_set = set()
+    base_path = chip_config["base_path"]
+
+    if not os.path.exists(base_path):
+        return []
+
+    for item in os.listdir(base_path):
+        item_path = os.path.join(base_path, item)
+        if os.path.isdir(item_path):
+            match = re.match(r"^\d+-\d+-i(\d+)-o(\d+)$", item)
+            if match:
+                input_len = int(match.group(1))
+                output_len = int(match.group(2))
+                io_set.add((input_len, output_len))
+
+    return sorted(io_set, key=lambda x: (x[0], x[1]))
+
+
+def get_chip_metrics_multi_io(chip_config, concurrency, input_len, output_len):
+    base_path = chip_config["base_path"]
+    chip_name = chip_config["name"]
+
+    dir_pattern = os.path.join(base_path, f"{concurrency}-*-i{input_len}-o{output_len}")
+    matching_dirs = glob.glob(dir_pattern)
+
+    if not matching_dirs:
+        return None
+
+    log_pattern = os.path.join(matching_dirs[0], "*.log")
+    log_files = glob.glob(log_pattern)
+
+    if not log_files:
+        return None
+
+    metrics = parse_benchmark_log(log_files[0])
+    return metrics
 
 
 def get_chip_metrics(chip_config, concurrency):
@@ -505,6 +545,373 @@ def generate_performance_trends(
 
     print(f"Generated performance trends chart: {chart_file}")
     return chart_file
+
+
+def generate_multi_io_comparison_charts(
+    all_chip_data,
+    io_pairs,
+    concurrencies,
+    output_dir,
+    test_suite,
+    chip_names,
+    model_display=None,
+):
+    if not HAS_MATPLOTLIB:
+        return None
+
+    chip_suffix = "_vs_".join([c.lower() for c in chip_names])
+    if model_display is None:
+        model_display = "_vs_".join([chip_names[0]])
+
+    colors = ["#3498db", "#2ecc71", "#e74c3c", "#f39c12", "#9b59b6"]
+    chart_files = []
+
+    metrics_short_names = [
+        "Req/s",
+        "Output Tok/s",
+        "Total Tok/s",
+        "TTFT P99",
+        "TPOT P99",
+        "ITL P99",
+    ]
+
+    for input_len, output_len in io_pairs:
+        io_key = f"i{input_len}_o{output_len}"
+        io_label = f"input:{input_len}, output:{output_len}"
+
+        num_chips = len(chip_names)
+        num_metrics = len(COMPARISON_METRICS)
+        x = np.arange(len(concurrencies))
+        bar_width = 0.35
+        gap = bar_width * 0.1
+
+        fig, axes = plt.subplots(2, 3, figsize=(18, 12))
+        axes = axes.flatten()
+
+        for metric_idx, (display_name, key_name) in enumerate(COMPARISON_METRICS):
+            ax = axes[metric_idx]
+
+            for chip_idx, chip in enumerate(chip_names):
+                chip_data = all_chip_data.get(chip, {}).get(io_key, {})
+                values = []
+                for conc in concurrencies:
+                    val = chip_data.get(conc, {}).get(key_name, "0")
+                    try:
+                        values.append(float(val))
+                    except:
+                        values.append(0)
+
+                bars = ax.bar(
+                    x + chip_idx * bar_width,
+                    values,
+                    bar_width - gap,
+                    label=chip,
+                    color=colors[chip_idx % len(colors)],
+                    alpha=0.8,
+                )
+
+                for bar, val in zip(bars, values):
+                    if val > 0:
+                        ax.annotate(
+                            f"{val:.1f}",
+                            (bar.get_x() + bar.get_width() / 2, bar.get_height()),
+                            textcoords="offset points",
+                            xytext=(0, 2),
+                            ha="center",
+                            fontsize=6,
+                            rotation=90,
+                        )
+
+            ax.set_title(
+                f"{metrics_short_names[metric_idx]}", fontsize=10, fontweight="bold"
+            )
+            ax.set_xlabel("Concurrency")
+            group_center = x + (num_chips - 1) * bar_width / 2
+            ax.set_xticks(group_center)
+            ax.set_xticklabels(concurrencies, rotation=45)
+            ax.legend(fontsize=8)
+            ax.grid(True, alpha=0.3, axis="y")
+            ax.spines["top"].set_visible(False)
+            ax.spines["right"].set_visible(False)
+
+        plt.suptitle(
+            f"Performance Comparison - {io_label}", fontsize=14, fontweight="bold"
+        )
+        plt.tight_layout()
+
+        chart_file = os.path.join(
+            output_dir,
+            f"multi_io_{io_key}_{test_suite}_{chip_suffix}.png",
+        )
+        plt.savefig(chart_file, dpi=150, bbox_inches="tight")
+        plt.close()
+
+        chart_files.append(chart_file)
+        print(f"Generated chart: {chart_file}")
+
+    io_labels = [f"i{p[0]}_o{p[1]}" for p in io_pairs]
+    for conc in concurrencies:
+        num_chips = len(chip_names)
+        num_metrics = len(COMPARISON_METRICS)
+        x = np.arange(len(io_pairs))
+        bar_width = 0.35
+        gap = bar_width * 0.1
+
+        fig, axes = plt.subplots(2, 3, figsize=(18, 12))
+        axes = axes.flatten()
+
+        for metric_idx, (display_name, key_name) in enumerate(COMPARISON_METRICS):
+            ax = axes[metric_idx]
+
+            for chip_idx, chip in enumerate(chip_names):
+                values = []
+                for input_len, output_len in io_pairs:
+                    io_key = f"i{input_len}_o{output_len}"
+                    chip_data = all_chip_data.get(chip, {}).get(io_key, {})
+                    val = chip_data.get(conc, {}).get(key_name, "0")
+                    try:
+                        values.append(float(val))
+                    except:
+                        values.append(0)
+
+                bars = ax.bar(
+                    x + chip_idx * bar_width,
+                    values,
+                    bar_width - gap,
+                    label=chip,
+                    color=colors[chip_idx % len(colors)],
+                    alpha=0.8,
+                )
+
+                for bar, val in zip(bars, values):
+                    if val > 0:
+                        ax.annotate(
+                            f"{val:.1f}",
+                            (bar.get_x() + bar.get_width() / 2, bar.get_height()),
+                            textcoords="offset points",
+                            xytext=(0, 2),
+                            ha="center",
+                            fontsize=6,
+                            rotation=90,
+                        )
+
+            ax.set_title(
+                f"{metrics_short_names[metric_idx]}", fontsize=10, fontweight="bold"
+            )
+            ax.set_xlabel("Input/Output")
+            group_center = x + (num_chips - 1) * bar_width / 2
+            ax.set_xticks(group_center)
+            ax.set_xticklabels(io_labels, rotation=45, ha="right")
+            ax.legend(fontsize=8)
+            ax.grid(True, alpha=0.3, axis="y")
+            ax.spines["top"].set_visible(False)
+            ax.spines["right"].set_visible(False)
+
+        plt.suptitle(
+            f"Performance Comparison - Concurrency {conc}",
+            fontsize=14,
+            fontweight="bold",
+        )
+        plt.tight_layout()
+
+        chart_file = os.path.join(
+            output_dir,
+            f"multi_io_compare_by_io_c{conc}_{test_suite}_{chip_suffix}.png",
+        )
+        plt.savefig(chart_file, dpi=150, bbox_inches="tight")
+        plt.close()
+
+        chart_files.append(chart_file)
+        print(f"Generated chart: {chart_file}")
+
+    return chart_files
+
+
+def generate_multi_io_markdown_report(
+    all_chip_data,
+    io_pairs,
+    concurrencies,
+    output_dir,
+    test_suite,
+    scenarios_config,
+    chip_names=None,
+    model_names=None,
+):
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    if chip_names is None:
+        chip_names = list(CHIP_BASE_PATHS.keys())
+    if model_names is None:
+        model_names = []
+
+    chip_suffix = "_vs_".join([c.lower() for c in chip_names])
+
+    model_prefix = get_common_model_prefix(model_names)
+    model_display = (
+        model_prefix
+        if model_prefix
+        else (", ".join(model_names) if model_names else MODEL_NAME)
+    )
+
+    base_config = scenarios_config.get("base_config", {})
+    test_params = get_test_suite_config(test_suite, scenarios_config)
+    dataset_name = test_params.get("dataset-name", "random")
+    max_concurrency = test_params.get("max-concurrency", [])
+    num_prompts = test_params.get("num-prompts", [])
+
+    concurrency_str = (
+        ", ".join(str(c) for c in max_concurrency)
+        if max_concurrency
+        else ", ".join(concurrencies)
+    )
+    total_requests = num_prompts[0] if num_prompts else "N/A"
+
+    chip_models_str = ", ".join(
+        [f"{chip} ({model})" for chip, model in zip(chip_names, model_names)]
+    )
+
+    def make_table_for_io_concurrency(
+        io_pair, conc, key_name, highlight_max=False, highlight_min=False
+    ):
+        input_len, output_len = io_pair
+        io_key = f"i{input_len}_o{output_len}"
+        values = []
+        for chip in chip_names:
+            chip_data = all_chip_data.get(chip, {}).get(io_key, {})
+            value = chip_data.get(conc, {}).get(key_name, "")
+            if value == "" or value is None:
+                value = "N/A"
+            values.append(value)
+
+        if highlight_max or highlight_min:
+            try:
+                numeric = [
+                    (i, float(v)) for i, v in enumerate(values) if v and v != "N/A"
+                ]
+                if numeric:
+                    if highlight_max:
+                        best_idx = max(numeric, key=lambda x: x[1])[0]
+                    else:
+                        best_idx = min(numeric, key=lambda x: x[1])[0]
+                    for i in range(len(values)):
+                        if i == best_idx and values[i] and values[i] != "N/A":
+                            values[i] = f"**{values[i]}** ⭐"
+            except:
+                pass
+        return " | ".join(values)
+
+    md_content = f"""# {model_display}模型在不同芯片下的多I/O测试比对报告
+
+<div align="center">
+**测试日期：** {current_date}
+
+</div>
+
+---
+
+## 测试场景
+测试不同输入输出长度和并发级别下的性能表现。
+
+| 项目 | 配置 |
+|------|------|
+| **数据集** | {dataset_name} |
+| **并发数** | {concurrency_str} |
+| **总请求数** | {total_requests} |
+| **输入输出长度** | {", ".join([f"({p[0]}, {p[1]})" for p in io_pairs])} |
+| **被测芯片** | {", ".join(chip_names)} |
+| **被测模型** | {chip_models_str} |
+
+---
+
+"""
+
+    md_content += "## 📋 各I/O测试汇总（固定上下文长度，随并发变化）\n\n"
+
+    for input_len, output_len in io_pairs:
+        io_label = f"input: {input_len}, output: {output_len}"
+        md_content += f"### {io_label}\n\n"
+
+        for chip in chip_names:
+            md_content += f"**{chip}**\n\n"
+
+            header_parts = ["并发数"] + [name for name, _ in COMPARISON_METRICS]
+            header = " | ".join(header_parts)
+            separator = " | ".join(["---------------"] * len(header_parts))
+
+            metric_data = defaultdict(dict)
+            for conc in concurrencies:
+                io_key = f"i{input_len}_o{output_len}"
+                chip_data = all_chip_data.get(chip, {}).get(io_key, {})
+                for _, key_name in COMPARISON_METRICS:
+                    value = chip_data.get(conc, {}).get(key_name, "N/A")
+                    if value == "" or value is None:
+                        value = "N/A"
+                    metric_data[conc][key_name] = value
+
+            rows = []
+            for conc in concurrencies:
+                row_values = [conc]
+                for _, key_name in COMPARISON_METRICS:
+                    row_values.append(metric_data[conc].get(key_name, "N/A"))
+                rows.append("| " + " | ".join(row_values) + " |")
+
+            md_content += f"| {header} |\n|{separator}|\n"
+            md_content += "\n".join(rows) + "\n\n"
+
+        safe_io_key = f"i{input_len}_o{output_len}"
+        md_content += f"![Performance Charts](./multi_io_{safe_io_key}_{test_suite}_{chip_suffix}.png)\n\n"
+        md_content += "---\n\n"
+
+    md_content += "## 📊 I/O对比（固定并发数，随上下文长度变化）\n\n"
+
+    for conc in concurrencies:
+        md_content += f"### {conc} 并发\n\n"
+
+        for chip in chip_names:
+            md_content += f"**{chip}**\n\n"
+
+            header_parts = ["输入输出"] + [name for name, _ in COMPARISON_METRICS]
+            header = " | ".join(header_parts)
+            separator = " | ".join(["---------------"] * len(header_parts))
+
+            metric_data = defaultdict(dict)
+            for input_len, output_len in io_pairs:
+                io_key = f"i{input_len}_o{output_len}"
+                chip_data = all_chip_data.get(chip, {}).get(io_key, {})
+                io_label = f"i{input_len}_o{output_len}"
+                for _, key_name in COMPARISON_METRICS:
+                    value = chip_data.get(conc, {}).get(key_name, "N/A")
+                    if value == "" or value is None:
+                        value = "N/A"
+                    metric_data[io_label][key_name] = value
+
+            rows = []
+            for input_len, output_len in io_pairs:
+                io_label = f"i{input_len}_o{output_len}"
+                row_values = [io_label]
+                for _, key_name in COMPARISON_METRICS:
+                    row_values.append(metric_data[io_label].get(key_name, "N/A"))
+                rows.append("| " + " | ".join(row_values) + " |")
+
+            md_content += f"| {header} |\n|{separator}|\n"
+            md_content += "\n".join(rows) + "\n\n"
+
+        md_content += f"\n![Performance Charts](./multi_io_compare_by_io_c{conc}_{test_suite}_{chip_suffix}.png)\n\n"
+        md_content += "---\n\n"
+
+    md_content += f"""
+<div align="center">
+*报告生成时间: {current_date}*
+</div>
+"""
+
+    md_file = os.path.join(
+        output_dir, f"{model_display}_multi_io_{test_suite}_{chip_suffix}.md"
+    )
+    with open(md_file, "w", encoding="utf-8") as f:
+        f.write(md_content)
+
+    print(f"Generated: {md_file}")
+    return md_file
 
 
 def generate_markdown_report(
@@ -1013,43 +1420,98 @@ def main():
                 else:
                     print(f"  - {conc}并发: No data")
 
+        test_cfg = get_test_suite_config(test_suite_to_use, scenarios_config)
+        input_output_lens = test_cfg.get("random-input-output-len", [])
+        is_multi_io = len(input_output_lens) > 1
+
         print("\nGenerating comparison reports...")
 
         model_display = (
             model_prefix if len(model_names_for_path) > 1 else model_names_for_path[0]
         )
 
-        generate_comparison_csv(
-            chip_data, concurrencies, output_base, test_suite_to_use, chip_names
-        )
+        if is_multi_io:
+            print(f"Detected multi-I/O scenario: {len(input_output_lens)} I/O pairs")
 
-        if HAS_MATPLOTLIB:
-            generate_comparison_charts(
+            all_io_pairs = set()
+            for chip in chip_configs:
+                io_pairs = get_all_input_output_pairs(chip)
+                all_io_pairs.update(io_pairs)
+            io_pairs = sorted(all_io_pairs, key=lambda x: (x[0], x[1]))
+
+            print(f"Found {len(io_pairs)} I/O pairs: {io_pairs}")
+
+            all_chip_data = defaultdict(lambda: defaultdict(dict))
+
+            for chip in chip_configs:
+                chip_name = chip["name"]
+                for input_len, output_len in io_pairs:
+                    io_key = f"i{input_len}_o{output_len}"
+                    chip_data_by_io = defaultdict(dict)
+
+                    for conc in concurrencies:
+                        metrics = get_chip_metrics_multi_io(
+                            chip, conc, input_len, output_len
+                        )
+                        if metrics:
+                            chip_data_by_io[conc] = metrics
+
+                    if chip_data_by_io:
+                        all_chip_data[chip_name][io_key] = chip_data_by_io
+
+            if HAS_MATPLOTLIB:
+                generate_multi_io_comparison_charts(
+                    all_chip_data,
+                    io_pairs,
+                    concurrencies,
+                    output_base,
+                    test_suite_to_use,
+                    chip_names,
+                    model_display,
+                )
+
+            generate_multi_io_markdown_report(
+                all_chip_data,
+                io_pairs,
+                concurrencies,
+                output_base,
+                test_suite_to_use,
+                scenarios_config,
+                chip_names,
+                model_names_for_path,
+            )
+        else:
+            generate_comparison_csv(
+                chip_data, concurrencies, output_base, test_suite_to_use, chip_names
+            )
+
+            if HAS_MATPLOTLIB:
+                generate_comparison_charts(
+                    chip_data,
+                    concurrencies,
+                    output_base,
+                    test_suite_to_use,
+                    chip_names,
+                    model_display,
+                )
+                generate_performance_trends(
+                    chip_data,
+                    concurrencies,
+                    output_base,
+                    test_suite_to_use,
+                    chip_names,
+                    model_display,
+                )
+
+            generate_markdown_report(
                 chip_data,
                 concurrencies,
                 output_base,
                 test_suite_to_use,
+                scenarios_config,
                 chip_names,
-                model_display,
+                model_names_for_path,
             )
-            generate_performance_trends(
-                chip_data,
-                concurrencies,
-                output_base,
-                test_suite_to_use,
-                chip_names,
-                model_display,
-            )
-
-        generate_markdown_report(
-            chip_data,
-            concurrencies,
-            output_base,
-            test_suite_to_use,
-            scenarios_config,
-            chip_names,
-            model_names_for_path,
-        )
 
         print(f"\n{'=' * 50}")
         print(f"Chip comparison for {test_suite} generated successfully!")

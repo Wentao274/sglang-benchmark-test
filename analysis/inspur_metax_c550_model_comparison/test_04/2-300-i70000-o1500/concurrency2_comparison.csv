@@ -1,0 +1,30 @@
+Metric,GLM-5-W8A8,Kimi-K2.5_int4_2,MiniMax-M2.5-W8A8
+[Serving Benchmark Result],,,,
+Successful requests,300,300,300
+Benchmark duration (s),90.15,7524.96,7420.87
+Total input tokens,21000000,21000000,21000000
+Total generated tokens,300,450000,450000
+Request throughput (req/s),3.33,0.04,0.04
+Input token throughput (tok/s),232939.07,2790.71,2829.86
+Output token throughput (tok/s),3.33,59.80,60.64
+Peak output token throughput (tok/s),4.00,231.00,102.00
+Peak concurrent requests,6,3,4
+Total token throughput (tok/s),232942.40,2850.51,2890.50
+[Time to First Token],,,,
+Mean TTFT (ms),599.56,8843.36,14764.48
+Median TTFT (ms),599.18,8794.20,18692.36
+P99 TTFT (ms),616.19,10382.12,34848.72
+[Time per Output Token],,,,
+Mean TPOT (ms),0.00,27.55,23.15
+Median TPOT (ms),0.00,27.27,24.20
+P99 TPOT (ms),0.00,41.77,26.89
+[Inter-Token Latency],,,,
+Mean ITL (ms),0.00,27.56,23.15
+Median ITL (ms),0.00,18.89,20.03
+P95 ITL (ms),0.00,37.83,20.50
+P99 ITL (ms),0.00,38.62,25.32
+[End-to-End Latency],,,,
+Mean E2E Latency (ms),599.57,50148.29,49470.99
+Median E2E Latency (ms),599.19,49732.48,49038.29
+P90 E2E Latency (ms),609.46,54104.38,49105.06
+P99 E2E Latency (ms),616.20,71489.03,78147.37

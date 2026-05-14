@@ -1,0 +1,30 @@
+Metric,GLM-5-W8A8,MiniMax-M2.5-W8A8
+[Serving Benchmark Result],,
+Successful requests,1000,1000
+Benchmark duration (s),5333.53,5487.44
+Total input tokens,4096000,4096000
+Total generated tokens,2048000,2048000
+Request throughput (req/s),0.19,0.18
+Input token throughput (tok/s),767.97,746.43
+Output token throughput (tok/s),383.99,373.22
+Peak output token throughput (tok/s),528.00,400.00
+Peak concurrent requests,11,16
+Total token throughput (tok/s),1151.96,1119.65
+[Time to First Token],,
+Mean TTFT (ms),1277.22,931.87
+Median TTFT (ms),1245.18,953.41
+P99 TTFT (ms),1639.84,1401.61
+[Time per Output Token],,
+Mean TPOT (ms),20.16,20.99
+Median TPOT (ms),19.76,20.97
+P99 TPOT (ms),29.57,21.41
+[Inter-Token Latency],,
+Mean ITL (ms),20.16,20.99
+Median ITL (ms),15.63,20.87
+P95 ITL (ms),20.52,21.16
+P99 ITL (ms),309.35,28.13
+[End-to-End Latency],,
+Mean E2E Latency (ms),42535.99,43896.57
+Median E2E Latency (ms),41708.12,43886.93
+P90 E2E Latency (ms),43578.37,44091.39
+P99 E2E Latency (ms),62161.01,44456.36
