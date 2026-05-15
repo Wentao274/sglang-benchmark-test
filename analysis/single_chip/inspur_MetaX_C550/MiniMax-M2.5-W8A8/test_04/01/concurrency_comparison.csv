@@ -1,11 +1,11 @@
 Metric,1 concurrency,2 concurrency,4 concurrency,8 concurrency,16 concurrency,32 concurrency,64 concurrency,80 concurrency,128 concurrency
 [[Serving Benchmark Result]],,,,,,,,,,,,,,,,
 Successful requests,300,300,300,300,300,300,300,300,300
-Failed requests,,,,,,,,,
 Benchmark duration (s),10036.82,7420.87,5916.84,5233.55,4967.48,4986.54,5001.72,5015.07,5022.32
 Total input tokens,21000000,21000000,21000000,21000000,21000000,21000000,21000000,21000000,21000000
 Total generated tokens,450000,450000,450000,450000,450000,450000,450000,450000,450000
 Request throughput (req/s),0.03,0.04,0.05,0.06,0.06,0.06,0.06,0.06,0.06
+Input token throughput (tok/s),2092.30,2829.86,3549.19,4012.57,4227.50,4211.34,4198.55,4187.38,4181.33
 Output token throughput (tok/s),44.83,60.64,76.05,85.98,90.59,90.24,89.97,89.73,89.60
 Peak output token throughput (tok/s),65.00,102.00,156.00,200.00,240.00,236.00,240.00,228.00,240.00
 Peak concurrent requests,2,4,8,16,28,44,76,92,140

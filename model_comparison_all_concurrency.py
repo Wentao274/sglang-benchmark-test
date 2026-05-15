@@ -364,11 +364,11 @@ def generate_combined_csv(
     metric_names = [
         ("[Serving Benchmark Result]", ""),
         ("Successful requests", "successful requests"),
-        ("Failed requests", "failed requests"),
         ("Benchmark duration (s)", "benchmark duration (s)"),
         ("Total input tokens", "total input tokens"),
         ("Total generated tokens", "total generated tokens"),
         ("Request throughput (req/s)", "request throughput (req/s)"),
+        ("Input token throughput (tok/s)", "input token throughput (tok/s)"),
         ("Output token throughput (tok/s)", "output token throughput (tok/s)"),
         (
             "Peak output token throughput (tok/s)",

@@ -173,9 +173,6 @@ def parse_benchmark_log(log_file):
                 value = match.group(2).strip()
                 metrics[key] = value
 
-    if "Failed requests" not in metrics:
-        metrics["Failed requests"] = "0"
-
     return metrics
 
 
@@ -253,11 +250,11 @@ def generate_comparison_csv(
     metric_names = [
         ("[Serving Benchmark Result]", ""),
         ("Successful requests", "Successful requests"),
-        ("Failed requests", "Failed requests"),
         ("Benchmark duration (s)", "Benchmark duration (s)"),
         ("Total input tokens", "Total input tokens"),
         ("Total generated tokens", "Total generated tokens"),
         ("Request throughput (req/s)", "Request throughput (req/s)"),
+        ("Input token throughput (tok/s)", "Input token throughput (tok/s)"),
         ("Output token throughput (tok/s)", "Output token throughput (tok/s)"),
         ("Total token throughput (tok/s)", "Total token throughput (tok/s)"),
         ("[Time to First Token]", ""),
@@ -599,11 +596,11 @@ def generate_markdown_report(
 
     serving_metrics = [
         ("成功请求数", "Successful requests"),
-        ("失败请求数", "Failed requests"),
         ("测试持续时间 (s)", "Benchmark duration (s)"),
         ("总输入 tokens", "Total input tokens"),
         ("总生成 tokens", "Total generated tokens"),
         ("**请求吞吐量 (req/s)**", "Request throughput (req/s)"),
+        ("**输入 token 吞吐量 (tok/s)**", "Input token throughput (tok/s)"),
         ("**输出 token 吞吐量 (tok/s)**", "Output token throughput (tok/s)"),
         ("**总 token 吞吐量 (tok/s)**", "Total token throughput (tok/s)"),
     ]

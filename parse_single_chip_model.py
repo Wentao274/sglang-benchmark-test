@@ -206,11 +206,11 @@ def generate_comparison_csv(chip_data, concurrencies, output_dir, chip_name):
     metric_names = [
         ("[Serving Benchmark Result]", ""),
         ("Successful requests", "Successful requests"),
-        ("Failed requests", "Failed requests"),
         ("Benchmark duration (s)", "Benchmark duration (s)"),
         ("Total input tokens", "Total input tokens"),
         ("Total generated tokens", "Total generated tokens"),
         ("Request throughput (req/s)", "Request throughput (req/s)"),
+        ("Input token throughput (tok/s)", "Input token throughput (tok/s)"),
         ("Output token throughput (tok/s)", "Output token throughput (tok/s)"),
         (
             "Peak output token throughput (tok/s)",
@@ -887,6 +887,7 @@ def generate_multi_io_markdown_report(
             ("总输入 tokens", "Total input tokens"),
             ("总生成 tokens", "Total generated tokens"),
             ("**请求吞吐量 (req/s)**", "Request throughput (req/s)"),
+            ("**输入 token 吞吐量 (tok/s)**", "Input token throughput (tok/s)"),
             ("**输出 token 吞吐量 (tok/s)**", "Output token throughput (tok/s)"),
             ("峰值输出 token 吞吐量 (tok/s)", "Peak output token throughput (tok/s)"),
             ("总 token 吞吐量 (tok/s)", "Total token throughput (tok/s)"),
@@ -962,12 +963,14 @@ def generate_multi_io_markdown_report(
 
 | 指标                  | 单位         | 含义                                 |
 |---------------------|------------|------------------------------------|
-| E2E Latency         | ms         | End-to-End Latency，端到端延迟         |
+| Request throughput  | req/s      | 请求吞吐量                              |
+| Input token throughput | tok/s   | 输入token吞吐量                        |
+| Output token throughput | tok/s  | 输出token吞吐量                        |
+| Total token throughput | tok/s   | 总token吞吐量                         |
 | TTFT                | ms         | Time To First Token，首 token 延迟     |
 | TPOT                | ms/token   | Time Per Output Token，每 token 生成时间 |
 | ITL                 | ms         | Inter-Token Latency，token间延迟       |
-| Throughput          | tokens/s   | 系统总吞吐                              |
-| QPS                 | requests/s | 请求吞吐                               |
+| E2E Latency         | ms         | End-to-End Latency，端到端延迟         |
 
 
 ## 🤖 芯片和模型配置信息
@@ -1112,6 +1115,7 @@ def generate_multi_io_markdown_report(
             ("总输入 tokens", "Total input tokens"),
             ("总生成 tokens", "Total generated tokens"),
             ("请求吞吐量 (req/s)", "Request throughput (req/s)"),
+            ("输入 token 吞吐量 (tok/s)", "Input token throughput (tok/s)"),
             ("输出 token 吞吐量 (tok/s)", "Output token throughput (tok/s)"),
             ("峰值输出 token 吞吐量 (tok/s)", "Peak output token throughput (tok/s)"),
             ("总 token 吞吐量 (tok/s)", "Total token throughput (tok/s)"),
@@ -1278,11 +1282,11 @@ def generate_performance_trends_csv(chip_data, concurrencies, output_dir, chip_n
     metric_names = [
         ("[Serving Benchmark Result]", ""),
         ("Successful requests", "Successful requests"),
-        ("Failed requests", "Failed requests"),
         ("Benchmark duration (s)", "Benchmark duration (s)"),
         ("Total input tokens", "Total input tokens"),
         ("Total generated tokens", "Total generated tokens"),
         ("Request throughput (req/s)", "Request throughput (req/s)"),
+        ("Input token throughput (tok/s)", "Input token throughput (tok/s)"),
         ("Output token throughput (tok/s)", "Output token throughput (tok/s)"),
         (
             "Peak output token throughput (tok/s)",
@@ -1589,6 +1593,7 @@ def generate_markdown_report(
         ("总输入 tokens", "Total input tokens"),
         ("总生成 tokens", "Total generated tokens"),
         ("**请求吞吐量 (req/s)**", "Request throughput (req/s)"),
+        ("**输入 token 吞吐量 (tok/s)**", "Input token throughput (tok/s)"),
         ("**输出 token 吞吐量 (tok/s)**", "Output token throughput (tok/s)"),
         ("峰值输出 token 吞吐量 (tok/s)", "Peak output token throughput (tok/s)"),
         ("峰值并发请求数", "Peak concurrent requests"),
@@ -1755,12 +1760,14 @@ def generate_markdown_report(
 
 | 指标                  | 单位         | 含义                                 |
 |---------------------|------------|------------------------------------|
-| E2E Latency         | ms         | End-to-End Latency，端到端延迟         |
+| Request throughput  | req/s      | 请求吞吐量                              |
+| Input token throughput | tok/s   | 输入token吞吐量                        |
+| Output token throughput | tok/s  | 输出token吞吐量                        |
+| Total token throughput | tok/s   | 总token吞吐量                         |
 | TTFT                | ms         | Time To First Token，首 token 延迟     |
 | TPOT                | ms/token   | Time Per Output Token，每 token 生成时间 |
 | ITL                 | ms         | Inter-Token Latency，token间延迟       |
-| Throughput          | tokens/s   | 系统总吞吐                              |
-| QPS                 | requests/s | 请求吞吐                               |
+| E2E Latency         | ms         | End-to-End Latency，端到端延迟         |
 
 
 ## 🤖 芯片和模型配置信息

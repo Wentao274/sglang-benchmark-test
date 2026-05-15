@@ -190,6 +190,10 @@ def get_chip_metrics(chip_config, concurrency):
 COMPARISON_METRICS = [
     ("请求吞吐量（Request throughput (req/s)）", "Request throughput (req/s)"),
     (
+        "输入token吞吐量（Input token throughput (tok/s)）",
+        "Input token throughput (tok/s)",
+    ),
+    (
         "输出token吞吐量（Output token throughput (tok/s)）",
         "Output token throughput (tok/s)",
     ),
@@ -568,6 +572,7 @@ def generate_multi_io_comparison_charts(
 
     metrics_short_names = [
         "Req/s",
+        "Input Tok/s",
         "Output Tok/s",
         "Total Tok/s",
         "TTFT P99",

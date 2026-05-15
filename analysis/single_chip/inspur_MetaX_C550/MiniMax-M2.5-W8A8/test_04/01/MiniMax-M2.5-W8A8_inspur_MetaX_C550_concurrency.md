@@ -1,7 +1,7 @@
 # MiniMax-M2.5-W8A8模型在inspur_MetaX_C550上的Benchmark基准测试报告
 
 <div align="center">
-**测试日期：** 2026-05-13
+**测试日期：** 2026-05-15
 
 </div>
 
@@ -14,12 +14,14 @@
 
 | 指标                  | 单位         | 含义                                 |
 |---------------------|------------|------------------------------------|
-| E2E Latency         | ms         | End-to-End Latency，端到端延迟         |
+| Request throughput  | req/s      | 请求吞吐量                              |
+| Input token throughput | tok/s   | 输入token吞吐量                        |
+| Output token throughput | tok/s  | 输出token吞吐量                        |
+| Total token throughput | tok/s   | 总token吞吐量                         |
 | TTFT                | ms         | Time To First Token，首 token 延迟     |
 | TPOT                | ms/token   | Time Per Output Token，每 token 生成时间 |
 | ITL                 | ms         | Inter-Token Latency，token间延迟       |
-| Throughput          | tokens/s   | 系统总吞吐                              |
-| QPS                 | requests/s | 请求吞吐                               |
+| E2E Latency         | ms         | End-to-End Latency，端到端延迟         |
 
 
 ## 🤖 芯片和模型配置信息
@@ -109,6 +111,7 @@
 | 总输入 tokens | 21000000 | 21000000 | 21000000 | 21000000 | 21000000 | 21000000 | 21000000 | 21000000 | 21000000 |
 | 总生成 tokens | 450000 | 450000 | 450000 | 450000 | 450000 | 450000 | 450000 | 450000 | 450000 |
 | **请求吞吐量 (req/s)** | 0.03 | 0.04 | 0.05 | 0.06 | 0.06 | 0.06 | 0.06 | 0.06 | 0.06 |
+| **输入 token 吞吐量 (tok/s)** | 2092.30 | 2829.86 | 3549.19 | 4012.57 | 4227.50 | 4211.34 | 4198.55 | 4187.38 | 4181.33 |
 | **输出 token 吞吐量 (tok/s)** | 44.83 | 60.64 | 76.05 | 85.98 | 90.59 | 90.24 | 89.97 | 89.73 | 89.60 |
 | 峰值输出 token 吞吐量 (tok/s) | 65.00 | 102.00 | 156.00 | 200.00 | 240.00 | 236.00 | 240.00 | 228.00 | 240.00 |
 | 峰值并发请求数 | 2 | 4 | 8 | 16 | 28 | 44 | 76 | 92 | 140 |
@@ -204,5 +207,5 @@ ITL随并发增加呈上升趋势。
 ---
 
 <div align="center">
-*报告生成时间: 2026-05-13*
+*报告生成时间: 2026-05-15*
 </div>
