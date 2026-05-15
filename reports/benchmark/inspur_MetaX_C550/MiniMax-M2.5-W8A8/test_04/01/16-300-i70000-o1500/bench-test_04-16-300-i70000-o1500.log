@@ -1,0 +1,79 @@
+Skipping import of cpp extensions due to incompatible torch version 2.8.0+metax3.5.3.9 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+/opt/conda/lib/python3.10/site-packages/torchvision/datapoints/__init__.py:12: UserWarning: The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+  warnings.warn(_BETA_TRANSFORMS_WARNING)
+/opt/conda/lib/python3.10/site-packages/torchvision/transforms/v2/__init__.py:54: UserWarning: The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+  warnings.warn(_BETA_TRANSFORMS_WARNING)
+benchmark_args=Namespace(backend='sglang', base_url=None, host='0.0.0.0', port=8000, dataset_name='random', dataset_path='/home/workspace/ShareGPT_V3_unfiltered_cleaned_split.json', model=None, served_model_name=None, tokenizer=None, num_prompts=300, sharegpt_output_len=None, sharegpt_context_len=None, random_input_len=70000, random_output_len=1500, random_range_ratio=1.0, image_count=1, image_resolution='1080p', random_image_count=False, image_format='jpeg', image_content='random', request_rate=inf, use_trace_timestamps=False, max_concurrency=16, output_file=None, output_details=False, print_requests=False, disable_tqdm=False, disable_stream=False, return_logprob=False, return_routed_experts=False, seed=1, disable_ignore_eos=False, extra_request_body=None, apply_chat_template=False, profile=False, plot_throughput=False, profile_activities=['CPU', 'GPU'], profile_num_steps=None, profile_by_stage=False, profile_stages=None, profile_output_dir=None, profile_prefix=None, lora_name=None, lora_request_distribution='uniform', lora_zipf_alpha=1.5, prompt_suffix='', pd_separated=False, profile_prefill_url=None, profile_decode_url=None, flush_cache=False, warmup_requests=1, tokenize_prompt=False, gsp_num_groups=64, gsp_prompts_per_group=16, gsp_system_prompt_len=2048, gsp_question_len=128, gsp_output_len=256, gsp_range_ratio=1.0, gsp_fast_prepare=False, gsp_send_routing_key=False, gsp_num_turns=1, gsp_ordered=False, mooncake_slowdown_factor=1.0, mooncake_num_rounds=1, mooncake_workload='conversation', tag=None, header=None, rampup_mode=False, ramp_up_period=0.0)
+Namespace(backend='sglang', base_url=None, host='0.0.0.0', port=8000, dataset_name='random', dataset_path='/home/workspace/ShareGPT_V3_unfiltered_cleaned_split.json', model='/data/data_shared/MiniMax-M2.5-W8A8', served_model_name=None, tokenizer=None, num_prompts=300, sharegpt_output_len=None, sharegpt_context_len=None, random_input_len=70000, random_output_len=1500, random_range_ratio=1.0, image_count=1, image_resolution='1080p', random_image_count=False, image_format='jpeg', image_content='random', request_rate=inf, use_trace_timestamps=False, max_concurrency=16, output_file=None, output_details=False, print_requests=False, disable_tqdm=False, disable_stream=False, return_logprob=False, return_routed_experts=False, seed=1, disable_ignore_eos=False, extra_request_body=None, apply_chat_template=False, profile=False, plot_throughput=False, profile_activities=['CPU', 'GPU'], profile_num_steps=None, profile_by_stage=False, profile_stages=None, profile_output_dir=None, profile_prefix=None, lora_name=None, lora_request_distribution='uniform', lora_zipf_alpha=1.5, prompt_suffix='', pd_separated=False, profile_prefill_url=None, profile_decode_url=None, flush_cache=False, warmup_requests=1, tokenize_prompt=False, gsp_num_groups=64, gsp_prompts_per_group=16, gsp_system_prompt_len=2048, gsp_question_len=128, gsp_output_len=256, gsp_range_ratio=1.0, gsp_fast_prepare=False, gsp_send_routing_key=False, gsp_num_turns=1, gsp_ordered=False, mooncake_slowdown_factor=1.0, mooncake_num_rounds=1, mooncake_workload='conversation', tag=None, header=None, rampup_mode=False, ramp_up_period=0.0)
+
+#Input tokens: 21000000
+#Output tokens: 450000
+Starting warmup with 1 sequences...
+Warmup completed with 1 sequences. Starting main benchmark run...
+
+  0%|          | 0/300 [00:00<?, ?it/s]
+  0%|          | 1/300 [03:14<16:10:27, 194.74s/it]
+  4%|▍         | 13/300 [06:34<2:06:30, 26.45s/it] 
+  8%|▊         | 25/300 [09:54<1:35:24, 20.82s/it]
+ 12%|█▏        | 37/300 [13:09<1:22:13, 18.76s/it]
+ 16%|█▋        | 49/300 [16:24<1:14:24, 17.79s/it]
+ 20%|██        | 61/300 [19:40<1:08:48, 17.27s/it]
+ 24%|██▍       | 73/300 [22:56<1:04:05, 16.94s/it]
+ 28%|██▊       | 85/300 [26:11<59:53, 16.71s/it]  
+ 32%|███▏      | 97/300 [29:25<56:01, 16.56s/it]
+ 36%|███▋      | 109/300 [32:40<52:25, 16.47s/it]
+ 40%|████      | 121/300 [35:56<48:56, 16.40s/it]
+ 44%|████▍     | 133/300 [39:10<45:28, 16.34s/it]
+ 48%|████▊     | 145/300 [42:23<42:00, 16.26s/it]
+ 52%|█████▏    | 157/300 [45:54<39:42, 16.66s/it]
+ 56%|█████▌    | 168/300 [49:08<37:17, 16.95s/it]
+ 60%|██████    | 180/300 [52:24<33:29, 16.75s/it]
+ 64%|██████▍   | 192/300 [55:54<30:34, 16.99s/it]
+ 68%|██████▊   | 203/300 [59:10<27:48, 17.21s/it]
+ 72%|███████▏  | 215/300 [1:02:25<23:57, 16.91s/it]
+ 76%|███████▌  | 227/300 [1:05:40<20:20, 16.72s/it]
+ 80%|███████▉  | 239/300 [1:08:55<16:51, 16.57s/it]
+ 84%|████████▎ | 251/300 [1:12:08<13:25, 16.44s/it]
+ 88%|████████▊ | 263/300 [1:15:27<10:09, 16.47s/it]
+ 92%|█████████▏| 275/300 [1:18:42<06:50, 16.42s/it]
+ 96%|█████████▌| 287/300 [1:21:58<03:32, 16.38s/it]
+100%|█████████▉| 299/300 [1:22:47<00:12, 12.68s/it]
+100%|██████████| 300/300 [1:22:47<00:00, 16.56s/it]
+
+============ Serving Benchmark Result ============
+Backend:                                 sglang    
+Traffic request rate:                    inf       
+Max request concurrency:                 16        
+Successful requests:                     300       
+Benchmark duration (s):                  4967.48   
+Total input tokens:                      21000000  
+Total input text tokens:                 21000000  
+Total generated tokens:                  450000    
+Total generated tokens (retokenized):    459497    
+Request throughput (req/s):              0.06      
+Input token throughput (tok/s):          4227.50   
+Output token throughput (tok/s):         90.59     
+Peak output token throughput (tok/s):    240.00    
+Peak concurrent requests:                28        
+Total token throughput (tok/s):          4318.09   
+Concurrency:                             15.78     
+----------------End-to-End Latency----------------
+Mean E2E Latency (ms):                   261327.40 
+Median E2E Latency (ms):                 195537.68 
+P90 E2E Latency (ms):                    393952.01 
+P99 E2E Latency (ms):                    405966.76 
+---------------Time to First Token----------------
+Mean TTFT (ms):                          129429.07 
+Median TTFT (ms):                        105763.75 
+P99 TTFT (ms):                           256062.39 
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          87.99     
+Median TPOT (ms):                        86.79     
+P99 TPOT (ms):                           126.76    
+---------------Inter-Token Latency----------------
+Mean ITL (ms):                           87.99     
+Median ITL (ms):                         53.12     
+P95 ITL (ms):                            54.87     
+P99 ITL (ms):                            56.23     
+Max ITL (ms):                            120519.62 
+==================================================

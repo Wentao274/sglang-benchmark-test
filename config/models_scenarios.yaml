@@ -4,11 +4,6 @@ base_config:
   port: 8000
 #  dataset-path: "/home/workspace/ShareGPT_V3_unfiltered_cleaned_split.json"
   params:
-    test_00:
-      dataset-name: random
-      max-concurrency: [ 1, 10, 32 ]
-      num-prompts: [ 1024 ]
-      random-input-output-len: [ [ 65536, 4096 ] ]
     test_01:
       dataset-name: random
       max-concurrency: [ 1, 2, 4, 8, 10, 16, 32, 64, 80, 128 ]

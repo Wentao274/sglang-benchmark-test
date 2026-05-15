@@ -749,7 +749,7 @@ def main():
     parser.add_argument(
         "--test-suite",
         type=str,
-        default="test_00",
+        default="test_01",
         help="Test suite name (e.g., test_01)",
     )
     parser.add_argument(

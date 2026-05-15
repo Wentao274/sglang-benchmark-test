@@ -1,0 +1,116 @@
+Skipping import of cpp extensions due to incompatible torch version 2.8.0+metax3.5.3.9 for torchao version 0.15.0             Please see https://github.com/pytorch/ao/issues/2919 for more info
+/opt/conda/lib/python3.10/site-packages/torchvision/datapoints/__init__.py:12: UserWarning: The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+  warnings.warn(_BETA_TRANSFORMS_WARNING)
+/opt/conda/lib/python3.10/site-packages/torchvision/transforms/v2/__init__.py:54: UserWarning: The torchvision.datapoints and torchvision.transforms.v2 namespaces are still Beta. While we do not expect major breaking changes, some APIs may still change according to user feedback. Please submit any feedback you may have in this issue: https://github.com/pytorch/vision/issues/6753, and you can also check out https://github.com/pytorch/vision/issues/7319 to learn more about the APIs that we suspect might involve future changes. You can silence this warning by calling torchvision.disable_beta_transforms_warning().
+  warnings.warn(_BETA_TRANSFORMS_WARNING)
+benchmark_args=Namespace(backend='sglang', base_url=None, host='0.0.0.0', port=8000, dataset_name='random', dataset_path='/home/workspace/ShareGPT_V3_unfiltered_cleaned_split.json', model=None, served_model_name=None, tokenizer=None, num_prompts=1000, sharegpt_output_len=None, sharegpt_context_len=None, random_input_len=8192, random_output_len=1024, random_range_ratio=1.0, image_count=1, image_resolution='1080p', random_image_count=False, image_format='jpeg', image_content='random', request_rate=inf, use_trace_timestamps=False, max_concurrency=16, output_file=None, output_details=False, print_requests=False, disable_tqdm=False, disable_stream=False, return_logprob=False, return_routed_experts=False, seed=1, disable_ignore_eos=False, extra_request_body=None, apply_chat_template=False, profile=False, plot_throughput=False, profile_activities=['CPU', 'GPU'], profile_num_steps=None, profile_by_stage=False, profile_stages=None, profile_output_dir=None, profile_prefix=None, lora_name=None, lora_request_distribution='uniform', lora_zipf_alpha=1.5, prompt_suffix='', pd_separated=False, profile_prefill_url=None, profile_decode_url=None, flush_cache=False, warmup_requests=1, tokenize_prompt=False, gsp_num_groups=64, gsp_prompts_per_group=16, gsp_system_prompt_len=2048, gsp_question_len=128, gsp_output_len=256, gsp_range_ratio=1.0, gsp_fast_prepare=False, gsp_send_routing_key=False, gsp_num_turns=1, gsp_ordered=False, mooncake_slowdown_factor=1.0, mooncake_num_rounds=1, mooncake_workload='conversation', tag=None, header=None, rampup_mode=False, ramp_up_period=0.0)
+Namespace(backend='sglang', base_url=None, host='0.0.0.0', port=8000, dataset_name='random', dataset_path='/home/workspace/ShareGPT_V3_unfiltered_cleaned_split.json', model='/data/data_shared/MiniMax-M2.5-W8A8', served_model_name=None, tokenizer=None, num_prompts=1000, sharegpt_output_len=None, sharegpt_context_len=None, random_input_len=8192, random_output_len=1024, random_range_ratio=1.0, image_count=1, image_resolution='1080p', random_image_count=False, image_format='jpeg', image_content='random', request_rate=inf, use_trace_timestamps=False, max_concurrency=16, output_file=None, output_details=False, print_requests=False, disable_tqdm=False, disable_stream=False, return_logprob=False, return_routed_experts=False, seed=1, disable_ignore_eos=False, extra_request_body=None, apply_chat_template=False, profile=False, plot_throughput=False, profile_activities=['CPU', 'GPU'], profile_num_steps=None, profile_by_stage=False, profile_stages=None, profile_output_dir=None, profile_prefix=None, lora_name=None, lora_request_distribution='uniform', lora_zipf_alpha=1.5, prompt_suffix='', pd_separated=False, profile_prefill_url=None, profile_decode_url=None, flush_cache=False, warmup_requests=1, tokenize_prompt=False, gsp_num_groups=64, gsp_prompts_per_group=16, gsp_system_prompt_len=2048, gsp_question_len=128, gsp_output_len=256, gsp_range_ratio=1.0, gsp_fast_prepare=False, gsp_send_routing_key=False, gsp_num_turns=1, gsp_ordered=False, mooncake_slowdown_factor=1.0, mooncake_num_rounds=1, mooncake_workload='conversation', tag=None, header=None, rampup_mode=False, ramp_up_period=0.0)
+
+#Input tokens: 8192000
+#Output tokens: 1024000
+Starting warmup with 1 sequences...
+Warmup completed with 1 sequences. Starting main benchmark run...
+
+  0%|          | 0/1000 [00:00<?, ?it/s]
+  0%|          | 1/1000 [00:32<9:09:07, 32.98s/it]
+  2%|▏         | 17/1000 [01:06<55:41,  3.40s/it] 
+  3%|▎         | 33/1000 [01:40<42:41,  2.65s/it]
+  5%|▍         | 49/1000 [02:12<37:38,  2.38s/it]
+  6%|▋         | 65/1000 [02:46<35:17,  2.26s/it]
+  8%|▊         | 81/1000 [03:19<33:29,  2.19s/it]
+ 10%|▉         | 97/1000 [03:51<32:10,  2.14s/it]
+ 11%|█▏        | 113/1000 [04:24<31:10,  2.11s/it]
+ 13%|█▎        | 129/1000 [04:57<30:17,  2.09s/it]
+ 14%|█▍        | 145/1000 [05:31<29:51,  2.09s/it]
+ 16%|█▌        | 161/1000 [06:03<29:03,  2.08s/it]
+ 18%|█▊        | 177/1000 [06:36<28:20,  2.07s/it]
+ 19%|█▉        | 193/1000 [07:10<27:58,  2.08s/it]
+ 21%|██        | 209/1000 [07:42<27:15,  2.07s/it]
+ 22%|██▎       | 225/1000 [08:15<26:39,  2.06s/it]
+ 24%|██▍       | 241/1000 [08:48<26:00,  2.06s/it]
+ 26%|██▌       | 257/1000 [09:21<25:35,  2.07s/it]
+ 27%|██▋       | 273/1000 [09:54<24:59,  2.06s/it]
+ 29%|██▉       | 289/1000 [10:27<24:21,  2.06s/it]
+ 30%|███       | 305/1000 [11:01<23:59,  2.07s/it]
+ 32%|███▏      | 321/1000 [11:33<23:20,  2.06s/it]
+ 34%|███▎      | 337/1000 [12:07<22:51,  2.07s/it]
+ 35%|███▌      | 353/1000 [12:39<22:15,  2.06s/it]
+ 37%|███▋      | 369/1000 [13:12<21:39,  2.06s/it]
+ 38%|███▊      | 385/1000 [13:45<21:03,  2.05s/it]
+ 40%|████      | 401/1000 [14:18<20:36,  2.06s/it]
+ 42%|████▏     | 417/1000 [14:51<20:01,  2.06s/it]
+ 43%|████▎     | 433/1000 [15:24<19:25,  2.06s/it]
+ 45%|████▍     | 449/1000 [15:57<18:52,  2.06s/it]
+ 46%|████▋     | 465/1000 [16:29<18:17,  2.05s/it]
+ 48%|████▊     | 481/1000 [17:02<17:46,  2.05s/it]
+ 50%|████▉     | 497/1000 [17:36<17:19,  2.07s/it]
+ 51%|█████▏    | 513/1000 [18:09<16:51,  2.08s/it]
+ 53%|█████▎    | 529/1000 [18:42<16:15,  2.07s/it]
+ 55%|█████▍    | 545/1000 [19:15<15:38,  2.06s/it]
+ 56%|█████▌    | 561/1000 [19:48<15:03,  2.06s/it]
+ 58%|█████▊    | 577/1000 [20:20<14:27,  2.05s/it]
+ 59%|█████▉    | 593/1000 [20:53<13:54,  2.05s/it]
+ 61%|██████    | 609/1000 [21:27<13:27,  2.06s/it]
+ 62%|██████▎   | 625/1000 [21:59<12:51,  2.06s/it]
+ 64%|██████▍   | 641/1000 [22:32<12:16,  2.05s/it]
+ 66%|██████▌   | 657/1000 [23:05<11:42,  2.05s/it]
+ 67%|██████▋   | 673/1000 [23:37<11:09,  2.05s/it]
+ 69%|██████▉   | 689/1000 [24:10<10:36,  2.05s/it]
+ 70%|███████   | 705/1000 [24:43<10:03,  2.05s/it]
+ 72%|███████▏  | 721/1000 [25:16<09:35,  2.06s/it]
+ 74%|███████▎  | 737/1000 [25:49<09:00,  2.06s/it]
+ 75%|███████▌  | 753/1000 [26:23<08:33,  2.08s/it]
+ 77%|███████▋  | 769/1000 [26:56<07:59,  2.07s/it]
+ 78%|███████▊  | 785/1000 [27:29<07:24,  2.07s/it]
+ 80%|████████  | 801/1000 [28:03<06:54,  2.08s/it]
+ 82%|████████▏ | 817/1000 [28:36<06:19,  2.07s/it]
+ 83%|████████▎ | 833/1000 [29:08<05:44,  2.06s/it]
+ 85%|████████▍ | 849/1000 [29:41<05:11,  2.06s/it]
+ 86%|████████▋ | 865/1000 [30:14<04:37,  2.05s/it]
+ 88%|████████▊ | 881/1000 [30:47<04:04,  2.05s/it]
+ 90%|████████▉ | 897/1000 [31:19<03:31,  2.05s/it]
+ 91%|█████████▏| 913/1000 [31:52<02:58,  2.05s/it]
+ 93%|█████████▎| 929/1000 [32:25<02:25,  2.05s/it]
+ 94%|█████████▍| 945/1000 [32:58<01:52,  2.05s/it]
+ 96%|█████████▌| 961/1000 [33:31<01:20,  2.07s/it]
+ 98%|█████████▊| 977/1000 [34:04<00:47,  2.06s/it]
+ 99%|█████████▉| 993/1000 [34:30<00:13,  1.92s/it]
+100%|██████████| 1000/1000 [34:30<00:00,  2.07s/it]
+
+============ Serving Benchmark Result ============
+Backend:                                 sglang    
+Traffic request rate:                    inf       
+Max request concurrency:                 16        
+Successful requests:                     1000      
+Benchmark duration (s):                  2070.20   
+Total input tokens:                      8192000   
+Total input text tokens:                 8192000   
+Total generated tokens:                  1024000   
+Total generated tokens (retokenized):    1062012   
+Request throughput (req/s):              0.48      
+Input token throughput (tok/s):          3957.10   
+Output token throughput (tok/s):         494.64    
+Peak output token throughput (tok/s):    624.00    
+Peak concurrent requests:                32        
+Total token throughput (tok/s):          4451.74   
+Concurrency:                             15.90     
+----------------End-to-End Latency----------------
+Mean E2E Latency (ms):                   32912.17  
+Median E2E Latency (ms):                 32787.35  
+P90 E2E Latency (ms):                    33626.36  
+P99 E2E Latency (ms):                    34069.80  
+---------------Time to First Token----------------
+Mean TTFT (ms):                          3201.04   
+Median TTFT (ms):                        3291.55   
+P99 TTFT (ms):                           6149.73   
+-----Time per Output Token (excl. 1st token)------
+Mean TPOT (ms):                          29.04     
+Median TPOT (ms):                        29.05     
+P99 TPOT (ms):                           32.34     
+---------------Inter-Token Latency----------------
+Mean ITL (ms):                           29.04     
+Median ITL (ms):                         26.56     
+P95 ITL (ms):                            27.19     
+P99 ITL (ms):                            31.66     
+Max ITL (ms):                            6022.78   
+==================================================
