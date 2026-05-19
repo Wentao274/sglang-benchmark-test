@@ -1,7 +1,7 @@
 # MiniMax-M2.5模型在不同芯片下的基准测试报告
 
 <div align="center">
-**测试日期：** 2026-05-13
+**测试日期：** 2026-05-19
 
 </div>
 
@@ -62,6 +62,14 @@
 | 64   | **0.15** ⭐ | 0.04 | -0.11 | -73.3% |
 
 
+#### 输入token吞吐量（Input token throughput (tok/s)）
+
+| 并发数 | nvidia_h100 | inspur_MetaX_C550 | 差值 | 百分比 |
+|-----|----------- | ----------- | ----------- | -----------|
+| 32   | N/A | 3363.64 | N/A | N/A |
+| 64   | N/A | 3364.79 | N/A | N/A |
+
+
 #### 输出token吞吐量（Output token throughput (tok/s)）
 
 | 并发数 | nvidia_h100 | inspur_MetaX_C550 | 差值 | 百分比 |
@@ -111,6 +119,7 @@
 | 指标 | nvidia_h100 | inspur_MetaX_C550 |
 |------|----------- | -----------|
 | 请求吞吐量（Request throughput (req/s)） | **0.15** ⭐ | 0.04 |
+| 输入token吞吐量（Input token throughput (tok/s)） | N/A | 3363.64 |
 | 输出token吞吐量（Output token throughput (tok/s)） | **307.27** ⭐ | 74.75 |
 | 总token吞吐量（Total token throughput (tok/s)） | **14140.63** ⭐ | 3438.38 |
 | 首token延迟（P99 TTFT (ms)） | **151671.11** ⭐ | 857488.09 |
@@ -123,6 +132,7 @@
 | 指标 | nvidia_h100 | inspur_MetaX_C550 |
 |------|----------- | -----------|
 | 请求吞吐量（Request throughput (req/s)） | **0.15** ⭐ | 0.04 |
+| 输入token吞吐量（Input token throughput (tok/s)） | N/A | 3364.79 |
 | 输出token吞吐量（Output token throughput (tok/s)） | **307.19** ⭐ | 74.77 |
 | 总token吞吐量（Total token throughput (tok/s)） | **14136.71** ⭐ | 3439.56 |
 | 首token延迟（P99 TTFT (ms)） | **345223.92** ⭐ | 1699446.48 |
@@ -134,5 +144,5 @@
 ---
 
 <div align="center">
-*报告生成时间: 2026-05-13*
+*报告生成时间: 2026-05-19*
 </div>

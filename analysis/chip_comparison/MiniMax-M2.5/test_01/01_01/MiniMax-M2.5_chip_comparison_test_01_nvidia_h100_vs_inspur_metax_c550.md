@@ -1,7 +1,7 @@
 # MiniMax-M2.5模型在不同芯片下的基准测试报告
 
 <div align="center">
-**测试日期：** 2026-05-13
+**测试日期：** 2026-05-19
 
 </div>
 
@@ -102,6 +102,22 @@
 | 128   | **3.66** ⭐ | 1.41 | -2.25 | -61.5% |
 
 
+#### 输入token吞吐量（Input token throughput (tok/s)）
+
+| 并发数 | nvidia_h100 | inspur_MetaX_C550 | 差值 | 百分比 |
+|-----|----------- | ----------- | ----------- | -----------|
+| 1   | N/A | 2770.22 | N/A | N/A |
+| 2   | N/A | 4230.31 | N/A | N/A |
+| 4   | N/A | 6456.06 | N/A | N/A |
+| 8   | N/A | 8543.62 | N/A | N/A |
+| 10   | N/A | 9308.12 | N/A | N/A |
+| 16   | N/A | 11072.12 | N/A | N/A |
+| 32   | N/A | 12997.18 | N/A | N/A |
+| 64   | N/A | 14384.76 | N/A | N/A |
+| 80   | N/A | 14405.36 | N/A | N/A |
+| 128   | N/A | 14396.10 | N/A | N/A |
+
+
 #### 输出token吞吐量（Output token throughput (tok/s)）
 
 | 并发数 | nvidia_h100 | inspur_MetaX_C550 | 差值 | 百分比 |
@@ -191,6 +207,7 @@
 | 指标 | nvidia_h100 | inspur_MetaX_C550 |
 |------|----------- | -----------|
 | 请求吞吐量（Request throughput (req/s)） | **0.45** ⭐ | 0.27 |
+| 输入token吞吐量（Input token throughput (tok/s)） | N/A | 2770.22 |
 | 输出token吞吐量（Output token throughput (tok/s)） | **115.31** ⭐ | 69.26 |
 | 总token吞吐量（Total token throughput (tok/s)） | **4745.14** ⭐ | 2839.48 |
 | 首token延迟（P99 TTFT (ms)） | **286.01** ⭐ | 596.38 |
@@ -203,6 +220,7 @@
 | 指标 | nvidia_h100 | inspur_MetaX_C550 |
 |------|----------- | -----------|
 | 请求吞吐量（Request throughput (req/s)） | **0.78** ⭐ | 0.41 |
+| 输入token吞吐量（Input token throughput (tok/s)） | N/A | 4230.31 |
 | 输出token吞吐量（Output token throughput (tok/s)） | **199.70** ⭐ | 105.76 |
 | 总token吞吐量（Total token throughput (tok/s)） | **8217.92** ⭐ | 4336.07 |
 | 首token延迟（P99 TTFT (ms)） | **466.40** ⭐ | 1097.81 |
@@ -215,6 +233,7 @@
 | 指标 | nvidia_h100 | inspur_MetaX_C550 |
 |------|----------- | -----------|
 | 请求吞吐量（Request throughput (req/s)） | **1.26** ⭐ | 0.63 |
+| 输入token吞吐量（Input token throughput (tok/s)） | N/A | 6456.06 |
 | 输出token吞吐量（Output token throughput (tok/s)） | **323.45** ⭐ | 161.40 |
 | 总token吞吐量（Total token throughput (tok/s)） | **13310.92** ⭐ | 6617.46 |
 | 首token延迟（P99 TTFT (ms)） | **826.89** ⭐ | 2137.97 |
@@ -227,6 +246,7 @@
 | 指标 | nvidia_h100 | inspur_MetaX_C550 |
 |------|----------- | -----------|
 | 请求吞吐量（Request throughput (req/s)） | **1.82** ⭐ | 0.83 |
+| 输入token吞吐量（Input token throughput (tok/s)） | N/A | 8543.62 |
 | 输出token吞吐量（Output token throughput (tok/s)） | **465.99** ⭐ | 213.59 |
 | 总token吞吐量（Total token throughput (tok/s)） | **19176.39** ⭐ | 8757.21 |
 | 首token延迟（P99 TTFT (ms)） | **1364.44** ⭐ | 4216.68 |
@@ -239,6 +259,7 @@
 | 指标 | nvidia_h100 | inspur_MetaX_C550 |
 |------|----------- | -----------|
 | 请求吞吐量（Request throughput (req/s)） | **2.09** ⭐ | 0.91 |
+| 输入token吞吐量（Input token throughput (tok/s)） | N/A | 9308.12 |
 | 输出token吞吐量（Output token throughput (tok/s)） | **534.52** ⭐ | 232.70 |
 | 总token吞吐量（Total token throughput (tok/s)） | **21996.95** ⭐ | 9540.82 |
 | 首token延迟（P99 TTFT (ms)） | **1534.23** ⭐ | 5277.45 |
@@ -251,6 +272,7 @@
 | 指标 | nvidia_h100 | inspur_MetaX_C550 |
 |------|----------- | -----------|
 | 请求吞吐量（Request throughput (req/s)） | **2.51** ⭐ | 1.08 |
+| 输入token吞吐量（Input token throughput (tok/s)） | N/A | 11072.12 |
 | 输出token吞吐量（Output token throughput (tok/s)） | **643.80** ⭐ | 276.80 |
 | 总token吞吐量（Total token throughput (tok/s)） | **26494.03** ⭐ | 11348.92 |
 | 首token延迟（P99 TTFT (ms)） | **2630.84** ⭐ | 8059.86 |
@@ -263,6 +285,7 @@
 | 指标 | nvidia_h100 | inspur_MetaX_C550 |
 |------|----------- | -----------|
 | 请求吞吐量（Request throughput (req/s)） | **3.12** ⭐ | 1.27 |
+| 输入token吞吐量（Input token throughput (tok/s)） | N/A | 12997.18 |
 | 输出token吞吐量（Output token throughput (tok/s)） | **797.81** ⭐ | 324.93 |
 | 总token吞吐量（Total token throughput (tok/s)） | **32831.81** ⭐ | 13322.11 |
 | 首token延迟（P99 TTFT (ms)） | **6556.86** ⭐ | 15782.91 |
@@ -275,6 +298,7 @@
 | 指标 | nvidia_h100 | inspur_MetaX_C550 |
 |------|----------- | -----------|
 | 请求吞吐量（Request throughput (req/s)） | **3.66** ⭐ | 1.40 |
+| 输入token吞吐量（Input token throughput (tok/s)） | N/A | 14384.76 |
 | 输出token吞吐量（Output token throughput (tok/s)） | **937.16** ⭐ | 359.62 |
 | 总token吞吐量（Total token throughput (tok/s)） | **38566.45** ⭐ | 14744.38 |
 | 首token延迟（P99 TTFT (ms)） | **12557.76** ⭐ | 31672.66 |
@@ -287,6 +311,7 @@
 | 指标 | nvidia_h100 | inspur_MetaX_C550 |
 |------|----------- | -----------|
 | 请求吞吐量（Request throughput (req/s)） | **3.67** ⭐ | 1.41 |
+| 输入token吞吐量（Input token throughput (tok/s)） | N/A | 14405.36 |
 | 输出token吞吐量（Output token throughput (tok/s)） | **938.91** ⭐ | 360.13 |
 | 总token吞吐量（Total token throughput (tok/s)） | **38638.21** ⭐ | 14765.49 |
 | 首token延迟（P99 TTFT (ms)） | **19679.20** ⭐ | 53556.78 |
@@ -299,6 +324,7 @@
 | 指标 | nvidia_h100 | inspur_MetaX_C550 |
 |------|----------- | -----------|
 | 请求吞吐量（Request throughput (req/s)） | **3.66** ⭐ | 1.41 |
+| 输入token吞吐量（Input token throughput (tok/s)） | N/A | 14396.10 |
 | 输出token吞吐量（Output token throughput (tok/s)） | **937.61** ⭐ | 359.90 |
 | 总token吞吐量（Total token throughput (tok/s)） | **38585.00** ⭐ | 14756.01 |
 | 首token延迟（P99 TTFT (ms)） | **29645.32** ⭐ | 76792.15 |
@@ -310,5 +336,5 @@
 ---
 
 <div align="center">
-*报告生成时间: 2026-05-13*
+*报告生成时间: 2026-05-19*
 </div>

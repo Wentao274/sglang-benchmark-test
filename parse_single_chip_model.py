@@ -999,7 +999,6 @@ def generate_multi_io_markdown_report(
 | **输入输出长度** | {", ".join([f"({p[0]}, {p[1]})" for p in io_pairs])} |     |
 | **模型**        | {actual_model_name}                           |     |
 | **被测芯片**      | {chip_name} |     |
-| **SGLang版本**   | {sglang_version}                           |     |
 
 ---
 
@@ -1797,7 +1796,6 @@ def generate_markdown_report(
 | **请求输出上下文长度** | {output_len[0] if output_len else "N/A"}（{output_ctx}）                             |     |
 | **模型**        | {actual_model_name}                           |     |
 | **被测芯片**      | {chip_name} |     |
-| **SGLang版本**   | {sglang_version}                           |     |
 
 ---
 

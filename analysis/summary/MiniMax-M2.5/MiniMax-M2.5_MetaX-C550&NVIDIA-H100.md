@@ -601,6 +601,9 @@ N/A
 | ruler_qa_squad  | 0.6927           | 0.6224           | -0.0703 | - 10.15%  |
 | ruler_vt        | 1.0000           | 1.0000           | 0.0000  | + 0.00%   |
 
+
+>- IFBench模型精度测试脚本参见《附录三》
+>- lm-eval模型精度测试脚本参见《附录四》
 ---
 
 ## 测试场景六：基础推理能力验证
@@ -816,7 +819,6 @@ python3 -m sglang.launch_server \
 
 ## 附录二：benchmark执行脚本
 
----
 **执行命令**
 ```shell
 python run_benchmark.py --chip inspur_MetaX_C550 --model MiniMax-M2.5-W8A8 --test-suite test_01,test_02,test_03,test_04,test_05
@@ -1099,6 +1101,152 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+```
+
+## 附录三：IFBench精度测试脚本
+
+以MiniMax-M2.5-W8A8模型为例
+
+---
+
+**ifbench_mm25_w8a8.sh**
+
+```shell
+#!/bin/bash
+ROOT_PATH=$(cd `dirname $0`; pwd)
+
+echo $ROOT_PATH
+cd ${ROOT_PATH}
+
+CurDate=`date +'%Y%m%d'`
+export NLTK_DATA=/home/workspace/poc/16-kh/llmtest/IFBench/nltk_data
+
+cat > .env << 'EOF'
+api_base=http://127.0.0.1:8000/v1
+api_key=abc123
+model=/data/data_shared/MiniMax-M2.5-W8A
+temperature=1.0
+top_p=0.95
+top_k=40
+max_tokens=8192
+seed=42
+input_file=data/IFBench_test.jsonl
+output_file=data/mm25-responses.jsonl
+workers=32
+EOF
+
+# 2. 生成模型响应
+uv run python generate_responses.py
+
+# 3. Thinking 模型后处理（重要！）
+uv run python postprocess_thinking.py data/mm25-responses.jsonl -o data/mm25-clean.jsonl
+
+# 4. 运行评估
+uv run python -m run_eval \
+	--input_data=data/IFBench_test.jsonl \
+	--input_response_data=data/mm25-clean.jsonl \
+	--output_dir=eval
+
+
+```
+
+## 附录四： lm-eval精度测试脚本
+
+以MiniMax-M2.5-W8A8模型为例
+
+---
+
+**lm_eval_test.sh**
+
+```shell
+#!/bin/bash
+ROOT_PATH=$(cd `dirname $0`; pwd)
+
+echo $ROOT_PATH
+cd ${ROOT_PATH}
+
+CurDate=`date +'%Y%m%d'`
+
+export HF_HUB_OFFLINE=1
+export TRANSFORMERS_OFFLINE=1
+
+#export HF_ENDPOINT=https://hf-mirror.com
+
+ADDR=${ADDR:-127.0.0.1}
+PORT=${PORT:-8000}
+API_KEY=${API_KEY:-abc123}
+LLM_ADDR="http://$ADDR:$PORT"
+
+# 自动获取模型名和 tokenizer 路径
+#MODEL_NAME=$(curl -s --header "Authorization: Bearer $API_KEY" $LLM_ADDR/v1/models | jq -r .data[0].id)
+#MODEL_PATH=$(curl -s --header "Authorization: Bearer $API_KEY" $LLM_ADDR/v1/models | jq -r .data[0].root)
+MODEL_NAME="minimax-m2.5"
+LOCAL_MODEL_PATH="/data/data_shared/MiniMax-M2.5-W8A8"
+
+# model_args 构造
+MODEL_ARGS_BASE_1="{\"model\":\"$MODEL_NAME\",\"base_url\":\"$LLM_ADDR/v1/completions\",\"max_length\":131072,\"tokenizer\":\"$LOCAL_MODEL_PATH\",\"trust_remote_code\":true,\"num_concurrent\":10,\"max_retries\":3,\"timeout\":12000,\"tokenized_requests\":false,\"headers\":{\"Authorization\":\"Bearer $API_KEY\"}}"
+MODEL_ARGS_BASE_2="{\"model\":\"$MODEL_NAME\",\"base_url\":\"$LLM_ADDR/v1/completions\",\"max_length\":192512,\"tokenizer\":\"$LOCAL_MODEL_PATH\",\"trust_remote_code\":true,\"num_concurrent\":10,\"max_retries\":3,\"timeout\":12000,\"tokenized_requests\":false,\"headers\":{\"Authorization\":\"Bearer $API_KEY\"}}"
+
+# 运行单个任务的函数
+run_task_1() {
+	local task_name=$1
+	local max_tokens=$2
+	local temperature=$3
+	local unsafe_code=$4
+	
+	local do_sample="false"
+	[ "$temperature" = "1.0" ] && do_sample="true"
+
+	GEN_KWARGS="{\"max_gen_toks\":$max_tokens,\"do_sample\":$do_sample,\"temperature\":$temperature,\"top_p\":0.95,\"top_k\":40}"
+
+	local unsafe_flag=""
+	[ "$unsafe_code" = "true" ] && unsafe_flag="--confirm_run_unsafe_code" && export HF_ALLOW_CODE_EVAL=1
+	
+	lm_eval \
+		--model local-completions \
+		--tasks $task_name \
+		--output_path ./output/${task_name}/${MODEL_NAME}_${CurDate} \
+		--model_args "$MODEL_ARGS_BASE_1" \
+		--batch_size auto \
+		--gen_kwargs "$GEN_KWARGS" \
+		$unsafe_flag
+}
+
+
+run_task_2() {
+	local task_name=$1
+	local max_tokens=$2
+	local temperature=$3
+	local unsafe_code=$4
+	
+	local do_sample="false"
+	[ "$temperature" = "1.0" ] && do_sample="true"
+
+	GEN_KWARGS="{\"max_gen_toks\":$max_tokens,\"do_sample\":$do_sample,\"temperature\":$temperature,\"top_p\":0.95,\"top_k\":40}"
+
+	local unsafe_flag=""
+	[ "$unsafe_code" = "true" ] && unsafe_flag="--confirm_run_unsafe_code" && export HF_ALLOW_CODE_EVAL=1
+	
+	lm_eval \
+		--model local-completions \
+		--tasks $task_name \
+		--output_path ./output/${task_name}/${MODEL_NAME}_${CurDate} \
+		--model_args "$MODEL_ARGS_BASE_2" \
+		--batch_size auto \
+		--limit 32 \
+		--gen_kwargs "$GEN_KWARGS" \ 
+		$unsafe_flag
+}
+
+
+run_task_1 mmlu_pro 8192 0.0 false
+
+sleep 120
+run_task_1 gsm_plus 8192 0.0 false
+
+sleep 120
+run_task_2 ruler 8192 0.0 false
 
 ```
 

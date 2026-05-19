@@ -111,7 +111,7 @@ def extract_concurrency_from_dir(dir_name):
     return None
 
 
-def get_all_concurrencies(chip_config):
+def get_all_concurrencies(chip_config, input_len=None, output_len=None):
     concurrency_set = set()
     base_path = chip_config["base_path"]
 
@@ -123,7 +123,13 @@ def get_all_concurrencies(chip_config):
         if os.path.isdir(item_path):
             conc = extract_concurrency_from_dir(item)
             if conc:
-                concurrency_set.add(conc)
+                if input_len is not None and output_len is not None:
+                    pattern = f"{conc}-*-i{input_len}-o{output_len}"
+                    matching = glob.glob(os.path.join(base_path, pattern))
+                    if matching:
+                        concurrency_set.add(conc)
+                else:
+                    concurrency_set.add(conc)
 
     return sorted(concurrency_set, key=lambda x: int(x))
 
@@ -138,7 +144,7 @@ def get_all_input_output_pairs(chip_config):
     for item in os.listdir(base_path):
         item_path = os.path.join(base_path, item)
         if os.path.isdir(item_path):
-            match = re.match(r"^\d+-\d+-i(\d+)-o(\d+)$", item)
+            match = re.search(r"-i(\d+)-o(\d+)", item)
             if match:
                 input_len = int(match.group(1))
                 output_len = int(match.group(2))
@@ -167,11 +173,17 @@ def get_chip_metrics_multi_io(chip_config, concurrency, input_len, output_len):
     return metrics
 
 
-def get_chip_metrics(chip_config, concurrency):
+def get_chip_metrics(chip_config, concurrency, input_len=None, output_len=None):
     base_path = chip_config["base_path"]
     chip_name = chip_config["name"]
 
-    dir_pattern = os.path.join(base_path, f"{concurrency}-*")
+    if input_len is not None and output_len is not None:
+        dir_pattern = os.path.join(
+            base_path, f"{concurrency}-*-i{input_len}-o{output_len}"
+        )
+    else:
+        dir_pattern = os.path.join(base_path, f"{concurrency}-*")
+
     matching_dirs = glob.glob(dir_pattern)
 
     if not matching_dirs:
@@ -955,12 +967,12 @@ def generate_markdown_report(
         and isinstance(input_output_lens, list)
         and len(input_output_lens) > 0
     ):
-        first_pair = input_output_lens[0]
-        if isinstance(first_pair, list) and len(first_pair) >= 2:
-            input_len = first_pair[0]
-            output_len = first_pair[1]
+        last_pair = input_output_lens[-1]
+        if isinstance(last_pair, list) and len(last_pair) >= 2:
+            input_len = last_pair[0]
+            output_len = last_pair[1]
         else:
-            input_len = first_pair if first_pair else 0
+            input_len = last_pair if last_pair else 0
             output_len = 0
     else:
         input_len = test_params.get("random-input-len", [0])
@@ -1380,112 +1392,182 @@ def main():
         if not model_prefix:
             model_prefix = "models"
 
-        output_base = (
-            f"analysis/chip_comparison/{model_prefix}/{test_suite}/{run_id_display}"
-        )
-        Path(output_base).mkdir(parents=True, exist_ok=True)
-
-        all_concurrencies = set()
-        for chip in chip_configs:
-            concs = get_all_concurrencies(chip)
-            all_concurrencies.update(concs)
-
-        if not all_concurrencies:
-            print(f"No concurrency configurations found for {test_suite}!")
-            continue
-
-        concurrencies = sorted(all_concurrencies, key=lambda x: int(x))
-
-        if args.concurrency:
-            conc_list = [s.strip() for s in args.concurrency.split(",")]
-            filtered_concs = [c for c in concurrencies if c in conc_list]
-            if filtered_concs:
-                concurrencies = filtered_concs
-                print(f"Using specified concurrency levels: {', '.join(concurrencies)}")
-            else:
-                print(
-                    f"Warning: None of the specified concurrency levels {conc_list} found, using all"
-                )
-
-        print(
-            f"Found {len(concurrencies)} concurrency levels: {', '.join(concurrencies)}"
-        )
-
-        chip_data = defaultdict(lambda: defaultdict(dict))
-
-        for chip in chip_configs:
-            chip_name = chip["name"]
-            print(f"\nProcessing chip: {chip_name}")
-
-            for conc in concurrencies:
-                metrics = get_chip_metrics(chip, conc)
-                if metrics:
-                    chip_data[chip_name][conc] = metrics
-                    print(f"  - {conc}并发: OK")
-                else:
-                    print(f"  - {conc}并发: No data")
-
         test_cfg = get_test_suite_config(test_suite_to_use, scenarios_config)
         input_output_lens = test_cfg.get("random-input-output-len", [])
         is_multi_io = len(input_output_lens) > 1
 
-        print("\nGenerating comparison reports...")
+        io_combinations = []
+        if input_output_lens and isinstance(input_output_lens, list):
+            for pair in input_output_lens:
+                if isinstance(pair, list) and len(pair) >= 2:
+                    io_combinations.append((pair[0], pair[1]))
+                else:
+                    io_combinations.append((pair, 0))
 
-        model_display = (
-            model_prefix if len(model_names_for_path) > 1 else model_names_for_path[0]
-        )
+        if len(io_combinations) > 1:
+            print(
+                f"Detected multi-I/O scenario: {len(io_combinations)} I/O pairs, generating separate reports for each..."
+            )
 
-        if is_multi_io:
-            print(f"Detected multi-I/O scenario: {len(input_output_lens)} I/O pairs")
+            for idx, (inp, out) in enumerate(io_combinations):
+                io_label = f"i{inp}-o{out}"
+                output_base = f"analysis/chip_comparison/{model_prefix}/{test_suite_to_use}/{io_label}/{run_id_display}"
+                Path(output_base).mkdir(parents=True, exist_ok=True)
 
-            all_io_pairs = set()
-            for chip in chip_configs:
-                io_pairs = get_all_input_output_pairs(chip)
-                all_io_pairs.update(io_pairs)
-            io_pairs = sorted(all_io_pairs, key=lambda x: (x[0], x[1]))
+                print(
+                    f"\n--- Processing I/O: {inp}x{out} ({idx + 1}/{len(io_combinations)}) ---"
+                )
 
-            print(f"Found {len(io_pairs)} I/O pairs: {io_pairs}")
+                all_concurrencies = set()
+                for chip in chip_configs:
+                    concs = get_all_concurrencies(chip, inp, out)
+                    all_concurrencies.update(concs)
 
-            all_chip_data = defaultdict(lambda: defaultdict(dict))
+                if not all_concurrencies:
+                    print(f"  No data found for I/O {inp}x{out}")
+                    continue
 
-            for chip in chip_configs:
-                chip_name = chip["name"]
-                for input_len, output_len in io_pairs:
-                    io_key = f"i{input_len}_o{output_len}"
-                    chip_data_by_io = defaultdict(dict)
+                concurrencies = sorted(all_concurrencies, key=lambda x: int(x))
+                print(f"  Found {len(concurrencies)} concurrency levels")
+
+                chip_data = defaultdict(lambda: defaultdict(dict))
+
+                for chip in chip_configs:
+                    chip_name = chip["name"]
+                    print(f"\n  Processing chip: {chip_name}")
 
                     for conc in concurrencies:
-                        metrics = get_chip_metrics_multi_io(
-                            chip, conc, input_len, output_len
-                        )
+                        metrics = get_chip_metrics(chip, conc, inp, out)
                         if metrics:
-                            chip_data_by_io[conc] = metrics
+                            chip_data[chip_name][conc] = metrics
+                            print(f"    - {conc}并发: OK")
+                        else:
+                            print(f"    - {conc}并发: No data")
 
-                    if chip_data_by_io:
-                        all_chip_data[chip_name][io_key] = chip_data_by_io
+                print("\n  Generating comparison reports...")
 
-            if HAS_MATPLOTLIB:
-                generate_multi_io_comparison_charts(
-                    all_chip_data,
-                    io_pairs,
+                model_display = (
+                    model_prefix
+                    if len(model_names_for_path) > 1
+                    else model_names_for_path[0]
+                )
+
+                generate_comparison_csv(
+                    chip_data, concurrencies, output_base, test_suite_to_use, chip_names
+                )
+
+                if HAS_MATPLOTLIB:
+                    generate_comparison_charts(
+                        chip_data,
+                        concurrencies,
+                        output_base,
+                        test_suite_to_use,
+                        chip_names,
+                        model_display,
+                    )
+                    generate_performance_trends(
+                        chip_data,
+                        concurrencies,
+                        output_base,
+                        test_suite_to_use,
+                        chip_names,
+                        model_display,
+                    )
+
+                scenarios_config_for_report = {
+                    "base_config": {
+                        "params": {
+                            test_suite_to_use: {
+                                **test_cfg,
+                                "random-input-output-len": [[inp, out]],
+                            }
+                        }
+                    }
+                }
+
+                generate_markdown_report(
+                    chip_data,
                     concurrencies,
                     output_base,
                     test_suite_to_use,
+                    scenarios_config_for_report,
                     chip_names,
-                    model_display,
+                    model_names_for_path,
                 )
 
-            generate_multi_io_markdown_report(
-                all_chip_data,
-                io_pairs,
-                concurrencies,
-                output_base,
-                test_suite_to_use,
-                scenarios_config,
-                chip_names,
-                model_names_for_path,
+                print(f"\n  Generated report for I/O {inp}x{out}")
+
+            print(f"\n{'=' * 50}")
+            print(f"All I/O combination reports generated successfully!")
+            print(
+                f"Output directory: analysis/chip_comparison/{model_prefix}/{test_suite_to_use}/"
             )
+            print(f"{'=' * 50}")
+
         else:
+            if io_combinations:
+                target_input_len, target_output_len = io_combinations[0]
+            else:
+                target_input_len = None
+                target_output_len = None
+
+            output_base = (
+                f"analysis/chip_comparison/{model_prefix}/{test_suite}/{run_id_display}"
+            )
+            Path(output_base).mkdir(parents=True, exist_ok=True)
+
+            all_concurrencies = set()
+            for chip in chip_configs:
+                concs = get_all_concurrencies(chip, target_input_len, target_output_len)
+                all_concurrencies.update(concs)
+
+            if not all_concurrencies:
+                print(f"No concurrency configurations found for {test_suite}!")
+                continue
+
+            concurrencies = sorted(all_concurrencies, key=lambda x: int(x))
+
+            if args.concurrency:
+                conc_list = [s.strip() for s in args.concurrency.split(",")]
+                filtered_concs = [c for c in concurrencies if c in conc_list]
+                if filtered_concs:
+                    concurrencies = filtered_concs
+                    print(
+                        f"Using specified concurrency levels: {', '.join(concurrencies)}"
+                    )
+                else:
+                    print(
+                        f"Warning: None of the specified concurrency levels {conc_list} found, using all"
+                    )
+
+            print(
+                f"Found {len(concurrencies)} concurrency levels: {', '.join(concurrencies)}"
+            )
+
+            chip_data = defaultdict(lambda: defaultdict(dict))
+
+            for chip in chip_configs:
+                chip_name = chip["name"]
+                print(f"\nProcessing chip: {chip_name}")
+
+                for conc in concurrencies:
+                    metrics = get_chip_metrics(
+                        chip, conc, target_input_len, target_output_len
+                    )
+                    if metrics:
+                        chip_data[chip_name][conc] = metrics
+                        print(f"  - {conc}并发: OK")
+                    else:
+                        print(f"  - {conc}并发: No data")
+
+            print("\nGenerating comparison reports...")
+
+            model_display = (
+                model_prefix
+                if len(model_names_for_path) > 1
+                else model_names_for_path[0]
+            )
+
             generate_comparison_csv(
                 chip_data, concurrencies, output_base, test_suite_to_use, chip_names
             )
@@ -1518,10 +1600,10 @@ def main():
                 model_names_for_path,
             )
 
-        print(f"\n{'=' * 50}")
-        print(f"Chip comparison for {test_suite} generated successfully!")
-        print(f"Output directory: {output_base}")
-        print(f"{'=' * 50}")
+            print(f"\n{'=' * 50}")
+            print(f"Chip comparison for {test_suite} generated successfully!")
+            print(f"Output directory: {output_base}")
+            print(f"{'=' * 50}")
 
 
 if __name__ == "__main__":

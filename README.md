@@ -16,7 +16,7 @@ run_benchmark.py [-h] --chip CHIP [--model MODEL]
 ### 1.1 测试 inspur_MetaX_C550 芯片上的 MiniMax-M2.5-W8A8 模型
 python run_benchmark.py --chip inspur_MetaX_C550 --model MiniMax-M2.5-W8A8
 
-### 1.2 不指定模型则测试该芯片下所有配置的模型
+### 1.2 不指定模型则测试该芯片配置下的第一个模型
 python run_benchmark.py --chip inspur_MetaX_C550
 
 ### 1.3 组合使用: 执行inspur_MetaX_C550平台下MiniMax-M2.5-W8A8模型的test_01测试场景的第2次测试
@@ -48,7 +48,7 @@ gpu_monitor.py 提供GPU监控功能，支持：
 - xpu-smi (昆仑芯 GPU)
 - mx-smi (沐曦 GPU)
 
-监控数据会保存到 monitor/logs 目录，并生成GPU使用趋势图表。
+监控数据会保存到 monitor/logs 目录，并生成GPU使用趋势图表（待实现）。
 
 
 ## 4. 数据目录结构
@@ -164,60 +164,7 @@ python parse_single_chip_model.py -c 1,4,8,16 --chip inspur_MetaX_C550 --test-su
   - `compare_by_io_conc<concurrency>/` - 固定并发数下的I/O对比图表
 
 
-## 5. 如何生成不同芯片平台对比的性能报告
-**命令**<br>
-python chip_comparison.py
-
-#### 帮助信息：
-usage:<br> 
-chip_comparison.py [-h] [--chip CHIP] [--model MODEL]
-                          [--test-suite TEST_SUITE] [--run-id RUN_ID] [--concurrency CONCURRENCY]
-
-**options**:<br>
---chip CHIP           Chip names to compare, comma-separated (e.g., inspur_MetaX_C550,nvidia_h100)<br>
---model MODEL         Model name to test (e.g., MiniMax-M2.5-W8A8)<br>
---test-suite TEST_SUITE  Test suite name (e.g., test_01) (default: test_01)<br>
---run-id RUN_ID       Run IDs, can be '01' for all chips or '01,02' for each chip<br>
---concurrency CONCURRENCY  Specific concurrency levels to compare, comma-separated (e.g., 1,2,4,8,10)<br>
-
-#### 示例：
-##### 5.1 对比inspur_MetaX_C550和nvidia_h100芯片
-python chip_comparison.py --chip inspur_MetaX_C550,nvidia_h100 --test-suite test_01
-
-##### 5.2 使用默认参数（对比所有配置的芯片）
-python chip_comparison.py
-
-##### 5.3 指定不同的run-id
-python chip_comparison.py --chip inspur_MetaX_C550,nvidia_h100 --test-suite test_01 --run-id '01,02'
-
-##### 5.4 指定特定并发数进行对比
-python chip_comparison.py --chip inspur_MetaX_C550,nvidia_h100 --test-suite test_01 --concurrency 1,2,4,8
-
-##### 5.5 使用简写-c指定并发数
-python chip_comparison.py -c 1,4,8,16 --chip inspur_MetaX_C550,nvidia_h100
-
-**注意**：
-- run-id 参数如果只有一个值，所有芯片使用相同 run-id
-- run-id 参数如果有多个值（逗号分隔），按 --chip 参数顺序一一对应
-- 所有参数值大小写不敏感
-
-#### 输出说明：
-- 输出目录：`analysis/chip_comparison/<model_name>/<test_suite>/<run_id1_run_id2>/`
-- 生成文件：
-  - `comparison_<test_suite>_<chip_suffix>.csv` - CSV格式对比数据
-  - `chip_comparison_c<conc>_<test_suite>_<chip_suffix>.png` - 各并发级别性能柱状图
-  - `performance_trends_<test_suite>_<chip_suffix>.png` - 性能趋势折线图
-  - `<model_name>_chip_comparison_<test_suite>_<chip_suffix>.md` - Markdown格式报告
-- 比对指标：
-  - Request throughput (req/s)
-  - Output token throughput (tok/s)
-  - Total token throughput (tok/s)
-  - P99 TTFT (ms)
-  - P99 TPOT (ms)
-  - P99 ITL (ms)
-
-
-## 6. 如何生成同一芯片下不同模型之间的性能对比报告
+## 5. 如何生成同一芯片下不同模型之间的性能对比报告
 
 **命令**<br>
 python model_comparison.py
@@ -236,16 +183,13 @@ model_comparison.py [-h] --chip CHIP --model MODEL
 -c CONCURRENCY        Specific concurrency levels to compare, comma-separated (e.g., 1,2,4,8,10)<br>
 
 #### 示例：
-##### 6.1 对比同一run-id（所有模型使用相同的run-id）
+##### 5.1 对比同一run-id（所有模型使用相同的run-id）
 python model_comparison.py --chip inspur_MetaX_C550 --model "MiniMax-M2.5-W8A8,GLM-5-W8A8" --test-suite test_01 --run-id 01
 
-##### 6.2 对比不同run-id（第一个模型用01，第二个用02）
+##### 5.2 对比不同run-id（第一个模型用01，第二个用02）
 python model_comparison.py --chip inspur_MetaX_C550 --model "MiniMax-M2.5-W8A8,GLM-5-W8A8" --test-suite test_01 --run-id '01,02'
 
-##### 6.3 使用默认参数（test_01, run-id 01）
-python model_comparison.py --chip inspur_MetaX_C550 --model "MiniMax-M2.5-W8A8,GLM-5-W8A8"
-
-##### 6.4 指定特定并发级别
+##### 5.3 指定特定并发级别
 python model_comparison.py --chip inspur_MetaX_C550 --model "MiniMax-M2.5-W8A8,GLM-5-W8A8" -c 1,2,4,8
 
 **注意**：所有参数值大小写不敏感
@@ -268,7 +212,7 @@ python model_comparison.py --chip inspur_MetaX_C550 --model "MiniMax-M2.5-W8A8,G
   - E2E延迟 (ms)
 
 
-## 7. 如何生成同一芯片下不同模型的全并发级别对比报告
+## 6. 如何生成同一芯片下不同模型的全并发级别对比报告
 
 **命令**<br>
 python model_comparison_all_concurrency.py
@@ -285,16 +229,14 @@ model_comparison_all_concurrency.py [-h] --chip CHIP --model MODEL
 --run-id RUN_ID       Run IDs for each model, separated by comma (e.g., 01 or 01,02)<br>
 
 #### 示例：
-##### 7.1 对比同一run-id（所有模型使用相同的run-id）
+##### 6.1 对比同一run-id（所有模型使用相同的run-id）
 python model_comparison_all_concurrency.py --chip inspur_MetaX_C550 --model "MiniMax-M2.5-W8A8,GLM-5-W8A8" --test-suite test_01 --run-id 01
 
-##### 7.2 对比不同run-id（第一个模型用01，第二个用02）
+##### 6.2 对比不同run-id（第一个模型用01，第二个用02）
 python model_comparison_all_concurrency.py --chip inspur_MetaX_C550 --model "MiniMax-M2.5-W8A8,GLM-5-W8A8" --test-suite test_01 --run-id '01,02'
 
-##### 7.3 使用默认参数（test_01, run-id 01）
-python model_comparison_all_concurrency.py --chip inspur_MetaX_C550 --model "MiniMax-M2.5-W8A8,GLM-5-W8A8"
-
-**注意**：此脚本会自动生成所有并发级别的对比数据，并合并到一个Markdown报告中
+##### 6.3 指定特定并发级别
+python model_comparison_all_concurrency.py --chip inspur_MetaX_C550 --model "MiniMax-M2.5-W8A8,GLM-5-W8A8" -c 1,2,4,8
 
 #### 输出说明：
 - 输出目录：`analysis/<chip>_comparison_all_concurrency/<test_suite>/`
@@ -312,7 +254,7 @@ python model_comparison_all_concurrency.py --chip inspur_MetaX_C550 --model "Min
   - 各并发级别详细对比（服务基准结果、TTFT、TPOT、ITL、E2E延迟）
 
 
-## 8. 如何生成同一芯片、同一模型下不同测试RUN-ID的性能对比报告
+## 7. 如何生成同一芯片、同一模型下不同测试RUN-ID的性能对比报告
 
 **命令**<br>
 python compare_runids.py
@@ -321,26 +263,26 @@ python compare_runids.py
 usage:<br> 
 compare_runids.py [-h] --chip CHIP --model MODEL
                   [--test-suite TEST_SUITE] --run-id RUN_ID
-                  [--concurrency CONCURRENCY]
+                  [--concurrency CONCURRENCY] [-c CONCURRENCY]
 
 **options**:<br>
 --chip CHIP           Chip platform (e.g., inspur_MetaX_C550, nvidia_h100)<br>
 --model MODEL         Model name (e.g., MiniMax-M2.5-W8A8)<br>
 --test-suite TEST_SUITE  Test suite name (e.g., test_01, test_05) (default: test_01)<br>
 --run-id RUN_ID       Run IDs to compare, separated by comma (e.g., 01,02 or 01,02,03)<br>
---concurrency CONCURRENCY  Specific concurrency levels, comma-separated (e.g., 1,2,4,8,10)<br>
+--concurrency, -c CONCURRENCY  Specific concurrency levels, comma-separated (e.g., 1,2,4,8,10)<br>
 
 #### 示例：
-##### 8.1 对比两个RUN-ID
+##### 7.1 对比两个RUN-ID
 python compare_runids.py --chip inspur_MetaX_C550 --model MiniMax-M2.5-W8A8 --test-suite test_01 --run-id 01,02
 
-##### 8.2 对比三个RUN-ID
+##### 7.2 对比三个RUN-ID
 python compare_runids.py --chip inspur_MetaX_C550 --model MiniMax-M2.5-W8A8 --test-suite test_01 --run-id 01,02,03
 
-##### 8.3 指定特定并发级别
+##### 7.3 指定特定并发级别
 python compare_runids.py --chip inspur_MetaX_C550 --model MiniMax-M2.5-W8A8 --test-suite test_01 --run-id 01,02 --concurrency 1,4,8,16
 
-##### 8.4 使用简写-c指定并发数
+##### 7.4 使用简写-c指定并发数
 python compare_runids.py --chip inspur_MetaX_C550 --model MiniMax-M2.5-W8A8 --test-suite test_01 --run-id 01,02 -c 1,2,4
 
 **注意**：
@@ -362,6 +304,60 @@ python compare_runids.py --chip inspur_MetaX_C550 --model MiniMax-M2.5-W8A8 --te
   - RUN-ID对比柱状图
   - 各并发级别详细对比（服务基准结果、TTFT、TPOT、ITL、E2E延迟）
   - 分析总结（吞吐量对比、延迟对比）
+
+
+## 8. 如何生成不同芯片平台对比的性能报告
+**命令**<br>
+python chip_comparison.py
+
+#### 帮助信息：
+usage:<br> 
+chip_comparison.py -h --chip CHIP --model MODEL
+                          [--test-suite TEST_SUITE] [--run-id RUN_ID] [--concurrency CONCURRENCY]
+
+**options**:<br>
+--chip CHIP           Chip names to compare, comma-separated (e.g., inspur_MetaX_C550,nvidia_h100). At least 2 chips required.<br>
+--model MODEL         Model names to test, comma-separated (e.g., MiniMax-M2.5-W8A8,MiniMax-M2.5). Must have same count as --chip.<br>
+--test-suite TEST_SUITE  Test suite name (e.g., test_01, test_05) (default: test_01)<br>
+--run-id RUN_ID       Run IDs, can be '01' for all chips or '01,02' for each chip<br>
+--concurrency CONCURRENCY  Specific concurrency levels to compare, comma-separated (e.g., 1,2,4,8,10)<br>
+
+#### 示例：
+##### 8.1 对比inspur_MetaX_C550和nvidia_h100芯片
+python chip_comparison.py --chip inspur_MetaX_C550,nvidia_h100 --model MiniMax-M2.5-W8A8,MiniMax-M2.5
+
+##### 8.2 指定run-id进行对比
+python chip_comparison.py --chip inspur_MetaX_C550,nvidia_h100 --model MiniMax-M2.5-W8A8,MiniMax-M2.5 --run-id '01,02'
+
+##### 8.3 指定特定并发数进行对比
+python chip_comparison.py --chip inspur_MetaX_C550,nvidia_h100 --model MiniMax-M2.5-W8A8,MiniMax-M2.5 --test-suite test_01 --concurrency 1,2,4,8
+
+##### 8.4 使用简写-c指定并发数
+python chip_comparison.py -c 1,4,8,16 --chip inspur_MetaX_C550,nvidia_h100 --model MiniMax-M2.5-W8A8,MiniMax-M2.5
+
+##### 8.5 多I/O测试套件（test_05）按I/O分组生成报告
+python chip_comparison.py --chip nvidia_h100,inspur_MetaX_C550 --model MiniMax-M2.5,MiniMax-M2.5-W8A8 --test-suite test_05 --run-id '01,01'
+
+**注意**：
+- run-id 参数如果只有一个值，所有芯片使用相同 run-id
+- run-id 参数如果有多个值（逗号分隔），按 --chip 参数顺序一一对应
+- 所有参数值大小写不敏感
+
+#### 输出说明：
+- 输出目录（单I/O）：`analysis/chip_comparison/<model_prefix>/<test_suite>/<run_id1_run_id2>/`
+- 输出目录（多I/O）：`analysis/chip_comparison/<model_prefix>/<test_suite>/i<input>_o<output>/<run_id1_run_id2>/`
+- 生成文件：
+  - `comparison_<test_suite>_<chip_suffix>.csv` - CSV格式对比数据
+  - `chip_comparison_c<conc>_<test_suite>_<chip_suffix>.png` - 各并发级别性能柱状图
+  - `performance_trends_<test_suite>_<chip_suffix>.png` - 性能趋势折线图
+  - `<model_name>_chip_comparison_<test_suite>_<chip_suffix>.md` - Markdown格式报告
+- 比对指标：
+  - Request throughput (req/s)
+  - Output token throughput (tok/s)
+  - Total token throughput (tok/s)
+  - P99 TTFT (ms)
+  - P99 TPOT (ms)
+  - P99 ITL (ms)
 
 
 ## 9. 一键运行基准测试并生成报告

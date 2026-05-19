@@ -183,6 +183,13 @@ def extract_concurrency_from_dir(dir_name):
     return None
 
 
+def extract_io_pair_from_dir(dir_name):
+    match = re.search(r"-i(\d+)-o(\d+)", dir_name)
+    if match:
+        return match.group(1), match.group(2)
+    return None, None
+
+
 def get_all_concurrencies(base_path, run_id):
     concurrency_set = set()
     full_path = os.path.join(base_path, run_id)
@@ -200,10 +207,35 @@ def get_all_concurrencies(base_path, run_id):
     return sorted(concurrency_set, key=lambda x: int(x))
 
 
-def get_chip_metrics(base_path, run_id, concurrency):
+def get_all_io_pairs(base_path, run_id, concurrency):
+    io_pairs = set()
     full_path = os.path.join(base_path, run_id)
 
-    dir_pattern = os.path.join(full_path, f"{concurrency}-*")
+    if not os.path.exists(full_path):
+        return []
+
+    for item in os.listdir(full_path):
+        item_path = os.path.join(full_path, item)
+        if os.path.isdir(item_path):
+            dir_concurrency = extract_concurrency_from_dir(item)
+            if dir_concurrency == concurrency:
+                input_len, output_len = extract_io_pair_from_dir(item)
+                if input_len and output_len:
+                    io_pairs.add((input_len, output_len))
+
+    return sorted(io_pairs, key=lambda x: (int(x[0]), int(x[1])))
+
+
+def get_chip_metrics(base_path, run_id, concurrency, io_pair=None):
+    full_path = os.path.join(base_path, run_id)
+
+    if io_pair:
+        dir_pattern = os.path.join(
+            full_path, f"{concurrency}-*-i{io_pair[0]}-o{io_pair[1]}"
+        )
+    else:
+        dir_pattern = os.path.join(full_path, f"{concurrency}-*")
+
     matching_dirs = glob.glob(dir_pattern)
 
     if not matching_dirs:
@@ -535,6 +567,7 @@ def generate_markdown_report(
     model_name=None,
     run_ids=None,
     test_overview=None,
+    io_pair=None,
 ):
     current_date = datetime.now().strftime("%Y-%m-%d")
 
@@ -820,9 +853,13 @@ def generate_markdown_report(
     total_requests_list = test_overview.get("total_requests", [])
     total_requests = str(total_requests_list) if total_requests_list else "N/A"
     input_len_list = test_overview.get("input_context_length", [])
-    input_ctx = str(input_len_list) if input_len_list else "N/A"
     output_len_list = test_overview.get("output_context_length", [])
-    output_ctx = str(output_len_list) if output_len_list else "N/A"
+    if io_pair:
+        input_ctx = str(input_len_list[0]) if input_len_list else "N/A"
+        output_ctx = str(output_len_list[0]) if output_len_list else "N/A"
+    else:
+        input_ctx = str(input_len_list) if input_len_list else "N/A"
+        output_ctx = str(output_len_list) if output_len_list else "N/A"
     model = test_overview.get("model", actual_model_name)
     chip = test_overview.get("chip", chip_name)
 
@@ -852,7 +889,12 @@ def generate_markdown_report(
     else:
         run_ids_display = ", ".join(run_ids)
 
-    md_content = f"""# {actual_model_name}模型在{chip_name}上多次运行结果对比报告
+    if io_pair:
+        title_suffix = f"多I/O测试报告 ({io_pair})"
+    else:
+        title_suffix = "多次运行结果对比报告"
+
+    md_content = f"""# {actual_model_name}模型在{chip_name}上{title_suffix}
 
 <div align="center">
 **测试日期：** {current_date}
@@ -896,7 +938,6 @@ def generate_markdown_report(
 | **请求输出上下文长度** | {output_ctx}                               |     |
 | **模型**        | {model}                          |     |
 | **被测芯片**      | {chip}                          |     |
-| **SGLang版本**   | {sglang_version}                          |     |
 
 
 **主要采集指标**：
@@ -1119,49 +1160,135 @@ def main():
 
         runid_data = defaultdict(lambda: defaultdict(lambda: defaultdict(dict)))
 
+        is_multi_io = test_suite == "test_05"
+        all_io_pairs = set()
+
+        if is_multi_io:
+            for run_id in RUN_IDS:
+                for conc in concurrencies:
+                    io_pairs = get_all_io_pairs(base_path, run_id, conc)
+                    all_io_pairs.update(io_pairs)
+
+            all_io_pairs = sorted(all_io_pairs, key=lambda x: (int(x[0]), int(x[1])))
+            print(f"Detected multi-I/O scenario: {len(all_io_pairs)} I/O pairs")
+            print(f"I/O pairs: {all_io_pairs}")
+
+            if not all_io_pairs:
+                print(f"No I/O pairs found for {chip_name} / {test_suite}!")
+                return
+
         print(f"\nProcessing chip: {chip_name}")
 
         for run_id in RUN_IDS:
             print(f"\n  Processing RUN-ID: {run_id}")
             for conc in concurrencies:
-                metrics = get_chip_metrics(base_path, run_id, conc)
-                if metrics:
-                    normalized_metrics = {}
-                    for key, value in metrics.items():
-                        normalized_metrics[key.lower()] = value
-                    runid_data[run_id][chip_name][conc] = normalized_metrics
-                    print(f"    - {conc}并发: OK")
+                if is_multi_io:
+                    for io_pair in all_io_pairs:
+                        io_key = f"i{io_pair[0]}-o{io_pair[1]}"
+                        metrics = get_chip_metrics(base_path, run_id, conc, io_pair)
+                        if metrics:
+                            normalized_metrics = {}
+                            for key, value in metrics.items():
+                                normalized_metrics[key.lower()] = value
+                            runid_data[run_id][chip_name][(conc, io_key)] = (
+                                normalized_metrics
+                            )
+                            print(f"    - {conc}并发/{io_key}: OK")
+                        else:
+                            print(f"    - {conc}并发/{io_key}: No data")
                 else:
-                    print(f"    - {conc}并发: No data")
+                    metrics = get_chip_metrics(base_path, run_id, conc)
+                    if metrics:
+                        normalized_metrics = {}
+                        for key, value in metrics.items():
+                            normalized_metrics[key.lower()] = value
+                        runid_data[run_id][chip_name][conc] = normalized_metrics
+                        print(f"    - {conc}并发: OK")
+                    else:
+                        print(f"    - {conc}并发: No data")
 
         test_overview = get_test_overview(test_suite)
 
-        print("\nGenerating comparison reports...")
+        if is_multi_io:
+            for io_pair in all_io_pairs:
+                io_key = f"i{io_pair[0]}-o{io_pair[1]}"
+                io_output_base = f"{output_base}/{io_key}"
+                Path(io_output_base).mkdir(parents=True, exist_ok=True)
 
-        generate_comparison_csv(
-            runid_data, concurrencies, output_base, chip_name, run_ids=RUN_IDS
-        )
+                io_runid_data = defaultdict(
+                    lambda: defaultdict(lambda: defaultdict(dict))
+                )
+                for run_id in RUN_IDS:
+                    for conc in concurrencies:
+                        if (conc, io_key) in runid_data[run_id][chip_name]:
+                            io_runid_data[run_id][chip_name][conc] = runid_data[run_id][
+                                chip_name
+                            ][(conc, io_key)]
 
-        if HAS_MATPLOTLIB:
-            generate_comparison_charts(
+                io_test_overview = test_overview.copy()
+                io_test_overview["input_context_length"] = [int(io_pair[0])]
+                io_test_overview["output_context_length"] = [int(io_pair[1])]
+
+                print(f"\nGenerating comparison reports for I/O pair: {io_key}...")
+
+                generate_comparison_csv(
+                    io_runid_data,
+                    concurrencies,
+                    io_output_base,
+                    chip_name,
+                    run_ids=RUN_IDS,
+                )
+
+                if HAS_MATPLOTLIB:
+                    generate_comparison_charts(
+                        io_runid_data,
+                        concurrencies,
+                        io_output_base,
+                        chip_name,
+                        MODEL_NAME,
+                        run_ids=RUN_IDS,
+                    )
+
+                generate_markdown_report(
+                    io_runid_data,
+                    concurrencies,
+                    io_output_base,
+                    test_suite,
+                    chip_name,
+                    model_name=MODEL_NAME,
+                    run_ids=RUN_IDS,
+                    test_overview=io_test_overview,
+                    io_pair=io_key,
+                )
+
+            print(f"\nMulti-I/O reports generated for {chip_name} - {test_suite}")
+        else:
+            print("\nGenerating comparison reports...")
+
+            generate_comparison_csv(
+                runid_data, concurrencies, output_base, chip_name, run_ids=RUN_IDS
+            )
+
+            if HAS_MATPLOTLIB:
+                generate_comparison_charts(
+                    runid_data,
+                    concurrencies,
+                    output_base,
+                    chip_name,
+                    MODEL_NAME,
+                    run_ids=RUN_IDS,
+                )
+
+            generate_markdown_report(
                 runid_data,
                 concurrencies,
                 output_base,
+                test_suite,
                 chip_name,
-                MODEL_NAME,
+                model_name=MODEL_NAME,
                 run_ids=RUN_IDS,
+                test_overview=test_overview,
             )
-
-        generate_markdown_report(
-            runid_data,
-            concurrencies,
-            output_base,
-            test_suite,
-            chip_name,
-            model_name=MODEL_NAME,
-            run_ids=RUN_IDS,
-            test_overview=test_overview,
-        )
 
         print(f"\n{'=' * 50}")
         print(

@@ -184,7 +184,7 @@ def main():
         "--model",
         type=str,
         default=None,
-        help="Model name to test (e.g., minimax-m2.5, Qwen3.5). If not specified, uses the first model in config.",
+        help="Model name to test (e.g., minimax-m2.5, Qwen3.5). If not specified, uses first model in config.",
     )
     parser.add_argument(
         "--test-suite",
@@ -246,7 +246,7 @@ def main():
             return
         model_configs = [selected_model]
     else:
-        model_configs = available_models
+        model_configs = [available_models[0]]
 
     test_suites_to_run = []
     if args.test_suite:
