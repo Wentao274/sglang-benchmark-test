@@ -1,8 +1,6 @@
 # SGLang bench serving启动配置
 base_config:
   base_url: "http://127.0.0.1:8000"
-  port: 8000
-#  dataset-path: "/home/workspace/ShareGPT_V3_unfiltered_cleaned_split.json"
   params:
     test_01:
       dataset-name: random
@@ -43,6 +41,14 @@ models:
   - name: "GLM-5-W8A8"
     served-model-name: "glm-5"
     model_path: "/var_docker/data_shared/GLM-5-W8A8"
+  inspur_P800:
+    - name: "MiniMax-M2.5-int8"
+      served-model-name: "/work/models/ssd4/models/MiniMax-M2.5-int8"
+      model_path: "/work/models/ssd4/models/MiniMax-M2.5-int8"
+  PPU810:
+    - name: "GLM-5.1-W4A8"
+      served-model-name: "glm-5.1"
+      model_path: "/mnt/data/GLM-5.1-W4A8"
 
 # SGLang 版本
 sglang_version: "0.5.9"
