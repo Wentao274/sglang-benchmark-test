@@ -1054,8 +1054,15 @@ def generate_markdown_report(
 
         chip_header = " | ".join(chip_names)
         chip_separator = " | ".join(["-----------"] * len(chip_names))
-        header = f"{chip_header} | 差值 | 百分比"
-        separator = f"{chip_separator} | ----------- | -----------"
+        non_baseline_chips = chip_names[1:] if len(chip_names) > 1 else []
+        diff_headers = " | ".join([f"{chip} vs基准" for chip in non_baseline_chips])
+        diff_separators = " | ".join(["-----------"] * len(non_baseline_chips))
+        if non_baseline_chips:
+            header = f"{chip_header} | {diff_headers}"
+            separator = f"{chip_separator} | {diff_separators}"
+        else:
+            header = chip_header
+            separator = chip_separator
 
         metric_rows = []
         for conc in concurrencies:
@@ -1077,26 +1084,30 @@ def generate_markdown_report(
                     except:
                         base_value = None
 
-            if len(chip_names) > 1 and base_value is not None and base_value != 0:
-                last_value_str = (
-                    values[-1].replace("**", "").replace("⭐", "").strip()
-                    if values[-1] != "N/A"
-                    else None
-                )
-                if last_value_str:
-                    try:
-                        last_value = float(last_value_str)
-                        diff = last_value - base_value
-                        pct = (diff / base_value) * 100
-                        diff_str = f"+{diff:.2f}" if diff >= 0 else f"{diff:.2f}"
-                        pct_str = f"+{pct:.1f}%" if pct >= 0 else f"{pct:.1f}%"
-                        extra_cols = f" | {diff_str} | {pct_str}"
-                    except:
-                        extra_cols = " | N/A | N/A"
-                else:
-                    extra_cols = " | N/A | N/A"
+            extra_cols = ""
+            if non_baseline_chips and base_value is not None and base_value != 0:
+                for i, chip in enumerate(non_baseline_chips):
+                    idx = i + 1
+                    val_str = (
+                        values[idx].replace("**", "").replace("⭐", "").strip()
+                        if values[idx] != "N/A"
+                        else None
+                    )
+                    if val_str:
+                        try:
+                            val_float = float(val_str)
+                            diff = val_float - base_value
+                            pct = (diff / base_value) * 100
+                            diff_str = f"+{diff:.2f}" if diff >= 0 else f"{diff:.2f}"
+                            pct_str = f"+{pct:.1f}%" if pct >= 0 else f"{pct:.1f}%"
+                            extra_cols += f" | {diff_str} / {pct_str}"
+                        except:
+                            extra_cols += " | N/A"
+                    else:
+                        extra_cols += " | N/A"
             else:
-                extra_cols = " | N/A | N/A"
+                for _ in non_baseline_chips:
+                    extra_cols += " | N/A"
 
             metric_rows.append(f"| {conc}   | {' | '.join(values)}{extra_cols} |")
 

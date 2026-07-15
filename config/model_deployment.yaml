@@ -53,20 +53,20 @@ sglang_configs:
       remarks: 浪潮MetaX_C550 SGLang启动配置
   NVIDIA_H100:
     - model_name: MiniMax-M2.5
-      max-model-len: 196608
-      max-num-seqs: 10
-      max-num-batched-tokens: 8192
-      gpu-memory-utilization: 0.85
-      dtype: default
-      block_size: default
-      dp: 1
-      tp: 8
-      pp: 1
-      enable-export-parallel: True
-      enable-auto-tool-choice: True
-      tool-call-parser: minimax_m2
-      reasoning-parser: minimax_m2
-      remarks: 英伟达H100 VLLM启动配置
+      tp_size: 8
+      dp_size: 1
+      pp_size: 1
+      ep_size: 8
+      context-length: 196608
+      cuda-graph-max-bs: 128
+      max-running-requests: 64
+      chunked-prefill-size: 8192
+      dtype: bfloat16
+      disable-radix-cache: True
+      tool-call-parser: minimax-m2
+      reasoning-parser: minimax
+      mem-fraction-static: 0.85
+      remarks: NVIDIA H100启动配置
   PPU810:
     - model_name: GLM-5.1-W4A8
       attention-backend: nsa
@@ -97,7 +97,7 @@ sglang_configs:
       chunked-prefill-size: 8192
       dtype: bfloat16
       disable-radix-cache: True
-      tool-call-parser: minimax_m2
+      tool-call-parser: minimax-m2
       reasoning-parser: minimax
       mem-fraction-static: 0.85
       remarks: tianjin_P800启动配置
@@ -114,7 +114,7 @@ sglang_configs:
       chunked-prefill-size: 8192
       dtype: bfloat16
       disable-radix-cache: True
-      tool-call-parser: minimax_m2
+      tool-call-parser: minimax-m2
       reasoning-parser: minimax
       mem-fraction-static: 0.85
       remarks: hanggang_P800启动配置
