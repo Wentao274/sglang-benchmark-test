@@ -59,6 +59,11 @@ def load_chip_config_by_model(chip_name, model_name):
     chip_key = chip_key_map.get(chip_name.lower(), chip_name)
 
     chip_configs = chips_raw.get(chip_key, [])
+    if not chip_configs:
+        for yaml_key in chips_raw:
+            if yaml_key.lower() == chip_name.lower():
+                chip_configs = chips_raw[yaml_key]
+                break
     if isinstance(chip_configs, list):
         for cfg in chip_configs:
             if cfg.get("model_name") == model_name:
@@ -80,6 +85,11 @@ def load_sglang_config_by_model(chip_name, model_name):
     chip_key = chip_key_map.get(chip_name.lower(), chip_name)
 
     config_list = sglang_configs_raw.get(chip_key, [])
+    if not config_list:
+        for yaml_key in sglang_configs_raw:
+            if yaml_key.lower() == chip_name.lower():
+                config_list = sglang_configs_raw[yaml_key]
+                break
     if isinstance(config_list, list):
         for cfg in config_list:
             if cfg.get("model_name") == model_name:

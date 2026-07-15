@@ -41,7 +41,11 @@ models:
   - name: "GLM-5-W8A8"
     served-model-name: "glm-5"
     model_path: "/var_docker/data_shared/GLM-5-W8A8"
-  inspur_P800:
+  tianjin_P800:
+    - name: "MiniMax-M2.5-int8"
+      served-model-name: "/work/models/ssd4/models/MiniMax-M2.5-int8"
+      model_path: "/work/models/ssd4/models/MiniMax-M2.5-int8"
+  hanggang_P800:
     - name: "MiniMax-M2.5-int8"
       served-model-name: "/work/models/ssd4/models/MiniMax-M2.5-int8"
       model_path: "/work/models/ssd4/models/MiniMax-M2.5-int8"

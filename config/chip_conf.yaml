@@ -60,3 +60,27 @@ chips:
       sglang_version: 0.5.10
       python_version: 3.12.3
       remark: 平头哥810芯片
+  tianjin_P800:
+    - model_name: MiniMax-M2.5-int8
+      quantization_config: w8a8_int8
+      model_size: 215G
+      max_position_embeddings: 196608
+      temperature: 1.0
+      top_k: 40
+      top_p: 0.95
+      transformers_version: 4.46.1
+      sglang_version: 0.5.10+08768c8f9
+      python_version: 3.10.19
+      remark: 天津浪潮+P800
+  hanggang_P800:
+    - model_name: MiniMax-M2.5-int8
+      quantization_config: w8a8_int8
+      model_size: 215G
+      max_position_embeddings: 196608
+      temperature: 1.0
+      top_k: 40
+      top_p: 0.95
+      transformers_version: 4.46.1
+      sglang_version: 0.5.10+08768c8f9
+      python_version: 3.10.19
+      remark: 杭钢海光+P800
