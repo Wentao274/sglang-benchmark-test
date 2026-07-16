@@ -211,4 +211,6 @@ __marimo__/
 analysis/
 monitor/
 reports/
-*.log
+
+# claude cache
+.claude/
