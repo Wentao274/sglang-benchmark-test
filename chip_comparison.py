@@ -215,7 +215,7 @@ COMPARISON_METRICS = [
     ),
     ("首token延迟（P99 TTFT (ms)）", "P99 TTFT (ms)"),
     ("每token生成时间（P99 TPOT (ms)）", "P99 TPOT (ms)"),
-    ("token间延迟（P99 ITL (ms)）", "P99 ITL (ms)"),
+    ("端到端延迟（P99 E2E Latency (ms)）", "P99 E2E Latency (ms)"),
 ]
 
 
@@ -279,7 +279,7 @@ def generate_comparison_charts(
     total_tput = get_values("Total token throughput (tok/s)")
     ttft_p99 = get_values("P99 TTFT (ms)")
     tpot_p99 = get_values("P99 TPOT (ms)")
-    itl_p99 = get_values("P99 ITL (ms)")
+    e2e_p99 = get_values("P99 E2E Latency (ms)")
 
     chart_files = []
 
@@ -373,9 +373,9 @@ def generate_comparison_charts(
             )
         axes[1, 1].grid(axis="y", alpha=0.3)
 
-        values = [itl_p99[i][idx] for i in range(len(chip_names))]
+        values = [e2e_p99[i][idx] for i in range(len(chip_names))]
         axes[1, 2].bar(chip_names, values, color=colors[: len(chip_names)], alpha=0.8)
-        axes[1, 2].set_title("P99 ITL (ms)", fontsize=11)
+        axes[1, 2].set_title("P99 E2E Latency (ms)", fontsize=11)
         axes[1, 2].set_ylabel("ms")
         axes[1, 2].tick_params(axis="x", rotation=15)
         for i, v in enumerate(values):
@@ -534,7 +534,7 @@ def generate_performance_trends(
 
     for idx, chip_name in enumerate(chip_names):
         color = colors[idx % len(colors)]
-        values = get_chip_values(chip_name, "P99 ITL (ms)")
+        values = get_chip_values(chip_name, "P99 E2E Latency (ms)")
         axes[1, 2].plot(
             concurrencies_int,
             values,
@@ -545,7 +545,7 @@ def generate_performance_trends(
             label=chip_name,
         )
 
-    axes[1, 2].set_title("P99 ITL (ms)")
+    axes[1, 2].set_title("P99 E2E Latency (ms)")
     axes[1, 2].set_ylabel("ms")
     axes[1, 2].set_xlabel("Concurrency")
     axes[1, 2].legend()
@@ -589,7 +589,7 @@ def generate_multi_io_comparison_charts(
         "Total Tok/s",
         "TTFT P99",
         "TPOT P99",
-        "ITL P99",
+        "E2E P99",
     ]
 
     for input_len, output_len in io_pairs:
@@ -1133,7 +1133,11 @@ def generate_markdown_report(
                 "Output token throughput (tok/s)",
                 "Total token throughput (tok/s)",
             ]
-            hmin = key_name in ["P99 TTFT (ms)", "P99 TPOT (ms)", "P99 ITL (ms)"]
+            hmin = key_name in [
+                "P99 TTFT (ms)",
+                "P99 TPOT (ms)",
+                "P99 E2E Latency (ms)",
+            ]
             metric_rows.append(
                 f"| {display_name} | {make_table_for_concurrency(conc, key_name, hmax, hmin)} |"
             )
@@ -1191,6 +1195,7 @@ def generate_markdown_report(
 | TPOT                | ms/token   | Time Per Output Token，每 token 生成时间 |
 | Throughput          | tokens/s   | 系统总吞吐                              |
 | QPS                 | requests/s | 请求吞吐                               |
+| E2E Latency         | ms         | End-to-End Latency，端到端延迟           |
 
 ### 📊 测试概览
 
